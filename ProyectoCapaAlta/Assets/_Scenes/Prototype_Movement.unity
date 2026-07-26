@@ -615,11 +615,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::TheoController
   moveSpeed: 6
   jumpForce: 14
+  fallGravityMultiplier: 2.8
+  lowJumpMultiplier: 2.2
+  coyoteTime: 0.15
+  jumpBufferTime: 0.12
+  dashEnabled: 1
+  dashSpeed: 18
+  dashDuration: 0.18
+  dashCooldown: 0.6
   groundCheck: {fileID: 1471465516}
   groundCheckRadius: 0.1
   groundLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 64
 --- !u!61 &997891427
 BoxCollider2D:
   m_ObjectHideFlags: 0
