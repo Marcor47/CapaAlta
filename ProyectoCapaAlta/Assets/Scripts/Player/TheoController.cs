@@ -5,19 +5,25 @@ public class TheoController : MonoBehaviour
 {
     // ─── MOVIMIENTO ────────────────────────────────────────────
     [Header("Movimiento")]
-    public float moveSpeed = 6f;
+    public float moveSpeed = 7f;
+
+    public float groundAcceleration = 80;
+    public float airAcceleration = 40;
+
+    public float groundDeceleration = 100;
+    public float airDeceleration = 30;
 
     // ─── SALTO ─────────────────────────────────────────────────
     [Header("Salto")]
-    public float jumpForce = 16f;
+    public float jumpForce = 17f;
     [Tooltip("Multiplicador de gravedad al caer (caída más rápida)")]
-    public float fallGravityMultiplier = 2.8f;
+    public float fallGravityMultiplier = 1.5f;
     [Tooltip("Multiplicador cuando suelta el salto antes de llegar al tope")]
-    public float lowJumpMultiplier = 2.2f;
+    public float lowJumpMultiplier = 1.6f;
     [Tooltip("Segundos de gracia para saltar después de caer del borde")]
-    public float coyoteTime = 0.15f;
+    public float coyoteTime = 0.12f;
     [Tooltip("Segundos de buffer si presiona salto antes de aterrizar")]
-    public float jumpBufferTime = 0.12f;
+    public float jumpBufferTime = 0.10f;
 
     // ─── DASH ──────────────────────────────────────────────────
     [Header("Dash")]
@@ -36,7 +42,7 @@ public class TheoController : MonoBehaviour
     // ─── REFERENCIAS ───────────────────────────────────────────
     private Rigidbody2D rb;
     private SpriteRenderer sr;
-    // private Animator anim;  // Descomenta cuando tengas el Animator configurado
+    private Animator anim;  // Descomenta cuando tengas el Animator configurado
 
     // ─── ESTADO INTERNO ────────────────────────────────────────
     private float moveInput;
@@ -51,7 +57,7 @@ public class TheoController : MonoBehaviour
 
     // Variable jump height
     private bool jumpHeld;
-    private bool hasJumped;
+
 
     // Dash
     private bool isDashing;
@@ -59,12 +65,19 @@ public class TheoController : MonoBehaviour
     private float dashCooldownCounter;
     private float dashDirection;
 
+
+    //Otros
+    private float originalGravityScale;
+
+
+
     // ──────────────────────────────────────────────────────────
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
         sr = GetComponent<SpriteRenderer>();
-        // anim = GetComponent<Animator>();
+        anim = GetComponent<Animator>();
+        originalGravityScale = rb.gravityScale;
     }
 
     void Update()
@@ -73,11 +86,11 @@ public class TheoController : MonoBehaviour
         if (isDashing) return;
 
         ReadInput();
-        HandleCoyoteTime();
+        
         HandleJumpBuffer();
         HandleFlip();
         HandleDashInput();
-        // HandleAnimations(); // Descomenta cuando tengas el Animator
+        
     }
 
     void FixedUpdate()
@@ -85,12 +98,17 @@ public class TheoController : MonoBehaviour
         if (isDashing)
         {
             HandleDash();
+            HandleAnimations();
             return;
         }
 
         CheckGround();
+        HandleCoyoteTime();
+
         ApplyMovement();
         ApplyBetterGravity();
+
+        HandleAnimations();
     }
 
     // ─── INPUT ─────────────────────────────────────────────────
@@ -129,9 +147,7 @@ public class TheoController : MonoBehaviour
         isGrounded = Physics2D.OverlapCircle(
             groundCheck.position, groundCheckRadius, groundLayer);
 
-        // Acaba de aterrizar
-        if (!wasGrounded && isGrounded)
-            hasJumped = false;
+        
     }
 
     // ─── COYOTE TIME ───────────────────────────────────────────
@@ -140,7 +156,7 @@ public class TheoController : MonoBehaviour
         if (isGrounded)
             coyoteTimeCounter = coyoteTime;
         else
-            coyoteTimeCounter -= Time.deltaTime;
+            coyoteTimeCounter -= Time.fixedDeltaTime;
     }
 
     // ─── JUMP BUFFER ───────────────────────────────────────────
@@ -156,13 +172,31 @@ public class TheoController : MonoBehaviour
         rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
         coyoteTimeCounter = 0f;
         jumpBufferCounter = 0f;
-        hasJumped = true;
+        
     }
 
     // ─── MOVIMIENTO LATERAL ────────────────────────────────────
     void ApplyMovement()
     {
-        rb.linearVelocity = new Vector2(moveInput * moveSpeed, rb.linearVelocity.y);
+        float targetSpeed = moveInput * moveSpeed;
+
+        float acceleration;
+
+        if (moveInput != 0)
+        {
+            acceleration = isGrounded ? groundAcceleration : airAcceleration;
+        }
+        else
+        {
+            acceleration = isGrounded ? groundDeceleration : airDeceleration;
+        }
+
+        float newVelocityX = Mathf.MoveTowards(
+            rb.linearVelocity.x,
+            targetSpeed,
+            acceleration * Time.fixedDeltaTime);
+
+        rb.linearVelocity = new Vector2(newVelocityX, rb.linearVelocity.y);
     }
 
     // ─── GRAVEDAD MEJORADA ─────────────────────────────────────
@@ -171,15 +205,17 @@ public class TheoController : MonoBehaviour
     {
         if (rb.linearVelocity.y < 0f)
         {
-            // Cayendo — gravedad aumentada
-            rb.linearVelocity += Vector2.up * Physics2D.gravity.y *
-                                  (fallGravityMultiplier - 1f) * Time.fixedDeltaTime;
+            rb.linearVelocity += Vector2.up *
+                Physics2D.gravity.y *
+                (fallGravityMultiplier - 1f) *
+                Time.fixedDeltaTime;
         }
         else if (rb.linearVelocity.y > 0f && !jumpHeld)
         {
-            // Subiendo pero soltó el salto — corta el salto
-            rb.linearVelocity += Vector2.up * Physics2D.gravity.y *
-                                  (lowJumpMultiplier - 1f) * Time.fixedDeltaTime;
+            rb.linearVelocity += Vector2.up *
+                Physics2D.gravity.y *
+                (lowJumpMultiplier - 1f) *
+                Time.fixedDeltaTime;
         }
     }
 
@@ -222,20 +258,27 @@ public class TheoController : MonoBehaviour
         if (dashTimeCounter <= 0f)
         {
             isDashing = false;
-            rb.gravityScale = 1f;
+            rb.gravityScale = originalGravityScale;
             dashCooldownCounter = dashCooldown;
-            rb.linearVelocity = new Vector2(rb.linearVelocity.x * 0.3f, 0f);
+            rb.linearVelocity = new Vector2(
+                rb.linearVelocity.x * 0.3f,
+                rb.linearVelocity.y);
         }
     }
 
     // ─── ANIMACIONES (placeholder) ─────────────────────────────
-    // void HandleAnimations()
-    // {
-    //     anim.SetFloat("Speed", Mathf.Abs(moveInput));
-    //     anim.SetBool("IsGrounded", isGrounded);
-    //     anim.SetFloat("VerticalSpeed", rb.linearVelocity.y);
-    //     anim.SetBool("IsDashing", isDashing);
-    // }
+    void HandleAnimations()
+    {
+        anim.SetFloat("Speed", Mathf.Abs(rb.linearVelocity.x));
+        anim.SetBool("IsGrounded", isGrounded);
+        float v = rb.linearVelocity.y;
+
+        if (Mathf.Abs(v) < 0.05f)
+            v = 0f;
+
+        anim.SetFloat("VerticalSpeed", v);
+        anim.SetBool("IsDashing", isDashing);
+    }
 
     // ─── DEBUG ─────────────────────────────────────────────────
     void OnDrawGizmosSelected()
