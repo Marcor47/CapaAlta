@@ -6,23 +6,17 @@ public class TheoController : MonoBehaviour
     // ─── MOVIMIENTO ────────────────────────────────────────────
     [Header("Movimiento")]
     public float moveSpeed = 7f;
-
-    public float groundAcceleration = 80;
-    public float airAcceleration = 40;
-
-    public float groundDeceleration = 100;
-    public float airDeceleration = 30;
+    public float groundAcceleration = 80f;
+    public float airAcceleration = 40f;
+    public float groundDeceleration = 100f;
+    public float airDeceleration = 30f;
 
     // ─── SALTO ─────────────────────────────────────────────────
     [Header("Salto")]
     public float jumpForce = 17f;
-    [Tooltip("Multiplicador de gravedad al caer (caída más rápida)")]
     public float fallGravityMultiplier = 1.5f;
-    [Tooltip("Multiplicador cuando suelta el salto antes de llegar al tope")]
     public float lowJumpMultiplier = 1.6f;
-    [Tooltip("Segundos de gracia para saltar después de caer del borde")]
     public float coyoteTime = 0.12f;
-    [Tooltip("Segundos de buffer si presiona salto antes de aterrizar")]
     public float jumpBufferTime = 0.10f;
 
     // ─── DASH ──────────────────────────────────────────────────
@@ -31,7 +25,14 @@ public class TheoController : MonoBehaviour
     public float dashSpeed = 18f;
     public float dashDuration = 0.18f;
     public float dashCooldown = 0.6f;
-    [Tooltip("Tecla de dash (Shift izquierdo por defecto)")]
+
+    // ─── MOCHILA (E) ───────────────────────────────────────────
+    [Header("Mochila")]
+    public Key backpackKey = Key.E;
+
+    // ─── SENTARSE / LIBRETA (S hold o ESC) ────────────────────
+    [Header("Sentarse / Libreta")]
+    public float sitHoldTime = 1.0f;
 
     // ─── DETECCIÓN DE SUELO ────────────────────────────────────
     [Header("Detección de suelo")]
@@ -42,34 +43,40 @@ public class TheoController : MonoBehaviour
     // ─── REFERENCIAS ───────────────────────────────────────────
     private Rigidbody2D rb;
     private SpriteRenderer sr;
-    private Animator anim;  // Descomenta cuando tengas el Animator configurado
+    private Animator anim;
 
     // ─── ESTADO INTERNO ────────────────────────────────────────
     private float moveInput;
     private bool isGrounded;
     private bool wasGrounded;
 
-    // Coyote time
     private float coyoteTimeCounter;
-
-    // Jump buffer
     private float jumpBufferCounter;
-
-    // Variable jump height
     private bool jumpHeld;
 
-
-    // Dash
     private bool isDashing;
     private float dashTimeCounter;
     private float dashCooldownCounter;
     private float dashDirection;
-
-
-    //Otros
     private float originalGravityScale;
 
+    private bool isBackpackOpen;
+    private bool isSitting;
+    private float sitHoldCounter;
 
+    private bool canMove
+    {
+        get
+        {
+            if (isSitting)
+                return false;
+
+            if (isBackpackOpen && isGrounded)
+                return false;
+
+            return true;
+        }
+    }
 
     // ──────────────────────────────────────────────────────────
     void Awake()
@@ -82,15 +89,15 @@ public class TheoController : MonoBehaviour
 
     void Update()
     {
-        // Si está dasheando, no procesar otras entradas
+        HandleAnimations();
         if (isDashing) return;
 
         ReadInput();
-        
         HandleJumpBuffer();
         HandleFlip();
         HandleDashInput();
-        
+        HandleBackpackInput();
+        HandleSitInput();
     }
 
     void FixedUpdate()
@@ -98,30 +105,34 @@ public class TheoController : MonoBehaviour
         if (isDashing)
         {
             HandleDash();
-            HandleAnimations();
             return;
         }
 
         CheckGround();
         HandleCoyoteTime();
 
-        ApplyMovement();
-        ApplyBetterGravity();
+        if (canMove)
+            ApplyMovement();
+        else
+            rb.linearVelocity = new Vector2(
+                Mathf.MoveTowards(rb.linearVelocity.x, 0f,
+                    groundDeceleration * Time.fixedDeltaTime),
+                rb.linearVelocity.y);
 
-        HandleAnimations();
+        ApplyBetterGravity();
     }
 
     // ─── INPUT ─────────────────────────────────────────────────
     void ReadInput()
     {
-        // Movimiento lateral
+        if (!canMove) { moveInput = 0f; return; }
+
         moveInput = 0f;
         if (Keyboard.current.aKey.isPressed || Keyboard.current.leftArrowKey.isPressed)
             moveInput = -1f;
         if (Keyboard.current.dKey.isPressed || Keyboard.current.rightArrowKey.isPressed)
             moveInput = 1f;
 
-        // Salto — detecta pulsación y si mantiene
         if (Keyboard.current.spaceKey.wasPressedThisFrame ||
             Keyboard.current.upArrowKey.wasPressedThisFrame)
         {
@@ -133,11 +144,8 @@ public class TheoController : MonoBehaviour
             Keyboard.current.upArrowKey.wasReleasedThisFrame)
             jumpHeld = false;
 
-        // Ejecutar salto si hay buffer y coyote time disponibles
         if (jumpBufferCounter > 0f && coyoteTimeCounter > 0f)
-        {
             Jump();
-        }
     }
 
     // ─── SUELO ─────────────────────────────────────────────────
@@ -146,107 +154,73 @@ public class TheoController : MonoBehaviour
         wasGrounded = isGrounded;
         isGrounded = Physics2D.OverlapCircle(
             groundCheck.position, groundCheckRadius, groundLayer);
-
-        
     }
 
-    // ─── COYOTE TIME ───────────────────────────────────────────
     void HandleCoyoteTime()
     {
-        if (isGrounded)
-            coyoteTimeCounter = coyoteTime;
-        else
-            coyoteTimeCounter -= Time.fixedDeltaTime;
+        if (isGrounded) coyoteTimeCounter = coyoteTime;
+        else coyoteTimeCounter -= Time.fixedDeltaTime;
     }
 
-    // ─── JUMP BUFFER ───────────────────────────────────────────
     void HandleJumpBuffer()
     {
         if (jumpBufferCounter > 0f)
             jumpBufferCounter -= Time.deltaTime;
     }
 
-    // ─── SALTO ─────────────────────────────────────────────────
     void Jump()
     {
         rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
         coyoteTimeCounter = 0f;
         jumpBufferCounter = 0f;
-        
     }
 
     // ─── MOVIMIENTO LATERAL ────────────────────────────────────
     void ApplyMovement()
     {
         float targetSpeed = moveInput * moveSpeed;
+        float acceleration = moveInput != 0
+            ? (isGrounded ? groundAcceleration : airAcceleration)
+            : (isGrounded ? groundDeceleration : airDeceleration);
 
-        float acceleration;
-
-        if (moveInput != 0)
-        {
-            acceleration = isGrounded ? groundAcceleration : airAcceleration;
-        }
-        else
-        {
-            acceleration = isGrounded ? groundDeceleration : airDeceleration;
-        }
-
-        float newVelocityX = Mathf.MoveTowards(
-            rb.linearVelocity.x,
-            targetSpeed,
-            acceleration * Time.fixedDeltaTime);
-
-        rb.linearVelocity = new Vector2(newVelocityX, rb.linearVelocity.y);
+        rb.linearVelocity = new Vector2(
+            Mathf.MoveTowards(rb.linearVelocity.x, targetSpeed,
+                acceleration * Time.fixedDeltaTime),
+            rb.linearVelocity.y);
     }
 
     // ─── GRAVEDAD MEJORADA ─────────────────────────────────────
-    // Caída más rápida que la subida + salto corto si sueltas pronto
     void ApplyBetterGravity()
     {
         if (rb.linearVelocity.y < 0f)
-        {
             rb.linearVelocity += Vector2.up *
-                Physics2D.gravity.y *
-                (fallGravityMultiplier - 1f) *
-                Time.fixedDeltaTime;
-        }
+                Physics2D.gravity.y * (fallGravityMultiplier - 1f) * Time.fixedDeltaTime;
         else if (rb.linearVelocity.y > 0f && !jumpHeld)
-        {
             rb.linearVelocity += Vector2.up *
-                Physics2D.gravity.y *
-                (lowJumpMultiplier - 1f) *
-                Time.fixedDeltaTime;
-        }
+                Physics2D.gravity.y * (lowJumpMultiplier - 1f) * Time.fixedDeltaTime;
     }
 
-    // ─── FLIP DEL SPRITE ───────────────────────────────────────
+    // ─── FLIP ──────────────────────────────────────────────────
     void HandleFlip()
     {
-        if (moveInput > 0f)
-            sr.flipX = false;
-        else if (moveInput < 0f)
-            sr.flipX = true;
+        if (!canMove) return;
+        if (moveInput > 0f) sr.flipX = false;
+        else if (moveInput < 0f) sr.flipX = true;
     }
 
     // ─── DASH ──────────────────────────────────────────────────
     void HandleDashInput()
     {
-        if (!dashEnabled) return;
-        if (dashCooldownCounter > 0f)
-        {
-            dashCooldownCounter -= Time.deltaTime;
-            return;
-        }
+        if (!dashEnabled || !canMove) return;
+        if (dashCooldownCounter > 0f) { dashCooldownCounter -= Time.deltaTime; return; }
 
         if (Keyboard.current.leftShiftKey.wasPressedThisFrame)
         {
-            // Dirección del dash según donde mira
             dashDirection = sr.flipX ? -1f : 1f;
             isDashing = true;
             dashTimeCounter = dashDuration;
-            // Cancela velocidad vertical al dashear
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, 0f);
-            rb.gravityScale = 0f; // Sin gravedad durante el dash
+            rb.gravityScale = 0f;
         }
     }
 
@@ -261,24 +235,92 @@ public class TheoController : MonoBehaviour
             rb.gravityScale = originalGravityScale;
             dashCooldownCounter = dashCooldown;
             rb.linearVelocity = new Vector2(
-                rb.linearVelocity.x * 0.3f,
-                rb.linearVelocity.y);
+                rb.linearVelocity.x * 0.3f, rb.linearVelocity.y);
         }
     }
 
-    // ─── ANIMACIONES (placeholder) ─────────────────────────────
+    // ─── MOCHILA (E) ───────────────────────────────────────────
+    void HandleBackpackInput()
+    {
+        if (isSitting)
+        {
+            anim.SetBool("IsBackpack", false);
+            return;
+        }
+
+        isBackpackOpen = Keyboard.current[backpackKey].isPressed;
+        anim.SetBool("IsBackpack", isBackpackOpen);
+    }
+
+    // ─── SENTARSE / LIBRETA (S hold) ───────────────────────────
+    void HandleSitInput()
+    {
+        if (!isGrounded || isBackpackOpen) return;
+
+        bool holdingDown = Keyboard.current.sKey.isPressed ||
+                           Keyboard.current.downArrowKey.isPressed;
+
+        if (holdingDown && !isSitting)
+        {
+            sitHoldCounter += Time.deltaTime;
+            if (sitHoldCounter >= sitHoldTime)
+            {
+                isSitting = true;
+                sitHoldCounter = 0f;
+                anim.SetBool("IsSitting", true);
+                // TODO: EmotionSystem.Instance.StartRecharge();
+                // TODO: MotivationSystem.Instance.StartFastRecharge();
+            }
+        }
+        else if (!holdingDown)
+            sitHoldCounter = 0f;
+
+        if (isSitting &&
+        (
+            Keyboard.current.aKey.wasPressedThisFrame ||
+            Keyboard.current.dKey.wasPressedThisFrame ||
+            Keyboard.current.leftArrowKey.wasPressedThisFrame ||
+            Keyboard.current.rightArrowKey.wasPressedThisFrame
+        ))
+        {
+            StandUp();
+        }
+    }
+
+    // ─── MÉTODOS PÚBLICOS (para NotebookMenu y otros) ──────────
+    public void TriggerNotebook()
+    {
+        if (!isGrounded) return;
+        isSitting = true;
+        anim.SetBool("IsSitting", true);
+    }
+
+    public void StandUp()
+    {
+        isSitting = false;
+        sitHoldCounter = 0f;
+        anim.SetBool("IsSitting", false);
+        // TODO: EmotionSystem.Instance.StopRecharge();
+        // TODO: MotivationSystem.Instance.StopFastRecharge();
+    }
+
+    // ─── ANIMACIONES ───────────────────────────────────────────
     void HandleAnimations()
     {
+        float v = Mathf.Abs(rb.linearVelocity.y) < 0.05f ? 0f : rb.linearVelocity.y;
         anim.SetFloat("Speed", Mathf.Abs(rb.linearVelocity.x));
-        anim.SetBool("IsGrounded", isGrounded);
-        float v = rb.linearVelocity.y;
-
-        if (Mathf.Abs(v) < 0.05f)
-            v = 0f;
-
         anim.SetFloat("VerticalSpeed", v);
+        anim.SetBool("IsGrounded", isGrounded);
         anim.SetBool("IsDashing", isDashing);
+        anim.SetBool("IsSitting", isSitting);
+        anim.SetBool("IsBackpack", isBackpackOpen);
     }
+
+    // ─── PROPIEDADES PÚBLICAS ───────────────────────────────────
+    public bool IsGrounded => isGrounded;
+    public bool IsSitting => isSitting;
+    public bool IsBackpackOpen => isBackpackOpen;
+    public bool IsDashing => isDashing;
 
     // ─── DEBUG ─────────────────────────────────────────────────
     void OnDrawGizmosSelected()

@@ -628,6 +628,8 @@ MonoBehaviour:
   dashSpeed: 18
   dashDuration: 0.18
   dashCooldown: 0.6
+  backpackKey: 19
+  sitHoldTime: 0.5
   groundCheck: {fileID: 1471465516}
   groundCheckRadius: 0.1
   groundLayer:
