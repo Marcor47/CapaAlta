@@ -24,7 +24,14 @@ public class TheoController : MonoBehaviour
     public bool dashEnabled = true;
     public float dashSpeed = 18f;
     public float dashDuration = 0.18f;
-    public float dashCooldown = 0.6f;
+    public float dashStaminaCost = 34f; // ej: ~3 dashes con la barra llena
+    public float dashCooldown = 0.6f;  // espacio mínimo entre un dash y el siguiente, estilo Hollow Knight
+
+    // ─── ESTAMINA / MOTIVACIÓN ───────────────────────────────────
+    [Header("Estamina / Motivación")]
+    public float maxStamina = 100f;
+    public float staminaRegenRate = 8f;         // regen pasiva por segundo
+    public float staminaRegenRateSitting = 25f; // regen acelerada al sentarse (notebook)
 
     // ─── MOCHILA (E) ───────────────────────────────────────────
     [Header("Mochila")]
@@ -58,7 +65,11 @@ public class TheoController : MonoBehaviour
     private float dashTimeCounter;
     private float dashCooldownCounter;
     private float dashDirection;
+    private float currentStamina;
+
+
     private float originalGravityScale;
+    private bool facingLeft;
 
     private bool isBackpackOpen;
     private bool isSitting;
@@ -85,19 +96,27 @@ public class TheoController : MonoBehaviour
         sr = GetComponent<SpriteRenderer>();
         anim = GetComponent<Animator>();
         originalGravityScale = rb.gravityScale;
+        facingLeft = sr.flipX;
+        currentStamina = maxStamina;
     }
 
     void Update()
     {
-        HandleAnimations();
+        HandleStaminaRegen(); // corre siempre, incluso durante el dash (afecta muy poco por lo corto que es)
+
+        if (dashCooldownCounter > 0f)
+            dashCooldownCounter -= Time.deltaTime;
+
         if (isDashing) return;
 
         ReadInput();
         HandleJumpBuffer();
-        HandleFlip();
-        HandleDashInput();
+        HandleDashInput();   // ahora primero
+        HandleFlip();        // ahora acá: si isDashing ya es true, se salta el giro este mismo frame
         HandleBackpackInput();
         HandleSitInput();
+
+        HandleAnimations();
     }
 
     void FixedUpdate()
@@ -112,12 +131,14 @@ public class TheoController : MonoBehaviour
         HandleCoyoteTime();
 
         if (canMove)
+        {
             ApplyMovement();
+        }
         else
-            rb.linearVelocity = new Vector2(
-                Mathf.MoveTowards(rb.linearVelocity.x, 0f,
-                    groundDeceleration * Time.fixedDeltaTime),
-                rb.linearVelocity.y);
+        {
+            // Sentado (notebook) o mochila abierta en el suelo: corte instantáneo, sin deslizamiento
+            rb.linearVelocity = new Vector2(0f, rb.linearVelocity.y);
+        }
 
         ApplyBetterGravity();
     }
@@ -203,24 +224,41 @@ public class TheoController : MonoBehaviour
     // ─── FLIP ──────────────────────────────────────────────────
     void HandleFlip()
     {
-        if (!canMove) return;
-        if (moveInput > 0f) sr.flipX = false;
-        else if (moveInput < 0f) sr.flipX = true;
+        if (!canMove || isDashing)
+            return;
+
+        var state = anim.GetCurrentAnimatorStateInfo(0);
+        if (state.IsName("TheoDash"))
+            return; // el bool ya cambió pero el Animator todavía no transicionó visualmente
+
+        if (moveInput > 0f)
+        {
+            sr.flipX = false;
+            facingLeft = false;
+        }
+        else if (moveInput < 0f)
+        {
+            sr.flipX = true;
+            facingLeft = true;
+        }
     }
 
     // ─── DASH ──────────────────────────────────────────────────
     void HandleDashInput()
     {
         if (!dashEnabled || !canMove) return;
-        if (dashCooldownCounter > 0f) { dashCooldownCounter -= Time.deltaTime; return; }
+        if (currentStamina < dashStaminaCost) return; // sin estamina suficiente, no puede dashear
+        if (dashCooldownCounter > 0f) return;         // muy pronto desde el último dash
 
         if (Keyboard.current.leftShiftKey.wasPressedThisFrame)
         {
-            dashDirection = sr.flipX ? -1f : 1f;
+            dashDirection = facingLeft ? -1f : 1f;
             isDashing = true;
             dashTimeCounter = dashDuration;
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, 0f);
             rb.gravityScale = 0f;
+            currentStamina -= dashStaminaCost;
+            dashCooldownCounter = dashCooldown;
         }
     }
 
@@ -233,10 +271,18 @@ public class TheoController : MonoBehaviour
         {
             isDashing = false;
             rb.gravityScale = originalGravityScale;
-            dashCooldownCounter = dashCooldown;
             rb.linearVelocity = new Vector2(
                 rb.linearVelocity.x * 0.3f, rb.linearVelocity.y);
         }
+    }
+
+    // ─── ESTAMINA / MOTIVACIÓN ───────────────────────────────────
+    void HandleStaminaRegen()
+    {
+        if (currentStamina >= maxStamina) return;
+
+        float regenRate = isSitting ? staminaRegenRateSitting : staminaRegenRate;
+        currentStamina = Mathf.Min(maxStamina, currentStamina + regenRate * Time.deltaTime);
     }
 
     // ─── MOCHILA (E) ───────────────────────────────────────────
@@ -267,6 +313,7 @@ public class TheoController : MonoBehaviour
             {
                 isSitting = true;
                 sitHoldCounter = 0f;
+                rb.linearVelocity = new Vector2(0f, rb.linearVelocity.y); // corte inmediato
                 anim.SetBool("IsSitting", true);
                 // TODO: EmotionSystem.Instance.StartRecharge();
                 // TODO: MotivationSystem.Instance.StartFastRecharge();
@@ -290,8 +337,10 @@ public class TheoController : MonoBehaviour
     // ─── MÉTODOS PÚBLICOS (para NotebookMenu y otros) ──────────
     public void TriggerNotebook()
     {
-        if (!isGrounded) return;
+        if (!isGrounded || isBackpackOpen) return;
         isSitting = true;
+        sitHoldCounter = 0f;
+        rb.linearVelocity = new Vector2(0f, rb.linearVelocity.y); // corte inmediato
         anim.SetBool("IsSitting", true);
     }
 
@@ -313,7 +362,7 @@ public class TheoController : MonoBehaviour
         anim.SetBool("IsGrounded", isGrounded);
         anim.SetBool("IsDashing", isDashing);
         anim.SetBool("IsSitting", isSitting);
-        anim.SetBool("IsBackpack", isBackpackOpen);
+        // IsBackpack ya se setea en HandleBackpackInput(), no hace falta repetirlo acá
     }
 
     // ─── PROPIEDADES PÚBLICAS ───────────────────────────────────
@@ -321,6 +370,10 @@ public class TheoController : MonoBehaviour
     public bool IsSitting => isSitting;
     public bool IsBackpackOpen => isBackpackOpen;
     public bool IsDashing => isDashing;
+    public float CurrentStamina => currentStamina;
+    public float MaxStamina => maxStamina;
+    public float StaminaPercent01 => maxStamina > 0f ? currentStamina / maxStamina : 0f; // para el fill de una barra UI
+
 
     // ─── DEBUG ─────────────────────────────────────────────────
     void OnDrawGizmosSelected()

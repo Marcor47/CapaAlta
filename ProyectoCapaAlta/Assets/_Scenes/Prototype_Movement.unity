@@ -389,7 +389,7 @@ Transform:
   m_GameObject: {fileID: 519420028}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.000006258037, y: -0.51816994, z: -10}
+  m_LocalPosition: {x: -0.000006258037, y: -0.51817006, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -627,9 +627,13 @@ MonoBehaviour:
   dashEnabled: 1
   dashSpeed: 18
   dashDuration: 0.18
+  dashStaminaCost: 33
   dashCooldown: 0.6
+  maxStamina: 100
+  staminaRegenRate: 8
+  staminaRegenRateSitting: 25
   backpackKey: 19
-  sitHoldTime: 0.5
+  sitHoldTime: 0.05
   groundCheck: {fileID: 1471465516}
   groundCheckRadius: 0.1
   groundLayer:
@@ -669,7 +673,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0.000000059604645, y: 0.063666746}
+  m_Offset: {x: 0.000000059604645, y: 0.06987536}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -679,7 +683,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 0.51077664, y: 0.6952375}
+  m_Size: {x: 0.51077664, y: 0.6828203}
   m_EdgeRadius: 0
 --- !u!50 &997891428
 Rigidbody2D:
@@ -942,7 +946,7 @@ Transform:
   m_GameObject: {fileID: 1471465515}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.2777, z: 0}
+  m_LocalPosition: {x: 0, y: -0.2808, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
