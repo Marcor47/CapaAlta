@@ -8,23 +8,17 @@ public class CardCollector : MonoBehaviour
     [Header("Datos de la carta")]
     public CardData cardData;
 
-    // ─── VISUAL ────────────────────────────────────────────────
-    [Header("Visual")]
-    public SpriteRenderer cardSprite;  // sprite de la carta en el nivel
-    public GameObject glowEffect;      // efecto de brillo (opcional)
-
     // ─── ESTADO ────────────────────────────────────────────────
     private bool isCollected = false;
     private bool playerInRange = false;
+    private SpriteRenderer sr;
 
     // ──────────────────────────────────────────────────────────
     void Start()
     {
-        // Asigna el sprite de la carta si tiene uno definido
-        if (cardSprite != null && cardData != null && cardData.cardSprite != null)
-            cardSprite.sprite = cardData.cardSprite;
+        sr = GetComponent<SpriteRenderer>();
 
-        // Verifica si ya fue recolectada en una sesión anterior
+        // Verifica si ya fue recolectada
         if (CardInventory.Instance != null &&
             CardInventory.Instance.IsCollected(cardData.cardID))
         {
@@ -34,7 +28,6 @@ public class CardCollector : MonoBehaviour
 
     void Update()
     {
-        // Theo presiona E estando en rango para leer la carta
         if (playerInRange && !isCollected)
         {
             if (Keyboard.current.eKey.wasPressedThisFrame)
@@ -45,23 +38,16 @@ public class CardCollector : MonoBehaviour
     // ─── TRIGGER ───────────────────────────────────────────────
     void OnTriggerEnter2D(Collider2D other)
     {
-        if (isCollected) return;
-        if (!other.CompareTag("Player")) return;
-
+        if (isCollected || !other.CompareTag("Player")) return;
         playerInRange = true;
-
-        // TODO: mostrar indicador "presiona E" sobre la carta
-        // UIHintManager.Instance.Show("Presiona E para leer");
+        // TODO: UIHintManager.Instance.Show("Presiona E para leer");
     }
 
     void OnTriggerExit2D(Collider2D other)
     {
         if (!other.CompareTag("Player")) return;
-
         playerInRange = false;
-
-        // TODO: ocultar indicador
-        // UIHintManager.Instance.Hide();
+        // TODO: UIHintManager.Instance.Hide();
     }
 
     // ─── RECOLECCIÓN ───────────────────────────────────────────
@@ -69,18 +55,14 @@ public class CardCollector : MonoBehaviour
     {
         if (isCollected || cardData == null) return;
 
-        // 1. Registrar en el inventario
         if (CardInventory.Instance != null)
             CardInventory.Instance.AddCard(cardData);
 
-        // 2. Mostrar la UI de lectura
         if (CardReaderUI.Instance != null)
             CardReaderUI.Instance.Show(cardData);
 
-        // 3. Aumentar motivación (M6)
         // TODO: MotivationSystem.Instance.AddMotivation(cardData.cardType);
 
-        // 4. Marcar como recolectada
         SetCollected();
     }
 
@@ -89,11 +71,7 @@ public class CardCollector : MonoBehaviour
         isCollected = true;
         playerInRange = false;
 
-        // Oculta la carta del nivel (ya fue recogida)
-        if (cardSprite != null) cardSprite.enabled = false;
-        if (glowEffect != null) glowEffect.SetActive(false);
-
-        // Desactiva el collider para que no siga detectando
+        if (sr != null) sr.enabled = false;
         GetComponent<Collider2D>().enabled = false;
     }
 
@@ -101,8 +79,7 @@ public class CardCollector : MonoBehaviour
     void OnDrawGizmosSelected()
     {
         Gizmos.color = cardData != null && cardData.cardType == CardData.CardType.Father
-            ? Color.yellow
-            : Color.cyan;
+            ? Color.yellow : Color.cyan;
         Gizmos.DrawWireSphere(transform.position, 0.5f);
     }
 }
