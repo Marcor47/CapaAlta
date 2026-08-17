@@ -959,6 +959,7 @@ GameObject:
   m_Component:
   - component: {fileID: 686823359}
   - component: {fileID: 686823360}
+  - component: {fileID: 686823361}
   m_Layer: 0
   m_Name: GameManagers
   m_TagString: Untagged
@@ -993,6 +994,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 88591593d58497547af08dc4212af20d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CardInventory
+--- !u!114 &686823361
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 686823358}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff0b06593d4ab8d498911e5a2227253b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GameManager
 --- !u!1 &782266196
 GameObject:
   m_ObjectHideFlags: 0
@@ -1135,8 +1148,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CardCollector
   cardData: {fileID: 11400000, guid: 9c5006f65f117c045a493752c9d13513, type: 2}
-  cardSprite: {fileID: 0}
-  glowEffect: {fileID: 0}
 --- !u!1 &838045126
 GameObject:
   m_ObjectHideFlags: 0
