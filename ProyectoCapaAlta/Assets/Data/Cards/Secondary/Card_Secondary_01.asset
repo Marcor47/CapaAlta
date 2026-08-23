@@ -12,11 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cc89f5f6e2ef6140828ac636dfc815e, type: 3}
   m_Name: Card_Secondary_01
   m_EditorClassIdentifier: Assembly-CSharp::CardData
-  cardID: S_Gaz_01
+  cardID: Gaz_01
   authorName: Gaz
   cardType: 1
-  cardText: Prueba_Gaz_01
-  cardSprite: {fileID: 0}
-  babbleAudio: {fileID: 0}
   chapter: 1
-  isCollected: 0
+  cardText: Texto_Prueba_Gaz_01
+  cardSprite: {fileID: 21300000, guid: 12d1ca348b0fe214ea384c7361f84971, type: 3}
+  babbleAudio: {fileID: 0}

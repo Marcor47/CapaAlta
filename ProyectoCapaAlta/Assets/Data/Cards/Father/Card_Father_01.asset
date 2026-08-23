@@ -13,10 +13,9 @@ MonoBehaviour:
   m_Name: Card_Father_01
   m_EditorClassIdentifier: Assembly-CSharp::CardData
   cardID: F_01
-  authorName: Father
+  authorName: Jason
   cardType: 0
-  cardText: Prueba_01
-  cardSprite: {fileID: 0}
-  babbleAudio: {fileID: 0}
   chapter: 1
-  isCollected: 0
+  cardText: Texto_Prueba_01
+  cardSprite: {fileID: 21300000, guid: 074e084b76471b4498812a240aae287d, type: 3}
+  babbleAudio: {fileID: 0}
