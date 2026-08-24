@@ -13,15 +13,17 @@ public class CardReaderUI : MonoBehaviour
     public GameObject readerPanel;      // panel completo que se muestra/oculta
 
     [Header("Contenido")]
-    public Image cardImage;       // ilustración de la carta
-    public TextMeshProUGUI authorText;  // nombre del autor
-    public TextMeshProUGUI cardText;    // texto de la carta
+    public Image cardBackground;  // el Image del CardContainer
+    public TextMeshProUGUI authorText;
+    public TextMeshProUGUI cardText;
 
     [Header("Audio")]
     public AudioSource babbleSource;    // fuente de audio para balbuceos
 
     [Header("Botón cerrar")]
     public Button closeButton;          // botón para cerrar la carta
+
+
 
     // ─── ESTADO ────────────────────────────────────────────────
     private bool isOpen = false;
@@ -78,8 +80,8 @@ public class CardReaderUI : MonoBehaviour
             return;
         }
 
-        if (cardImage != null)
-            cardImage.sprite = card.cardSprite;
+        if (cardBackground != null && card.cardSprite != null)
+            cardBackground.sprite = card.cardSprite;
         else
             Debug.LogError("[CardReaderUI] cardImage es NULL");
 
