@@ -20,8 +20,7 @@ public class CardReaderUI : MonoBehaviour
     [Header("Audio")]
     public AudioSource babbleSource;    // fuente de audio para balbuceos
 
-    [Header("Botón cerrar")]
-    public Button closeButton;          // botón para cerrar la carta
+    
 
 
 
@@ -47,8 +46,7 @@ public class CardReaderUI : MonoBehaviour
 
     void Start()
     {
-        if (closeButton != null)
-            closeButton.onClick.AddListener(Hide);
+       
     }
 
     private float openCooldown = 0f;
