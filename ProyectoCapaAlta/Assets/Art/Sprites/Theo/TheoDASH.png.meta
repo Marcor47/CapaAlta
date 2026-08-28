@@ -26,6 +26,9 @@ TextureImporter:
   - first:
       213: 2679504299782723835
     second: TheoDASH_7
+  - first:
+      213: -3830722483392211358
+    second: TheoDASH_8
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -309,11 +312,33 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: TheoDASH_8
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 0
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2661e48823a86dac0800000000000000
+      internalID: -3830722483392211358
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     customData: 
     physicsShape: []
     bones: []
-    spriteID: ac495c37b8234c34fb6a0722ee81caa0
+    spriteID: 22683e41588852b43b727041b3f82b24
     internalID: 0
     vertices: []
     indices: 
@@ -333,6 +358,7 @@ TextureImporter:
       TheoDASH_5: 1739291898097972938
       TheoDASH_6: 3952255688979048635
       TheoDASH_7: 2679504299782723835
+      TheoDASH_8: -3830722483392211358
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
