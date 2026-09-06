@@ -16,6 +16,7 @@ public class DialogueManager : MonoBehaviour
 
     [Header("Contenido")]
     public TextMeshProUGUI npcNameText;
+    public TextMeshProUGUI theoNameText;  // ← nuevo
     public TextMeshProUGUI dialogueText;
 
     [Header("Opciones")]
@@ -95,6 +96,7 @@ public class DialogueManager : MonoBehaviour
     // ─── INICIAR DIÁLOGO ───────────────────────────────────────
     public void StartDialogue(DialogueNode node, System.Action<int> callback)
     {
+        SetNPCSpeaking(true);
         currentNode = node;
         onDialogueComplete = callback;
         chosenOptionIndex = -1;
@@ -174,6 +176,7 @@ public class DialogueManager : MonoBehaviour
     // ─── MOSTRAR OPCIONES ──────────────────────────────────────
     void ShowOptions()
     {
+        SetNPCSpeaking(false);
         state = DialogueState.Choosing;
         choosingOption = true;
         waitingInput = false;
@@ -198,6 +201,7 @@ public class DialogueManager : MonoBehaviour
     // ─── ELEGIR OPCIÓN ─────────────────────────────────────────
     void ChooseOption(int index)
     {
+        SetNPCSpeaking(true);
         if (index >= currentNode.options.Length) return;
 
         chosenOptionIndex = index;
@@ -237,6 +241,15 @@ public class DialogueManager : MonoBehaviour
 
         onDialogueComplete?.Invoke(chosenOptionIndex);
     }
+
+    // ─── HelperCambioNPCTalking ────────────────────────────────────────
+    void SetNPCSpeaking(bool npcTalking)
+    {
+        npcNameText.gameObject.SetActive(npcTalking);
+        theoNameText.gameObject.SetActive(!npcTalking);
+        dialogueText.gameObject.SetActive(npcTalking);
+    }
+
 
     // ─── PROPIEDADES PÚBLICAS ──────────────────────────────────
     public bool IsOpen => isOpen;
