@@ -15,56 +15,89 @@ MonoBehaviour:
   nodeID: ryland_cap1_enc1
   npcName: Astro
   chapter: 1
+  npcID: ryland_astro
+  isSingleSpeaker: 0
   openingLines:
-  - "Cari\xF1o, seguro que no quieres que te d\xE9 una ayuda con la bici."
-  - "Lo tengo todo controlado cari\xF1o, solo muevo esto aqu\xED y esto ac\xE1..."
-  - Tan testarudo como siempre jeje.
-  - "Oh, hola ni\xF1o, \xBFqu\xE9 haces por aqu\xED? \xBFEst\xE1s perdido?"
+  - speakerName: Astro
+    text: "Cari\xF1o, seguro que no quieres que te d\xE9 una ayuda con la bici."
+  - speakerName: Ryland
+    text: "Lo tengo todo controlado cari\xF1o, solo muevo esto aqu\xED y esto ac\xE1..."
+  - speakerName: Astro
+    text: Tan testarudo como siempre jeje.
+  - speakerName: Astro
+    text: "Oh, hola ni\xF1o, \xBFqu\xE9 haces por aqu\xED? \xBFEst\xE1s perdido?"
   options:
   - optionText: "Estoy bien se\xF1ora, m\xE1s bien, \xBFustedes necesitan ayuda?"
     relationshipDelta: 1
     npcResponseLines:
-    - "Jeje \xBFa poco no te recuerda a Arthur, no Ryland?"
-    - "Soy Astro por cierto, ni\xF1o."
-    - "S\xED, se parece un poco."
-    - "\xBFVas a subir la monta\xF1a?"
-    - Nosotros solo andamos de paseo por esta zona.
-    - "Nos ayuda a recordar cuando est\xE1bamos un poco m\xE1s j\xF3venes."
-    - Es lindo recordar lo vivido creando nuevos recuerdos.
-    - "Nosotros sol\xEDamos tener... un hijo muy parecido a ti hace un tiempo."
-    - "Si vas a subir m\xE1s te vale que tengas una buena raz\xF3n para arriesgarte
-      tanto."
+    - speakerName: Astro
+      text: "Jeje \xBFa poco no te recuerda a Arthur, no Ryland?"
+    - speakerName: Astro
+      text: "Soy Astro por cierto, ni\xF1o."
+    - speakerName: Ryland
+      text: "S\xED, se parece un poco."
+    - speakerName: Ryland
+      text: "\xBFVas a subir la monta\xF1a?"
+    - speakerName: Ryland
+      text: Nosotros solo andamos de paseo por esta zona.
+    - speakerName: Ryland
+      text: "Nos ayuda a recordar cuando est\xE1bamos un poco m\xE1s j\xF3venes."
+    - speakerName: Astro
+      text: Es lindo recordar lo vivido creando nuevos recuerdos.
+    - speakerName: Ryland
+      text: "Nosotros sol\xEDamos tener... un hijo muy parecido a ti hace un tiempo."
+    - speakerName: Ryland
+      text: "Si vas a subir m\xE1s te vale que tengas una buena raz\xF3n para arriesgarte
+        tanto."
     closingLines: []
   - optionText: Solo andaba de paso.
     relationshipDelta: -1
     npcResponseLines:
-    - "Jeje ni\xF1o misterioso."
-    - Soy Astro por cierto, este es mi esposo Ryland.
-    - "Hola ni\xF1o, \xBFno estar\xE1s pensando subir la monta\xF1a no?"
-    - "Es una ruta algo peligrosa llegando al final, por eso nosotros solo paseamos
-      por aqu\xED para apreciar la vista."
-    - "La verdad nos gustar\xEDa ir un poco m\xE1s arriba pero ya no estamos tan
-      j\xF3venes jeje."
-    - "No te conf\xEDes tampoco mucho, ni\xF1o. Si las cosas se ponen dif\xEDciles,
-      no dudes en regresar o pedir ayuda."
+    - speakerName: Astro
+      text: "Jeje ni\xF1o misterioso."
+    - speakerName: Astro
+      text: Soy Astro por cierto, este es mi esposo Ryland.
+    - speakerName: Ryland
+      text: "Hola ni\xF1o, \xBFno estar\xE1s pensando subir la monta\xF1a no?"
+    - speakerName: Ryland
+      text: "Es una ruta algo peligrosa llegando al final, por eso nosotros solo
+        paseamos por aqu\xED para apreciar la vista."
+    - speakerName: Astro
+      text: "La verdad nos gustar\xEDa ir un poco m\xE1s arriba pero ya no estamos
+        tan j\xF3venes jeje."
+    - speakerName: Ryland
+      text: "No te conf\xEDes tampoco mucho, ni\xF1o. Si las cosas se ponen dif\xEDciles,
+        no dudes en regresar o pedir ayuda."
     closingLines: []
   - optionText: "No se preocupe, estoy camino a subir la monta\xF1a, \xBFustedes
       tambi\xE9n?"
     relationshipDelta: 0
     npcResponseLines:
-    - "Estamos de paseo mi esposo y yo, peque\xF1o."
-    - "\xBFSi o no Ryland?"
-    - Ese es el plan.
-    - "Hasta que se sali\xF3 la cadena de la bici, pero ahora lo arreglo."
-    - "\xBFAs\xED que vas a subir la monta\xF1a no? Tienes muchas agallas, ni\xF1o."
-    - "Me recuerda un poco a Arthur, \xBFa ti no amor?"
-    - "Ten cuidado al subir la monta\xF1a, ni\xF1o. Puede llegar a ser dif\xEDcil,
-      as\xED que te recomiendo que no te sobreexijas tanto."
+    - speakerName: Astro
+      text: "Estamos de paseo mi esposo y yo, peque\xF1o."
+    - speakerName: Astro
+      text: "\xBFSi o no Ryland?"
+    - speakerName: Ryland
+      text: Ese es el plan, Astro.
+    - speakerName: Ryland
+      text: "Hasta que se sali\xF3 la cadena de la bici, pero ahora lo arreglo."
+    - speakerName: Astro
+      text: "\xBFAs\xED que vas a subir la monta\xF1a no? Tienes muchas agallas,
+        ni\xF1o."
+    - speakerName: Astro
+      text: "Me recuerda un poco a Arthur, \xBFa ti no amor?"
+    - speakerName: Ryland
+      text: Un poco...
+    - speakerName: Ryland
+      text: "Ten cuidado al subir la monta\xF1a, ni\xF1o. Puede llegar a ser dif\xEDcil,
+        as\xED que te recomiendo que no te sobreexijas tanto."
     closingLines: []
   givesManzanaOnEnd: 1
   manzanaTutorialLines:
-  - "Toma esto, ni\xF1o. Seguro lo llegar\xE1s a necesitar en alg\xFAn momento."
-  - "Si te encuentras alguien en el camino seguro agradecer\xE1 que alguien le d\xE9
-    una mano tambi\xE9n."
-  - "Cu\xEDdate mucho."
-  npcID: ryland_astro
+  - speakerName: Astro
+    text: "Toma esto, ni\xF1o. Seguro lo llegar\xE1s a necesitar en alg\xFAn momento."
+  - speakerName: Astro
+    text: "Si te encuentras alguien en el camino seguro agradecer\xE1 que alguien
+      le d\xE9 una mano tambi\xE9n."
+  - speakerName: Astro
+    text: "Cu\xEDdate mucho."

@@ -7,18 +7,17 @@ public class DialogueNode : ScriptableObject
     // ─── IDENTIFICACIÓN ────────────────────────────────────────
     [Header("Identificación")]
     public string nodeID;
-    // ej: "gaz_cap1_enc1", "ryland_cap1_enc1"
-
     public string npcName;
-    // Nombre que aparece en la UI: "Gaz", "Astro", "Ryland"...
-
     public int chapter;
-    // Capítulo donde ocurre este encuentro (1-4)
+    public string npcID;
+
+    [Tooltip("Si es true, todas las líneas usan npcName automáticamente. Si es false, cada línea define su propio speakerName.")]
+    public bool isSingleSpeaker = true;
 
     // ─── DIÁLOGO INICIAL ───────────────────────────────────────
     [Header("Diálogo inicial del NPC")]
     [Tooltip("Líneas que el NPC dice antes de que aparezcan las opciones")]
-    public string[] openingLines;
+    public DialogueLine[] openingLines;
 
     // ─── OPCIONES DEL JUGADOR ──────────────────────────────────
     [Header("Opciones del jugador")]
@@ -26,17 +25,20 @@ public class DialogueNode : ScriptableObject
 
     // ─── MANZANA TUTORIAL ──────────────────────────────────────
     [Header("Manzana")]
-    [Tooltip("Este nodo entrega la manzana tutorial al jugador")]
     public bool givesManzanaOnEnd;
 
-    [Tooltip("Líneas que se dicen al dar la manzana tutorial")]
-    public string[] manzanaTutorialLines;
+    [Tooltip("Líneas tras entregar la manzana — speakerName por línea")]
+    public DialogueLine[] manzanaTutorialLines;
+}
 
-    // ─── CONSECUENCIAS ─────────────────────────────────────────
-    [Header("Consecuencias")]
-    [Tooltip("ID del NPC para registrar su relación en DecisionRecord")]
-    public string npcID;
-    // ej: "gaz", "ryland_astro", "haru"
+// ─── LÍNEA DE DIÁLOGO ──────────────────────────────────────────
+[System.Serializable]
+public class DialogueLine
+{
+    [Tooltip("Quién dice esta línea. Vacío = usa npcName del asset.")]
+    public string speakerName;
+    [TextArea(1, 4)]
+    public string text;
 }
 
 // ─── OPCIÓN DE DIÁLOGO ─────────────────────────────────────────
@@ -51,8 +53,8 @@ public class DialogueOption
     public int relationshipDelta;
 
     [Tooltip("Líneas que responde el NPC según esta opción")]
-    public string[] npcResponseLines;
+    public DialogueLine[] npcResponseLines;
 
-    [Tooltip("Líneas adicionales comunes después de la respuesta (cierre del diálogo)")]
-    public string[] closingLines;
+    [Tooltip("Líneas adicionales comunes después de la respuesta")]
+    public DialogueLine[] closingLines;
 }

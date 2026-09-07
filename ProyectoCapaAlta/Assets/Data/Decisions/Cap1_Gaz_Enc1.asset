@@ -15,36 +15,59 @@ MonoBehaviour:
   nodeID: gaz_cap1_enc1
   npcName: Gaz
   chapter: 1
+  npcID: gaz
+  isSingleSpeaker: 1
   openingLines:
-  - "\xA1Hey! No tan r\xE1pido..."
-  - "\xBFTambi\xE9n est\xE1s subiendo hasta la cima?"
-  - "Dicen que esta monta\xF1a es de las m\xE1s dif\xEDciles de la regi\xF3n, chico."
-  - "M\xE1s te vale estar preparado."
+  - speakerName: 
+    text: "\xA1Hey! No tan r\xE1pido..."
+  - speakerName: 
+    text: "\xBFTambi\xE9n est\xE1s subiendo hasta la cima?"
+  - speakerName: 
+    text: "Dicen que esta monta\xF1a es de las m\xE1s dif\xEDciles de la regi\xF3n,
+      chico."
+  - speakerName: 
+    text: "M\xE1s te vale estar preparado."
   options:
   - optionText: "Vengo por un tema personal, en la cima. \xBFY t\xFA?"
     relationshipDelta: 1
     npcResponseLines:
-    - Hey, somos dos entonces, chico.
-    - "He escalado muchas monta\xF1as pero este es mi reto definitivo."
-    - "Termino de ordenar mis provisiones y retomar\xE9 el ritmo, nos vemos en la
-      cima."
+    - speakerName: 
+      text: Hey, somos dos entonces, chico.
+    - speakerName: 
+      text: Soy Gaz por cierto
+    - speakerName: 
+      text: "He escalado muchas monta\xF1as pero este es mi reto definitivo."
+    - speakerName: 
+      text: "Termino de ordenar mis provisiones y retomar\xE9 el ritmo, nos vemos
+        en la cima."
     closingLines: []
   - optionText: "S\xED, creo que soy el m\xE1s preparado para esto la verdad."
     relationshipDelta: -1
     npcResponseLines:
-    - "Con que el m\xE1s preparado. Mucha confianza te tienes, chico."
-    - "He entrenado con varias monta\xF1as tan grandes como esta antes."
-    - "Termino de ordenar mis provisiones y retomar\xE9 el ritmo, veremos qui\xE9n
-      llega antes a la cima."
+    - speakerName: 
+      text: "Con que el m\xE1s preparado."
+    - speakerName: 
+      text: Mucha confianza te tienes, chico.
+    - speakerName: 
+      text: Me llamo Gaz.
+    - speakerName: 
+      text: "He entrenado con varias monta\xF1as tan grandes como esta antes."
+    - speakerName: 
+      text: "Termino de ordenar mis provisiones y retomar\xE9 el ritmo, veremos qui\xE9n
+        llega antes a la cima."
     closingLines: []
   - optionText: "Creo que lo estoy, nunca hab\xEDa subido algo as\xED."
     relationshipDelta: 0
     npcResponseLines:
-    - Tranquilo, chico.
-    - Esto se ve peor de lo que parece, eso creo.
-    - "Termino de ordenar mis provisiones y retomar\xE9 el ritmo, estoy seguro que
-      nos veremos en la cima."
+    - speakerName: 
+      text: Tranquilo, chico.
+    - speakerName: 
+      text: Esto se ve peor de lo que parece, eso creo.
+    - speakerName: 
+      text: Verdad, mi nombre es Gaz.
+    - speakerName: 
+      text: "Termino de ordenar mis provisiones y retomar\xE9 el ritmo, estoy seguro
+        que nos veremos en la cima."
     closingLines: []
   givesManzanaOnEnd: 0
   manzanaTutorialLines: []
-  npcID: gaz

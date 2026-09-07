@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
@@ -16,19 +15,19 @@ public class DialogueManager : MonoBehaviour
 
     [Header("Contenido")]
     public TextMeshProUGUI npcNameText;
-    public TextMeshProUGUI theoNameText;  // ← nuevo
+    public TextMeshProUGUI theoNameText;
     public TextMeshProUGUI dialogueText;
 
     [Header("Opciones")]
     public GameObject optionsPanel;
-    public Button[] optionButtons;         // 3 botones de opción
-    public TextMeshProUGUI[] optionTexts;  // textos de cada botón
+    public Button[] optionButtons;
+    public TextMeshProUGUI[] optionTexts;
 
     // ─── ESTADO ────────────────────────────────────────────────
     private DialogueNode currentNode;
     private System.Action<int> onDialogueComplete;
 
-    private List<string> currentLines = new List<string>();
+    private List<DialogueLine> currentLines = new List<DialogueLine>();
     private int currentLineIndex = 0;
     private int chosenOptionIndex = -1;
 
@@ -37,25 +36,18 @@ public class DialogueManager : MonoBehaviour
     private bool choosingOption = false;
     private float inputCooldown = 0f;
 
-    // Estados del diálogo
+    private TheoController theo;
+
     private enum DialogueState
     {
-        Opening,    // mostrando líneas iniciales del NPC
-        Choosing,   // jugador elige opción
-        Responding, // NPC responde según opción
-        Manzana,    // líneas tutorial de manzana (Ryland y Astro)
-        Done
+        Opening, Choosing, Responding, Manzana, Done
     }
     private DialogueState state;
 
     // ──────────────────────────────────────────────────────────
     void Awake()
     {
-        if (Instance != null && Instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
+        if (Instance != null && Instance != this) { Destroy(gameObject); return; }
         Instance = this;
 
         if (dialoguePanel != null)
@@ -64,7 +56,8 @@ public class DialogueManager : MonoBehaviour
 
     void Start()
     {
-        // Conectar botones de opciones
+        theo = FindAnyObjectByType<TheoController>();
+
         for (int i = 0; i < optionButtons.Length; i++)
         {
             int index = i;
@@ -79,16 +72,12 @@ public class DialogueManager : MonoBehaviour
     {
         if (!isOpen) return;
 
-        if (inputCooldown > 0f)
-        {
-            inputCooldown -= Time.deltaTime;
-            return;
-        }
+        if (inputCooldown > 0f) { inputCooldown -= Time.deltaTime; return; }
 
-        // Avanzar diálogo con E (solo cuando no está eligiendo)
+        // Avanzar con click izquierdo (solo cuando no está eligiendo)
         if (!choosingOption && waitingInput)
         {
-            if (Keyboard.current.eKey.wasPressedThisFrame)
+            if (Mouse.current.leftButton.wasPressedThisFrame)
                 AdvanceLine();
         }
     }
@@ -96,7 +85,6 @@ public class DialogueManager : MonoBehaviour
     // ─── INICIAR DIÁLOGO ───────────────────────────────────────
     public void StartDialogue(DialogueNode node, System.Action<int> callback)
     {
-        SetNPCSpeaking(true);
         currentNode = node;
         onDialogueComplete = callback;
         chosenOptionIndex = -1;
@@ -105,14 +93,16 @@ public class DialogueManager : MonoBehaviour
         isOpen = true;
         inputCooldown = 0.15f;
 
+        // Bloquear movimiento de Theo
+        if (theo != null) theo.SetDialogueState(true);
+
         dialoguePanel.SetActive(true);
         optionsPanel.SetActive(false);
+        SetNPCSpeaking(true);
 
-        npcNameText.text = node.npcName;
-
-        // Cargar líneas iniciales
         currentLines.Clear();
-        currentLines.AddRange(node.openingLines);
+        if (node.openingLines != null)
+            currentLines.AddRange(node.openingLines);
 
         ShowCurrentLine();
     }
@@ -122,12 +112,19 @@ public class DialogueManager : MonoBehaviour
     {
         if (currentLineIndex < currentLines.Count)
         {
-            dialogueText.text = currentLines[currentLineIndex];
+            DialogueLine line = currentLines[currentLineIndex];
+
+            // Speaker: si la línea tiene nombre propio lo usa, sino usa npcName del nodo
+            string speaker = currentNode.isSingleSpeaker
+            ? currentNode.npcName
+            : (string.IsNullOrEmpty(line.speakerName) ? currentNode.npcName : line.speakerName);
+
+            npcNameText.text = speaker;
+            dialogueText.text = line.text;
             waitingInput = true;
         }
         else
         {
-            // Terminó el bloque actual — avanzar al siguiente estado
             AdvanceState();
         }
     }
@@ -145,12 +142,10 @@ public class DialogueManager : MonoBehaviour
         switch (state)
         {
             case DialogueState.Opening:
-                // Terminaron las líneas iniciales → mostrar opciones
                 ShowOptions();
                 break;
 
             case DialogueState.Responding:
-                // Terminó la respuesta del NPC → pasar a manzana o cerrar
                 if (currentNode.givesManzanaOnEnd &&
                     currentNode.manzanaTutorialLines != null &&
                     currentNode.manzanaTutorialLines.Length > 0)
@@ -161,10 +156,7 @@ public class DialogueManager : MonoBehaviour
                     currentLines.AddRange(currentNode.manzanaTutorialLines);
                     ShowCurrentLine();
                 }
-                else
-                {
-                    EndDialogue();
-                }
+                else EndDialogue();
                 break;
 
             case DialogueState.Manzana:
@@ -191,19 +183,16 @@ public class DialogueManager : MonoBehaviour
                 optionButtons[i].gameObject.SetActive(true);
                 optionTexts[i].text = currentNode.options[i].optionText;
             }
-            else
-            {
-                optionButtons[i].gameObject.SetActive(false);
-            }
+            else optionButtons[i].gameObject.SetActive(false);
         }
     }
 
     // ─── ELEGIR OPCIÓN ─────────────────────────────────────────
     void ChooseOption(int index)
     {
-        SetNPCSpeaking(true);
         if (index >= currentNode.options.Length) return;
 
+        SetNPCSpeaking(true);
         chosenOptionIndex = index;
         choosingOption = false;
         optionsPanel.SetActive(false);
@@ -211,19 +200,15 @@ public class DialogueManager : MonoBehaviour
 
         DialogueOption chosen = currentNode.options[index];
 
-        // Registrar cambio de relación
         if (DecisionRecord.Instance != null)
-            DecisionRecord.Instance.SetRelationship(
-                currentNode.npcID, chosen.relationshipDelta);
+            DecisionRecord.Instance.SetRelationship(currentNode.npcID, chosen.relationshipDelta);
 
-        // Cargar respuesta del NPC
         state = DialogueState.Responding;
         currentLineIndex = 0;
         currentLines.Clear();
 
         if (chosen.npcResponseLines != null)
             currentLines.AddRange(chosen.npcResponseLines);
-
         if (chosen.closingLines != null)
             currentLines.AddRange(chosen.closingLines);
 
@@ -239,17 +224,19 @@ public class DialogueManager : MonoBehaviour
         dialoguePanel.SetActive(false);
         optionsPanel.SetActive(false);
 
+        // Desbloquear movimiento de Theo
+        if (theo != null) theo.SetDialogueState(false);
+
         onDialogueComplete?.Invoke(chosenOptionIndex);
     }
 
-    // ─── HelperCambioNPCTalking ────────────────────────────────────────
+    // ─── HELPER NPC / THEO SPEAKING ────────────────────────────
     void SetNPCSpeaking(bool npcTalking)
     {
         npcNameText.gameObject.SetActive(npcTalking);
         theoNameText.gameObject.SetActive(!npcTalking);
         dialogueText.gameObject.SetActive(npcTalking);
     }
-
 
     // ─── PROPIEDADES PÚBLICAS ──────────────────────────────────
     public bool IsOpen => isOpen;
