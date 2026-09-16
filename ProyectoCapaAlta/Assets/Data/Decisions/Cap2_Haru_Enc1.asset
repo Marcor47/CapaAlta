@@ -44,16 +44,16 @@ MonoBehaviour:
       relationshipDelta: -1
       npcResponseLines:
       - speakerName: 
-        text: "No lo creas as\xED chico azul."
+        text: "No lo creas as\xED, Azul."
       - speakerName: 
         text: 'A veces te puedes encontrar con cosas bonitas en lugares como este. '
       - speakerName: 
         text: Solo hay que tomarse el tiempo para apreciarlas.
-    - optionText: "Voy para a la cima. Es una misi\xF3n personal."
+    - optionText: "Voy a la cima. Es una misi\xF3n personal."
       relationshipDelta: 0
       npcResponseLines:
       - speakerName: 
-        text: 'Suena serio chico azul... '
+        text: Suena serio, Azul...
       - speakerName: 
         text: "Es un lugar muy bonito para una misi\xF3n como la que dices."
       - speakerName: 
@@ -73,8 +73,8 @@ MonoBehaviour:
       - speakerName: 
         text: "Me pregunto tambi\xE9n el porqu\xE9 de esas cartas."
       - speakerName: 
-        text: "\xBFSer\xE1 una forma de desahogarse de sus problemas de los que viajan
-          por estas monta\xF1as?"
+        text: "\xBFSer\xE1 una forma en la que la gente que viaja por estas monta\xF1as
+          se desahoga de sus problemas?"
       - speakerName: 
         text: Ni idea...
     - optionText: He visto algunas, trato de no entrometerme mucho.
@@ -86,7 +86,7 @@ MonoBehaviour:
         text: "Es como si quisieran que alguien las leyese tambi\xE9n, buscando ayuda."
       - speakerName: 
         text: "\xBFQui\xE9nes ser\xE1n estas personas?"
-    - optionText: Trato de no distraerme en el camino hacia la cima la verdad.
+    - optionText: Trato de no distraerme en el camino hacia la cima, la verdad.
       relationshipDelta: 0
       npcResponseLines:
       - speakerName: 
@@ -94,7 +94,7 @@ MonoBehaviour:
       - speakerName: 
         text: Cada uno tiene una historia que contar.
       - speakerName: 
-        text: Algunos no estamos listos aun para compatirla.
+        text: "Algunos no estamos listos a\xFAn para compartirla."
     sharedFollowUpLines:
     - speakerName: 
       text: "Bueno, creo que me quedo un rato m\xE1s por aqu\xED."
@@ -111,12 +111,12 @@ MonoBehaviour:
   - speakerName: 
     text: Gracias, Azul.
   - speakerName: 
-    text: Que bonito detalle.
+    text: "\xA1Qu\xE9 bonito detalle!"
   - speakerName: 
-    text: "\xBFDe donde la sacaste?"
+    text: "\xBFDe d\xF3nde la sacaste?"
   manzanaGivenWhenGood:
   - speakerName: 
-    text: Azuul.
+    text: Azuuul.
   - speakerName: 
     text: "Gracias justo estaba buscando una tambi\xE9n."
   - speakerName: 

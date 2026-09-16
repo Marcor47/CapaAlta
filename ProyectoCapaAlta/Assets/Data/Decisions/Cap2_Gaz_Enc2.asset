@@ -43,26 +43,26 @@ MonoBehaviour:
         text: "Estoy solo tom\xE1ndome un peque\xF1o respiro. No te preocupes."
     npcLeadInLines: []
     options:
-    - optionText: "S\xED ha estado dificil. Creo que terminar\xE9 descansando por
-        aqu\xED tambi\xE9n."
+    - optionText: "S\xED ha estado dif\xEDcil. Creo que terminar\xE9 descansando
+        por aqu\xED tambi\xE9n."
       relationshipDelta: 0
       npcResponseLines:
       - speakerName: 
         text: Gracias, chico. Pero no me esperes.
       - speakerName: 
         text: "Ahorita tomo el ritmo y seguro nos vemos m\xE1s adelante."
-    - optionText: "Vamos, \xBFno me vas a dejar esperando no? Jeje"
+    - optionText: "Vamos, \xBFno me vas a dejar esperando? Jeje"
       relationshipDelta: -1
       npcResponseLines:
       - speakerName: 
         text: Muy gracioso, chico.
       - speakerName: 
-        text: Termino este descanso y veremos quien llega antes.
-    - optionText: Ya vamos mitad de camino, seguro llegamos a la par.
+        text: "Termino este descanso y veremos qui\xE9n llega antes."
+    - optionText: Ya vamos a mitad de camino, seguro llegamos a la par.
       relationshipDelta: 1
       npcResponseLines:
       - speakerName: 
-        text: "\xBFT\xFA crees chico?"
+        text: "\xBFT\xFA crees, chico?"
       - speakerName: 
         text: "S\xED, capaz y tengas raz\xF3n."
       - speakerName: 
