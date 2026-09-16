@@ -47,16 +47,41 @@ public class DialogueNode : ScriptableObject
 [System.Serializable]
 public class DialogueRound
 {
-    [Tooltip("Líneas del NPC antes de mostrar las opciones de esta ronda")]
+    [Tooltip("Opcional: aperturas alternativas según la relación con el NPC al iniciar este " +
+             "encuentro (ej. Gaz Cap2 Enc2 según cómo quedó Cap1). Solo tiene sentido en la ronda 0.")]
+    public ConditionalOpening[] conditionalOpenings;
+
+    [Tooltip("Líneas del NPC antes de mostrar las opciones — se usan si ninguna condición en conditionalOpenings aplica")]
     public DialogueLine[] npcLeadInLines;
+
 
     [Tooltip("Opciones del jugador para esta ronda (mala/neutral/buena)")]
     public DialogueOption[] options;
 
-    [Tooltip("Líneas comunes que se muestran DESPUÉS de la respuesta de la opción " +
-             "elegida, sin importar cuál fue (ej. una despedida igual para las 3). " +
-             "Déjalo vacío si cada opción termina distinto.")]
+    [Tooltip("Líneas comunes que se muestran DESPUÉS de la respuesta de la opción elegida, sin importar cuál fue")]
     public DialogueLine[] sharedFollowUpLines;
+
+    public DialogueLine[] GetOpeningLines(int currentRelationship)
+    {
+        if (conditionalOpenings != null)
+        {
+            foreach (var co in conditionalOpenings)
+            {
+                if (co.requiredRelationship == currentRelationship)
+                    return co.npcLeadInLines;
+            }
+        }
+        return npcLeadInLines;
+    }
+}
+
+[System.Serializable]
+public class ConditionalOpening
+{
+    [Range(-1, 1)]
+    public int requiredRelationship;
+
+    public DialogueLine[] npcLeadInLines;
 }
 
 // ─── LÍNEA DE DIÁLOGO ──────────────────────────────────────────

@@ -1,0 +1,75 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d6edfb0cc82e72348988115f5216b241, type: 3}
+  m_Name: Cap2_Gaz_Enc2
+  m_EditorClassIdentifier: Assembly-CSharp::DialogueNode
+  nodeID: Cap2_Gaz_Enc2
+  npcName: Gaz
+  chapter: 2
+  npcID: gaz
+  isSingleSpeaker: 1
+  rounds:
+  - conditionalOpenings:
+    - requiredRelationship: 1
+      npcLeadInLines:
+      - speakerName: 
+        text: "\xA1Ey, mira qui\xE9n lleg\xF3!"
+      - speakerName: 
+        text: "Estoy haciendo una pausa, este tramo me dej\xF3 frito."
+      - speakerName: 
+        text: "Ven, si\xE9ntate un rato si quieres, no hay prisa."
+    - requiredRelationship: 0
+      npcLeadInLines:
+      - speakerName: 
+        text: "Hey, de nuevo t\xFA."
+      - speakerName: 
+        text: Estoy parando un rato, este tramo estuvo pesado.
+      - speakerName: 
+        text: Sigue cuando quieras, yo ya casi termino de recuperar el aire.
+    - requiredRelationship: -1
+      npcLeadInLines:
+      - speakerName: 
+        text: "Ah, eres t\xFA otra vez."
+      - speakerName: 
+        text: "Estoy solo tom\xE1ndome un peque\xF1o respiro. No te preocupes."
+    npcLeadInLines: []
+    options:
+    - optionText: "S\xED ha estado dificil. Creo que terminar\xE9 descansando por
+        aqu\xED tambi\xE9n."
+      relationshipDelta: 0
+      npcResponseLines:
+      - speakerName: 
+        text: Gracias, chico. Pero no me esperes.
+      - speakerName: 
+        text: "Ahorita tomo el ritmo y seguro nos vemos m\xE1s adelante."
+    - optionText: "Vamos, \xBFno me vas a dejar esperando no? Jeje"
+      relationshipDelta: -1
+      npcResponseLines:
+      - speakerName: 
+        text: Muy gracioso, chico.
+      - speakerName: 
+        text: Termino este descanso y veremos quien llega antes.
+    - optionText: Ya vamos mitad de camino, seguro llegamos a la par.
+      relationshipDelta: 1
+      npcResponseLines:
+      - speakerName: 
+        text: "\xBFT\xFA crees chico?"
+      - speakerName: 
+        text: "S\xED, capaz y tengas raz\xF3n."
+      - speakerName: 
+        text: "Solo dame un momento y contin\xFAo despu\xE9s de ti."
+    sharedFollowUpLines: []
+  givesManzanaOnEnd: 0
+  manzanaTutorialLines: []
+  manzanaGivenWhenBad: []
+  manzanaGivenWhenNeutral: []
+  manzanaGivenWhenGood: []

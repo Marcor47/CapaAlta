@@ -1,0 +1,123 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d6edfb0cc82e72348988115f5216b241, type: 3}
+  m_Name: Cap2_Haru_Enc1
+  m_EditorClassIdentifier: Assembly-CSharp::DialogueNode
+  nodeID: Cap2_Haru_Enc1
+  npcName: Haru
+  chapter: 2
+  npcID: haru
+  isSingleSpeaker: 1
+  rounds:
+  - conditionalOpenings: []
+    npcLeadInLines:
+    - speakerName: 
+      text: "Oh, no esperaba compa\xF1\xEDa por aqu\xED."
+    - speakerName: 
+      text: Estaba por tomarle una foto a esto antes de que cambie la luz.
+    - speakerName: 
+      text: "\xBFT\xFA tambi\xE9n subes a la cima, o vienes de paso?"
+    options:
+    - optionText: "Voy a la cima. \xBFQu\xE9 es lo que le vas a tomar foto?"
+      relationshipDelta: 1
+      npcResponseLines:
+      - speakerName: 
+        text: "Nada en especial, Azul... \xBFte molesta si te digo as\xED? Es por
+          la polera que traes."
+      - speakerName: 
+        text: "Hay una vista incre\xEDble desde esta altura. Todo parece tan... infinito
+          desde aqu\xED"
+      - speakerName: 
+        text: "Subir\xE9 tambi\xE9n un poco m\xE1s para unas \xFAltimas fotos."
+      - speakerName: 
+        text: "Ser\xEDa bueno encontrarnos en el camino."
+    - optionText: "Voy a la cima. No creo que se pueda hacer mucho en una monta\xF1a."
+      relationshipDelta: -1
+      npcResponseLines:
+      - speakerName: 
+        text: "No lo creas as\xED chico azul."
+      - speakerName: 
+        text: 'A veces te puedes encontrar con cosas bonitas en lugares como este. '
+      - speakerName: 
+        text: Solo hay que tomarse el tiempo para apreciarlas.
+    - optionText: "Voy para a la cima. Es una misi\xF3n personal."
+      relationshipDelta: 0
+      npcResponseLines:
+      - speakerName: 
+        text: 'Suena serio chico azul... '
+      - speakerName: 
+        text: "Es un lugar muy bonito para una misi\xF3n como la que dices."
+      - speakerName: 
+        text: "Ojal\xE1 puedas terminarla y tomarte el tiempo para apreciarlo."
+    sharedFollowUpLines: []
+  - conditionalOpenings: []
+    npcLeadInLines:
+    - speakerName: 
+      text: "Parece m\xE1gico este lugar."
+    - speakerName: 
+      text: "\xBFTe has dado cuenta de las notas que est\xE1n dispersadas por la
+        monta\xF1a?"
+    options:
+    - optionText: "S\xED, algunas tienen historias muy personales. "
+      relationshipDelta: 1
+      npcResponseLines:
+      - speakerName: 
+        text: "Me pregunto tambi\xE9n el porqu\xE9 de esas cartas."
+      - speakerName: 
+        text: "\xBFSer\xE1 una forma de desahogarse de sus problemas de los que viajan
+          por estas monta\xF1as?"
+      - speakerName: 
+        text: Ni idea...
+    - optionText: He visto algunas, trato de no entrometerme mucho.
+      relationshipDelta: 0
+      npcResponseLines:
+      - speakerName: 
+        text: "S\xED, algunas tienen un tono muy personal."
+      - speakerName: 
+        text: "Es como si quisieran que alguien las leyese tambi\xE9n, buscando ayuda."
+      - speakerName: 
+        text: "\xBFQui\xE9nes ser\xE1n estas personas?"
+    - optionText: Trato de no distraerme en el camino hacia la cima la verdad.
+      relationshipDelta: 0
+      npcResponseLines:
+      - speakerName: 
+        text: Ya veo...
+      - speakerName: 
+        text: Cada uno tiene una historia que contar.
+      - speakerName: 
+        text: Algunos no estamos listos aun para compatirla.
+    sharedFollowUpLines:
+    - speakerName: 
+      text: "Bueno, creo que me quedo un rato m\xE1s por aqu\xED."
+    - speakerName: 
+      text: "Cu\xEDdate en el camino, Azul."
+  givesManzanaOnEnd: 0
+  manzanaTutorialLines: []
+  manzanaGivenWhenBad:
+  - speakerName: 
+    text: Muchas gracias, Azul.
+  - speakerName: 
+    text: "Sab\xEDa que eras alguien dulce por dentro."
+  manzanaGivenWhenNeutral:
+  - speakerName: 
+    text: Gracias, Azul.
+  - speakerName: 
+    text: Que bonito detalle.
+  - speakerName: 
+    text: "\xBFDe donde la sacaste?"
+  manzanaGivenWhenGood:
+  - speakerName: 
+    text: Azuul.
+  - speakerName: 
+    text: "Gracias justo estaba buscando una tambi\xE9n."
+  - speakerName: 
+    text: "Me gust\xF3."

@@ -34,6 +34,7 @@ public class DialogueManager : MonoBehaviour
     private int currentRoundIndex = 0;
     private int pendingRelationshipDelta = 0;
     private List<int> chosenOptionsThisNode = new List<int>();
+    private int entryRelationship = 0;
 
     // Modo simple: solo líneas, sin rondas ni opciones (usado por ManzanaGiver)
     private bool simpleMode = false;
@@ -92,9 +93,9 @@ public class DialogueManager : MonoBehaviour
     }
 
     // ─── INICIAR DIÁLOGO (encuentro normal, con nodo) ──────────
+    // StartDialogue() — reemplaza cómo se llena currentLines al inicio:
     public void StartDialogue(DialogueNode node, System.Action<int> callback)
     {
-        simpleMode = false;
         currentNode = node;
         onDialogueComplete = callback;
         chosenOptionIndex = -1;
@@ -102,6 +103,11 @@ public class DialogueManager : MonoBehaviour
         currentRoundIndex = 0;
         pendingRelationshipDelta = 0;
         chosenOptionsThisNode.Clear();
+
+        entryRelationship = DecisionRecord.Instance != null
+            ? DecisionRecord.Instance.GetRelationship(node.npcID)
+            : 0;
+
         state = DialogueState.Opening;
         isOpen = true;
         inputCooldown = 0.15f;
@@ -113,8 +119,9 @@ public class DialogueManager : MonoBehaviour
         SetNPCSpeaking(true);
 
         currentLines.Clear();
-        if (CurrentRound.npcLeadInLines != null)
-            currentLines.AddRange(CurrentRound.npcLeadInLines);
+        DialogueLine[] opening = CurrentRound.GetOpeningLines(entryRelationship);
+        if (opening != null)
+            currentLines.AddRange(opening);
 
         ShowCurrentLine();
     }
@@ -197,14 +204,17 @@ public class DialogueManager : MonoBehaviour
                 break;
 
             case DialogueState.Responding:
+                // AdvanceState() — dentro del case Responding, cuando pasa a la siguiente ronda:
                 if (currentRoundIndex < currentNode.rounds.Length - 1)
                 {
                     currentRoundIndex++;
                     state = DialogueState.Opening;
                     currentLineIndex = 0;
                     currentLines.Clear();
-                    if (CurrentRound.npcLeadInLines != null)
-                        currentLines.AddRange(CurrentRound.npcLeadInLines);
+
+                    DialogueLine[] opening = CurrentRound.GetOpeningLines(entryRelationship);
+                    if (opening != null)
+                        currentLines.AddRange(opening);
 
                     SetNPCSpeaking(true);
                     ShowCurrentLine();

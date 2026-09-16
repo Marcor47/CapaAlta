@@ -8,9 +8,12 @@ public class DialogueTrigger : MonoBehaviour
     [Header("Datos del encuentro")]
     public DialogueNode dialogueNode;
 
-    [Tooltip("NodeID del encuentro anterior requerido para que este NPC aparezca")]
-    [SerializeField] private string requiredPreviousNodeID = "";
-    // Dejar vacío si no requiere encuentro previo (ej: primer encuentro de Gaz)
+    [Tooltip("El encuentro anterior que debe estar completado para que este NPC aparezca. Déjalo vacío (None) si no requiere ninguno.")]
+    public DialogueNode requiredPreviousNode;
+
+    [Header("UI")]
+    [Tooltip("Ej. un texto o ícono 'Presiona E para hablar'")]
+    public GameObject promptUI;
 
     // ─── ESTADO ────────────────────────────────────────────────
     private bool playerInRange = false;
@@ -20,10 +23,10 @@ public class DialogueTrigger : MonoBehaviour
     // ──────────────────────────────────────────────────────────
     void Start()
     {
-        if (!string.IsNullOrEmpty(requiredPreviousNodeID))
+        if (requiredPreviousNode != null)
         {
             if (DecisionRecord.Instance != null &&
-                !DecisionRecord.Instance.CanAppear(requiredPreviousNodeID))
+                !DecisionRecord.Instance.CanAppear(requiredPreviousNode.nodeID))
             {
                 gameObject.SetActive(false);
                 return;
@@ -40,9 +43,18 @@ public class DialogueTrigger : MonoBehaviour
 
     void Update()
     {
-        if (!playerInRange || !canInteract || isCompleted) return;
+        if (!playerInRange)
+        {
+            if (promptUI != null) promptUI.SetActive(false);
+            return;
+        }
 
-        if (Keyboard.current.eKey.wasPressedThisFrame)
+        bool canTalk = canInteract && !isCompleted
+            && DialogueManager.Instance != null && !DialogueManager.Instance.IsOpen;
+
+        if (promptUI != null) promptUI.SetActive(canTalk);
+
+        if (canTalk && Keyboard.current.eKey.wasPressedThisFrame)
             StartDialogue();
     }
 
@@ -50,10 +62,7 @@ public class DialogueTrigger : MonoBehaviour
     void OnTriggerEnter2D(Collider2D other)
     {
         if (!other.CompareTag("Player")) return;
-        if (isCompleted || !canInteract) return;
-
         playerInRange = true;
-        // TODO: UIHintManager.Instance.Show("Presiona E para hablar");
     }
 
     void OnTriggerExit2D(Collider2D other)
@@ -61,7 +70,7 @@ public class DialogueTrigger : MonoBehaviour
         if (!other.CompareTag("Player")) return;
 
         playerInRange = false;
-        // TODO: UIHintManager.Instance.Hide();
+        if (promptUI != null) promptUI.SetActive(false);
     }
 
     // ─── INICIAR DIÁLOGO ───────────────────────────────────────
@@ -74,6 +83,7 @@ public class DialogueTrigger : MonoBehaviour
         }
 
         canInteract = false;
+        if (promptUI != null) promptUI.SetActive(false);
         DialogueManager.Instance.StartDialogue(dialogueNode, OnDialogueComplete);
     }
 

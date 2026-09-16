@@ -94,16 +94,18 @@ public class DecisionRecord : MonoBehaviour
             return false;
         }
 
-        int current = GetRelationship(npcID);
-        if (current >= 1)
-        {
-            Debug.Log($"[DecisionRecord] Relación con {npcID} ya está al máximo.");
-            return false;
-        }
-
         manzanasAvailable--;
         manzanasUsedOn.Add(npcID);
-        SetRelationship(npcID, +1);
+
+        int current = GetRelationship(npcID);
+        if (current < 1)
+        {
+            SetRelationship(npcID, +1);
+        }
+        else
+        {
+            Debug.Log($"[DecisionRecord] Relación con {npcID} ya estaba al máximo; la manzana se usó igual (sin subir más).");
+        }
 
         Debug.Log($"[DecisionRecord] Manzana usada con {npcID}. Manzanas restantes: {manzanasAvailable}");
         return true;
