@@ -94,6 +94,8 @@ MonoBehaviour:
     closingLines: []
   givesManzanaOnEnd: 1
   manzanaTutorialLines:
+  - speakerName: Ryland
+    text: Termino de arreglar nuestra bici y nosotros seguiremos nuestro camino.
   - speakerName: Astro
     text: "Toma esto, ni\xF1o. Seguro lo llegar\xE1s a necesitar en alg\xFAn momento."
   - speakerName: Astro
