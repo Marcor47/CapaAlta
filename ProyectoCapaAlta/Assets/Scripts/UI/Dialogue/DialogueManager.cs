@@ -31,6 +31,14 @@ public class DialogueManager : MonoBehaviour
     private int currentLineIndex = 0;
     private int chosenOptionIndex = -1;
 
+    private int currentRoundIndex = 0;
+    private int pendingRelationshipDelta = 0;
+    private List<int> chosenOptionsThisNode = new List<int>();
+
+    // Modo simple: solo líneas, sin rondas ni opciones (usado por ManzanaGiver)
+    private bool simpleMode = false;
+    private string simpleSpeakerName;
+
     private bool isOpen = false;
     private bool waitingInput = false;
     private bool choosingOption = false;
@@ -43,6 +51,8 @@ public class DialogueManager : MonoBehaviour
         Opening, Choosing, Responding, Manzana, Done
     }
     private DialogueState state;
+
+    private DialogueRound CurrentRound => currentNode.rounds[currentRoundIndex];
 
     // ──────────────────────────────────────────────────────────
     void Awake()
@@ -74,7 +84,6 @@ public class DialogueManager : MonoBehaviour
 
         if (inputCooldown > 0f) { inputCooldown -= Time.deltaTime; return; }
 
-        // Avanzar con click izquierdo (solo cuando no está eligiendo)
         if (!choosingOption && waitingInput)
         {
             if (Mouse.current.leftButton.wasPressedThisFrame)
@@ -82,18 +91,21 @@ public class DialogueManager : MonoBehaviour
         }
     }
 
-    // ─── INICIAR DIÁLOGO ───────────────────────────────────────
+    // ─── INICIAR DIÁLOGO (encuentro normal, con nodo) ──────────
     public void StartDialogue(DialogueNode node, System.Action<int> callback)
     {
+        simpleMode = false;
         currentNode = node;
         onDialogueComplete = callback;
         chosenOptionIndex = -1;
         currentLineIndex = 0;
+        currentRoundIndex = 0;
+        pendingRelationshipDelta = 0;
+        chosenOptionsThisNode.Clear();
         state = DialogueState.Opening;
         isOpen = true;
         inputCooldown = 0.15f;
 
-        // Bloquear movimiento de Theo
         if (theo != null) theo.SetDialogueState(true);
 
         dialoguePanel.SetActive(true);
@@ -101,8 +113,34 @@ public class DialogueManager : MonoBehaviour
         SetNPCSpeaking(true);
 
         currentLines.Clear();
-        if (node.openingLines != null)
-            currentLines.AddRange(node.openingLines);
+        if (CurrentRound.npcLeadInLines != null)
+            currentLines.AddRange(CurrentRound.npcLeadInLines);
+
+        ShowCurrentLine();
+    }
+
+    // ─── MOSTRAR LÍNEAS SIMPLES (sin nodo, sin opciones) ───────
+    // Usado por ManzanaGiver.cs para la reacción al dar una manzana
+    public void ShowSimpleLines(string speakerName, DialogueLine[] lines)
+    {
+        simpleMode = true;
+        simpleSpeakerName = speakerName;
+        currentNode = null;
+        onDialogueComplete = null;
+        chosenOptionIndex = -1;
+        currentLineIndex = 0;
+        state = DialogueState.Responding;
+        isOpen = true;
+        inputCooldown = 0.15f;
+
+        if (theo != null) theo.SetDialogueState(true);
+
+        dialoguePanel.SetActive(true);
+        optionsPanel.SetActive(false);
+        SetNPCSpeaking(true);
+
+        currentLines.Clear();
+        if (lines != null) currentLines.AddRange(lines);
 
         ShowCurrentLine();
     }
@@ -114,10 +152,17 @@ public class DialogueManager : MonoBehaviour
         {
             DialogueLine line = currentLines[currentLineIndex];
 
-            // Speaker: si la línea tiene nombre propio lo usa, sino usa npcName del nodo
-            string speaker = currentNode.isSingleSpeaker
-            ? currentNode.npcName
-            : (string.IsNullOrEmpty(line.speakerName) ? currentNode.npcName : line.speakerName);
+            string speaker;
+            if (simpleMode)
+            {
+                speaker = string.IsNullOrEmpty(line.speakerName) ? simpleSpeakerName : line.speakerName;
+            }
+            else
+            {
+                speaker = currentNode.isSingleSpeaker
+                    ? currentNode.npcName
+                    : (string.IsNullOrEmpty(line.speakerName) ? currentNode.npcName : line.speakerName);
+            }
 
             npcNameText.text = speaker;
             dialogueText.text = line.text;
@@ -139,6 +184,12 @@ public class DialogueManager : MonoBehaviour
     // ─── AVANZAR ESTADO ────────────────────────────────────────
     void AdvanceState()
     {
+        if (simpleMode)
+        {
+            EndDialogue();
+            return;
+        }
+
         switch (state)
         {
             case DialogueState.Opening:
@@ -146,17 +197,38 @@ public class DialogueManager : MonoBehaviour
                 break;
 
             case DialogueState.Responding:
-                if (currentNode.givesManzanaOnEnd &&
-                    currentNode.manzanaTutorialLines != null &&
-                    currentNode.manzanaTutorialLines.Length > 0)
+                if (currentRoundIndex < currentNode.rounds.Length - 1)
                 {
-                    state = DialogueState.Manzana;
+                    currentRoundIndex++;
+                    state = DialogueState.Opening;
                     currentLineIndex = 0;
                     currentLines.Clear();
-                    currentLines.AddRange(currentNode.manzanaTutorialLines);
+                    if (CurrentRound.npcLeadInLines != null)
+                        currentLines.AddRange(CurrentRound.npcLeadInLines);
+
+                    SetNPCSpeaking(true);
                     ShowCurrentLine();
                 }
-                else EndDialogue();
+                else
+                {
+                    if (DecisionRecord.Instance != null)
+                    {
+                        int finalDelta = Mathf.Clamp(pendingRelationshipDelta, -1, 1);
+                        DecisionRecord.Instance.SetRelationship(currentNode.npcID, finalDelta);
+                    }
+
+                    if (currentNode.givesManzanaOnEnd &&
+                        currentNode.manzanaTutorialLines != null &&
+                        currentNode.manzanaTutorialLines.Length > 0)
+                    {
+                        state = DialogueState.Manzana;
+                        currentLineIndex = 0;
+                        currentLines.Clear();
+                        currentLines.AddRange(currentNode.manzanaTutorialLines);
+                        ShowCurrentLine();
+                    }
+                    else EndDialogue();
+                }
                 break;
 
             case DialogueState.Manzana:
@@ -176,12 +248,14 @@ public class DialogueManager : MonoBehaviour
         optionsPanel.SetActive(true);
         dialogueText.text = "";
 
+        DialogueOption[] roundOptions = CurrentRound.options;
+
         for (int i = 0; i < optionButtons.Length; i++)
         {
-            if (i < currentNode.options.Length)
+            if (i < roundOptions.Length)
             {
                 optionButtons[i].gameObject.SetActive(true);
-                optionTexts[i].text = currentNode.options[i].optionText;
+                optionTexts[i].text = roundOptions[i].optionText;
             }
             else optionButtons[i].gameObject.SetActive(false);
         }
@@ -190,18 +264,23 @@ public class DialogueManager : MonoBehaviour
     // ─── ELEGIR OPCIÓN ─────────────────────────────────────────
     void ChooseOption(int index)
     {
-        if (index >= currentNode.options.Length) return;
+        DialogueOption[] roundOptions = CurrentRound.options;
+        if (index >= roundOptions.Length) return;
 
         SetNPCSpeaking(true);
         chosenOptionIndex = index;
+        chosenOptionsThisNode.Add(index);
         choosingOption = false;
         optionsPanel.SetActive(false);
         inputCooldown = 0.15f;
 
-        DialogueOption chosen = currentNode.options[index];
+        DialogueOption chosen = roundOptions[index];
+        pendingRelationshipDelta += chosen.relationshipDelta;
 
         if (DecisionRecord.Instance != null)
-            DecisionRecord.Instance.SetRelationship(currentNode.npcID, chosen.relationshipDelta);
+            DecisionRecord.Instance.RecordChoice(
+                currentNode.nodeID, currentNode.npcID,
+                currentRoundIndex, index, chosen.relationshipDelta);
 
         state = DialogueState.Responding;
         currentLineIndex = 0;
@@ -209,8 +288,10 @@ public class DialogueManager : MonoBehaviour
 
         if (chosen.npcResponseLines != null)
             currentLines.AddRange(chosen.npcResponseLines);
-        if (chosen.closingLines != null)
-            currentLines.AddRange(chosen.closingLines);
+
+        // NUEVO: agrega el cierre común de la ronda, si lo tiene
+        if (CurrentRound.sharedFollowUpLines != null)
+            currentLines.AddRange(CurrentRound.sharedFollowUpLines);
 
         ShowCurrentLine();
     }
@@ -220,11 +301,11 @@ public class DialogueManager : MonoBehaviour
     {
         state = DialogueState.Done;
         isOpen = false;
+        simpleMode = false;
 
         dialoguePanel.SetActive(false);
         optionsPanel.SetActive(false);
 
-        // Desbloquear movimiento de Theo
         if (theo != null) theo.SetDialogueState(false);
 
         onDialogueComplete?.Invoke(chosenOptionIndex);
@@ -240,4 +321,5 @@ public class DialogueManager : MonoBehaviour
 
     // ─── PROPIEDADES PÚBLICAS ──────────────────────────────────
     public bool IsOpen => isOpen;
+    public List<int> LastNodeChoices => new List<int>(chosenOptionsThisNode);
 }

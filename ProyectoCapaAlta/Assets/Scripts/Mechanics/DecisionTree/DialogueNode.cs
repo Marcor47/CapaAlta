@@ -14,21 +14,49 @@ public class DialogueNode : ScriptableObject
     [Tooltip("Si es true, todas las líneas usan npcName automáticamente. Si es false, cada línea define su propio speakerName.")]
     public bool isSingleSpeaker = true;
 
-    // ─── DIÁLOGO INICIAL ───────────────────────────────────────
-    [Header("Diálogo inicial del NPC")]
-    [Tooltip("Líneas que el NPC dice antes de que aparezcan las opciones")]
-    public DialogueLine[] openingLines;
+    // ─── RONDAS DE DIÁLOGO ──────────────────────────────────────
+    [Header("Rondas de diálogo")]
+    [Tooltip("Cada ronda: líneas de introducción del NPC + 3 opciones del jugador. " +
+             "Ronda 0 = apertura del encuentro. Si el encuentro tiene una sola toma " +
+             "de decisión, deja el array con un solo elemento.")]
+    public DialogueRound[] rounds;
 
-    // ─── OPCIONES DEL JUGADOR ──────────────────────────────────
-    [Header("Opciones del jugador")]
-    public DialogueOption[] options;
-
-    // ─── MANZANA TUTORIAL ──────────────────────────────────────
-    [Header("Manzana")]
+    // ─── MANZANA: NPC → THEO ─────────────────────────────────────
+    [Header("Manzana que el NPC le da a Theo (tutorial)")]
     public bool givesManzanaOnEnd;
 
-    [Tooltip("Líneas tras entregar la manzana — speakerName por línea")]
+    [Tooltip("Líneas tras entregar la manzana — se muestran igual sin importar qué opción se eligió")]
     public DialogueLine[] manzanaTutorialLines;
+
+    // ─── MANZANA: THEO → NPC ─────────────────────────────────────
+    [Header("Manzana que Theo le da al NPC (después de este encuentro)")]
+    [Tooltip("Deja los 3 arrays vacíos si en este encuentro no se puede dar una manzana")]
+    public DialogueLine[] manzanaGivenWhenBad;      // relación -1 → sube a neutral
+    public DialogueLine[] manzanaGivenWhenNeutral;  // relación 0 → sube a buena
+    public DialogueLine[] manzanaGivenWhenGood;     // relación +1 → ya al máximo
+
+    public DialogueLine[] GetManzanaGivenResponse(int currentRelationship)
+    {
+        if (currentRelationship <= -1) return manzanaGivenWhenBad;
+        if (currentRelationship == 0) return manzanaGivenWhenNeutral;
+        return manzanaGivenWhenGood;
+    }
+}
+
+// ─── RONDA DE DIÁLOGO ────────────────────────────────────────────
+[System.Serializable]
+public class DialogueRound
+{
+    [Tooltip("Líneas del NPC antes de mostrar las opciones de esta ronda")]
+    public DialogueLine[] npcLeadInLines;
+
+    [Tooltip("Opciones del jugador para esta ronda (mala/neutral/buena)")]
+    public DialogueOption[] options;
+
+    [Tooltip("Líneas comunes que se muestran DESPUÉS de la respuesta de la opción " +
+             "elegida, sin importar cuál fue (ej. una despedida igual para las 3). " +
+             "Déjalo vacío si cada opción termina distinto.")]
+    public DialogueLine[] sharedFollowUpLines;
 }
 
 // ─── LÍNEA DE DIÁLOGO ──────────────────────────────────────────
@@ -48,13 +76,13 @@ public class DialogueOption
     [Tooltip("Texto que ve el jugador como opción")]
     public string optionText;
 
-    [Tooltip("Cambio en la relación: -1 mala, 0 neutral, +1 buena")]
+    [Tooltip("Cambio en la relación de ESTA ronda: -1 mala, 0 neutral, +1 buena. " +
+             "Si hay varias rondas, se suman todas y el total se limita entre -1 y +1 " +
+             "al terminar el nodo.")]
     [Range(-1, 1)]
     public int relationshipDelta;
 
-    [Tooltip("Líneas que responde el NPC según esta opción")]
+    [Tooltip("Todo lo que dice el NPC en respuesta a esta opción — incluida la " +
+             "despedida si esta es la última ronda del nodo.")]
     public DialogueLine[] npcResponseLines;
-
-    [Tooltip("Líneas adicionales comunes después de la respuesta")]
-    public DialogueLine[] closingLines;
 }

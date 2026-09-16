@@ -20,19 +20,16 @@ public class DialogueTrigger : MonoBehaviour
     // ──────────────────────────────────────────────────────────
     void Start()
     {
-        // Verifica si este NPC debe aparecer según encuentros previos
         if (!string.IsNullOrEmpty(requiredPreviousNodeID))
         {
             if (DecisionRecord.Instance != null &&
                 !DecisionRecord.Instance.CanAppear(requiredPreviousNodeID))
             {
-                // El encuentro anterior no fue completado — oculta el NPC
                 gameObject.SetActive(false);
                 return;
             }
         }
 
-        // Verifica si este encuentro ya fue completado (ej: volvió al capítulo)
         if (DecisionRecord.Instance != null &&
             DecisionRecord.Instance.IsNodeCompleted(dialogueNode.nodeID))
         {
@@ -85,15 +82,13 @@ public class DialogueTrigger : MonoBehaviour
     {
         isCompleted = true;
 
-        // Registrar encuentro como completado
         if (DecisionRecord.Instance != null)
             DecisionRecord.Instance.MarkNodeCompleted(dialogueNode.nodeID);
 
-        // Si este NPC da la manzana tutorial al terminar
         if (dialogueNode.givesManzanaOnEnd && DecisionRecord.Instance != null)
             DecisionRecord.Instance.AddManzana();
 
-        Debug.Log($"[DialogueTrigger] Encuentro completado: {dialogueNode.nodeID} — opción elegida: {chosenOptionIndex}");
+        Debug.Log($"[DialogueTrigger] Encuentro completado: {dialogueNode.nodeID} — última opción elegida: {chosenOptionIndex}");
     }
 
     // ─── PROPIEDADES PÚBLICAS ──────────────────────────────────

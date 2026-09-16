@@ -7,18 +7,17 @@ public class DecisionRecord : MonoBehaviour
     public static DecisionRecord Instance { get; private set; }
 
     // ─── RELACIONES CON NPCs (-1, 0, +1) ──────────────────────
-    // clave: npcID ("gaz", "ryland_astro", "haru", etc.)
-    // valor: -1 mala / 0 neutral / +1 buena
     private Dictionary<string, int> npcRelationships = new Dictionary<string, int>();
 
     // ─── ENCUENTROS COMPLETADOS ────────────────────────────────
-    // registra qué nodeIDs ya fueron completados
     private HashSet<string> completedNodes = new HashSet<string>();
 
     // ─── MANZANAS ──────────────────────────────────────────────
     private int manzanasAvailable = 0;
     private HashSet<string> manzanasUsedOn = new HashSet<string>();
-    // registra a qué NPCs ya se les dio una manzana (1 por NPC)
+
+    // ─── HISTORIAL DE ELECCIONES (para M10) ────────────────────
+    private List<ChoiceRecord> choiceHistory = new List<ChoiceRecord>();
 
     // ──────────────────────────────────────────────────────────
     void Awake()
@@ -37,7 +36,7 @@ public class DecisionRecord : MonoBehaviour
     {
         return npcRelationships.ContainsKey(npcID)
             ? npcRelationships[npcID]
-            : 0; // neutral por defecto
+            : 0;
     }
 
     public void SetRelationship(string npcID, int delta)
@@ -61,8 +60,6 @@ public class DecisionRecord : MonoBehaviour
         Debug.Log($"[DecisionRecord] Encuentro completado: {nodeID}");
     }
 
-    // Verifica si el encuentro anterior de un NPC fue completado
-    // Usa esto para saber si el NPC aparece en el siguiente encuentro
     public bool CanAppear(string nodeID)
     {
         return completedNodes.Contains(nodeID);
@@ -77,9 +74,6 @@ public class DecisionRecord : MonoBehaviour
         Debug.Log($"[DecisionRecord] Manzanas disponibles: {manzanasAvailable}");
     }
 
-    // Intenta usar una manzana con un NPC
-    // Retorna false si: no hay manzanas, ya se usó con ese NPC,
-    //                   o el encuentro no está completado (regla: solo después del diálogo)
     public bool TryUseManzana(string npcID, string completedNodeID)
     {
         if (manzanasAvailable <= 0)
@@ -100,7 +94,6 @@ public class DecisionRecord : MonoBehaviour
             return false;
         }
 
-        // Aplica la manzana: sube 1 nivel la relación
         int current = GetRelationship(npcID);
         if (current >= 1)
         {
@@ -116,8 +109,38 @@ public class DecisionRecord : MonoBehaviour
         return true;
     }
 
+    // ─── HISTORIAL DE ELECCIONES ────────────────────────────────
+    [System.Serializable]
+    public class ChoiceRecord
+    {
+        public string nodeID;
+        public string npcID;
+        public int roundIndex;
+        public int optionIndex;
+        public int relationshipDelta;
+    }
+
+    public void RecordChoice(string nodeID, string npcID, int roundIndex, int optionIndex, int relationshipDelta)
+    {
+        choiceHistory.Add(new ChoiceRecord
+        {
+            nodeID = nodeID,
+            npcID = npcID,
+            roundIndex = roundIndex,
+            optionIndex = optionIndex,
+            relationshipDelta = relationshipDelta
+        });
+
+        Debug.Log($"[DecisionRecord] Elección registrada: {nodeID} ronda {roundIndex} → opción {optionIndex} (delta {relationshipDelta})");
+    }
+
+    public List<ChoiceRecord> GetChoiceHistory()
+        => new List<ChoiceRecord>(choiceHistory);
+
+    public List<ChoiceRecord> GetChoicesForNode(string nodeID)
+        => choiceHistory.FindAll(c => c.nodeID == nodeID);
+
     // ─── PROPIEDADES PÚBLICAS ──────────────────────────────────
-    // Útil para el módulo docente (M10)
     public Dictionary<string, int> GetAllRelationships()
         => new Dictionary<string, int>(npcRelationships);
 
@@ -135,6 +158,10 @@ public class DecisionRecord : MonoBehaviour
         Debug.Log("=== ENCUENTROS COMPLETADOS ===");
         foreach (var node in completedNodes)
             Debug.Log($"  {node}");
+
+        Debug.Log("=== HISTORIAL DE ELECCIONES ===");
+        foreach (var c in choiceHistory)
+            Debug.Log($"  {c.nodeID} ronda {c.roundIndex}: opción {c.optionIndex} (delta {c.relationshipDelta})");
 
         Debug.Log($"=== MANZANAS: {manzanasAvailable} disponibles ===");
     }
