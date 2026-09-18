@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.Collections.Generic;  // NUEVO — necesario para el List<DialogueLine> de abajo
 
 [CreateAssetMenu(fileName = "NewDialogueNode",
                  menuName = "Capa Alta/Dialogue Node")]
@@ -47,11 +48,12 @@ public class DialogueNode : ScriptableObject
 [System.Serializable]
 public class DialogueRound
 {
-    [Tooltip("Opcional: aperturas alternativas según la relación con el NPC al iniciar este " +
-             "encuentro (ej. Gaz Cap2 Enc2 según cómo quedó Cap1). Solo tiene sentido en la ronda 0.")]
+
+    [Tooltip("Opcional: líneas que se muestran ANTES de npcLeadInLines, según la relación con el NPC " +
+             "al iniciar este encuentro. Solo tiene sentido usarlo en la ronda 0.")]
     public ConditionalOpening[] conditionalOpenings;
 
-    [Tooltip("Líneas del NPC antes de mostrar las opciones — se usan si ninguna condición en conditionalOpenings aplica")]
+    [Tooltip("Líneas del NPC que SIEMPRE se muestran en esta ronda, después del prefijo condicional si lo hay")]
     public DialogueLine[] npcLeadInLines;
 
 
@@ -63,15 +65,22 @@ public class DialogueRound
 
     public DialogueLine[] GetOpeningLines(int currentRelationship)
     {
+        List<DialogueLine> result = new List<DialogueLine>();
         if (conditionalOpenings != null)
         {
             foreach (var co in conditionalOpenings)
             {
                 if (co.requiredRelationship == currentRelationship)
-                    return co.npcLeadInLines;
+                {
+                    if (co.npcLeadInLines != null)
+                        result.AddRange(co.npcLeadInLines);
+                    break;
+                }
             }
         }
-        return npcLeadInLines;
+        if (npcLeadInLines != null)
+            result.AddRange(npcLeadInLines);
+        return result.ToArray();
     }
 }
 
