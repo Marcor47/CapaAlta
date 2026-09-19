@@ -1,0 +1,190 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d6edfb0cc82e72348988115f5216b241, type: 3}
+  m_Name: Cap3_LeeWilber_Enc1
+  m_EditorClassIdentifier: Assembly-CSharp::DialogueNode
+  nodeID: Cap3_LeeWilber_Enc1
+  npcName: 
+  chapter: 3
+  npcID: lee_wilber
+  isSingleSpeaker: 0
+  rounds:
+  - conditionalOpenings: []
+    npcLeadInLines:
+    - speakerName: Lee
+      text: "No es como lo pens\xE1bamos, \xBFno es as\xED?"
+    - speakerName: Wilber
+      text: Este lugar...
+    - speakerName: Wilber
+      text: "Nada que hagamos har\xE1 que las cosas sean distintas."
+    - speakerName: Lee
+      text: "Lo s\xE9..."
+    - speakerName: Lee
+      text: Oh...
+    - speakerName: Lee
+      text: "Hola, ni\xF1o. No pensamos que alguien pasar\xEDa por aqu\xED."
+    - speakerName: Lee
+      text: Soy Lee. Este es mi socio Wilber.
+    - speakerName: Wilber
+      text: "Hola, ni\xF1o."
+    - speakerName: Lee
+      text: Si quieres, puedes quedarte un rato, nosotros nos quedaremos a acampar.
+    - speakerName: Lee
+      text: Este lugar es algo... especial para los dos.
+    options:
+    - optionText: "Gracias, ando subiendo a la cima, de hecho. \xBFPor qu\xE9 espec\xEDficamente
+        se quedar\xE1n aqu\xED?"
+      relationshipDelta: 1
+      npcResponseLines:
+      - speakerName: Wilber
+        text: "No hay de qu\xE9, ni\xF1o."
+      - speakerName: Wilber
+        text: "Nosotros estamos aqu\xED para recordar cosas, nuestros errores."
+      - speakerName: Wilber
+        text: "Creemos que alg\xFAn d\xEDa pesar\xE1n menos."
+    - optionText: "Ando subiendo a la cima. \xBFQu\xE9 de especial podr\xEDa tener
+        un lugar tan desolado como este?"
+      relationshipDelta: -1
+      npcResponseLines:
+      - speakerName: Wilber
+        text: "Cada uno tiene muchas historias por contar, ni\xF1o."
+      - speakerName: Wilber
+        text: Incluso los lugares.
+    - optionText: "Podr\xEDa descansar un momento, debo llegar a la cima. \xBFPor
+        qu\xE9 es que se quedar\xE1n aqu\xED?"
+      relationshipDelta: 0
+      npcResponseLines:
+      - speakerName: Wilber
+        text: "Hay algunos que no podemos dejar ir el pasado tan f\xE1cilmente, ni\xF1o."
+      - speakerName: Wilber
+        text: De alguna manera es nuestra forma de superarlo.
+      - speakerName: Wilber
+        text: O intentarlo.
+    sharedFollowUpLines: []
+  - conditionalOpenings: []
+    npcLeadInLines:
+    - speakerName: Wilber
+      text: "Hace un tiempo esto era una mina, ni\xF1o."
+    - speakerName: Wilber
+      text: O bueno... iba a ser una.
+    - speakerName: Wilber
+      text: "Mi socio y yo invertimos el dinero de toda nuestra vida en un proyecto
+        en esta monta\xF1a."
+    - speakerName: Wilber
+      text: "Pensamos que al ser un terreno no manipulado por el hombre, podr\xEDamos
+        sacar algo de provecho."
+    - speakerName: Wilber
+      text: "El d\xEDa que trajimos toda la maquinaria y los equipos, ocurri\xF3
+        una avalancha."
+    - speakerName: Wilber
+      text: "Se lo llev\xF3 todo..."
+    - speakerName: Wilber
+      text: "Por suerte nosotros, y todo el personal que contratamos, salimos sin
+        da\xF1os graves de ah\xED."
+    - speakerName: Wilber
+      text: "Pero los pagos por indemnizaci\xF3n y el equipo perdido nos llevaron
+        a la bancarrota."
+    - speakerName: Wilber
+      text: "Ahora vivimos como podemos los dos, y solemos pasar por aqu\xED para
+        recordar nuestro mayor error."
+    options:
+    - optionText: Todos intentamos lo mejor que podemos para seguir adelante. Al
+        menos se tienen el uno al otro.
+      relationshipDelta: 1
+      npcResponseLines:
+      - speakerName: Lee
+        text: "Eso es muy cierto, ni\xF1o."
+      - speakerName: Lee
+        text: "Capaz no est\xE9 bien seguir atorment\xE1ndonos y buscar otra forma
+          de avanzar."
+      - speakerName: Lee
+        text: "Es dif\xEDcil."
+      - speakerName: Lee
+        text: "Pero al menos tengo a mi mejor amigo apoy\xE1ndome."
+      - speakerName: Wilber
+        text: "As\xED es, hermano."
+      - speakerName: Wilber
+        text: "Capaz no hoy, pero alg\xFAn d\xEDa haremos mejor las cosas."
+    - optionText: "Pero lo ocurrido es agua pasada, \xBFno? Podr\xEDan haber empezado
+        de nuevo con otra idea."
+      relationshipDelta: -1
+      npcResponseLines:
+      - speakerName: Lee
+        text: "Nuestro pasado define qui\xE9nes somos en el presente, ni\xF1o."
+      - speakerName: Lee
+        text: "Pero s\xED, el presente define qui\xE9nes podemos ser."
+      - speakerName: Lee
+        text: Me conforta al menos no estar solo en esto.
+      - speakerName: Lee
+        text: Y es algo por lo que estoy muy agradecido con mi vida.
+      - speakerName: Lee
+        text: "La cual pudimos haber perdido ese d\xEDa."
+      - speakerName: Wilber
+        text: Muy cierto, hermano.
+    - optionText: "No suena a lo m\xE1s sano, la verdad. \xBFEn alg\xFAn momento
+        dejar\xE1n de castigarse?"
+      relationshipDelta: 0
+      npcResponseLines:
+      - speakerName: Lee
+        text: "Lo hemos pensado mucho, ni\xF1o."
+      - speakerName: Lee
+        text: "De hecho... capaz y seguir viniendo aqu\xED nos est\xE9 haciendo da\xF1o."
+      - speakerName: Lee
+        text: De alguna forma debemos seguir adelante.
+      - speakerName: Lee
+        text: "Al menos a\xFAn tengo a mi mejor amigo."
+      - speakerName: Wilber
+        text: Gracias, hermano.
+    sharedFollowUpLines:
+    - speakerName: Wilber
+      text: "Bueno, creo que ya casi est\xE1n listas las hamburguesas."
+    - speakerName: Wilber
+      text: "Estaba pensando, Lee... \xBFy si abrimos un puesto de hamburguesas?"
+    - speakerName: Wilber
+      text: "S\xE9 que somos ingenieros, pero podr\xEDa ser el comienzo de algo nuevo."
+    - speakerName: Lee
+      text: "Me est\xE1s convenciendo, hermano. \xBFC\xF3mo lo llamar\xEDamos?"
+    - speakerName: Wilber
+      text: "\xBFQu\xE9 tal... 'L&W's Burgers'?"
+    - speakerName: Lee
+      text: "Suena horrible... y gen\xE9rico. Me gusta, hermano"
+  givesManzanaOnEnd: 0
+  manzanaTutorialLines: []
+  manzanaGivenWhenBad:
+  - speakerName: Lee
+    text: "Muchas gracias, ni\xF1o."
+  - speakerName: Lee
+    text: "Ser\xE1 un buen postre."
+  - speakerName: Wilber
+    text: "Perfecto, hermano, ten\xEDa mucha hambre, la verdad."
+  manzanaGivenWhenNeutral:
+  - speakerName: Lee
+    text: "\xBFDe d\xF3nde sacaste eso?"
+  - speakerName: Lee
+    text: "Muchas gracias, ni\xF1o."
+  - speakerName: Lee
+    text: "Podr\xEDa ser un nuevo ingrediente para las hamburguesas. \xBFQu\xE9 dices,
+      Wil?"
+  - speakerName: Wilber
+    text: "Tocar\xE1 probarla, hermano."
+  manzanaGivenWhenGood:
+  - speakerName: Lee
+    text: "Muchas gracias, ni\xF1o. Eres sorprendente."
+  - speakerName: Lee
+    text: "\xBFQu\xE9 dices, Wil? \xBFLe regalamos unas hamburguesas cuando abramos
+      nuestro restaurante?"
+  - speakerName: Wilber
+    text: Claro, hermano.
+  - speakerName: Wilber
+    text: "Ser\xE1s bienvenido siempre en el local, ni\xF1o."
+  - speakerName: Wilber
+    text: Gracias, de verdad.
