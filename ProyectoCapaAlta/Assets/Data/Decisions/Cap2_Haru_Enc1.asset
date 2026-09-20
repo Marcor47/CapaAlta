@@ -64,6 +64,8 @@ MonoBehaviour:
     - speakerName: 
       text: "Parece m\xE1gico este lugar."
     - speakerName: 
+      text: Me llamo Haru, por cierto.
+    - speakerName: 
       text: "\xBFTe has dado cuenta de las notas que est\xE1n dispersadas por la
         monta\xF1a?"
     options:
