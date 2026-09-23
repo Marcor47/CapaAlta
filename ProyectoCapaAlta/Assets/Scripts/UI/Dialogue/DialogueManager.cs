@@ -23,6 +23,9 @@ public class DialogueManager : MonoBehaviour
     public Button[] optionButtons;
     public TextMeshProUGUI[] optionTexts;
 
+    [Header("Regulación Emocional")]
+    public float regulacionPenaltyPerBadChoice = 15f;
+
     // ─── ESTADO ────────────────────────────────────────────────
     private DialogueNode currentNode;
     private System.Action<int> onDialogueComplete;
@@ -286,6 +289,8 @@ public class DialogueManager : MonoBehaviour
 
         DialogueOption chosen = roundOptions[index];
         pendingRelationshipDelta += chosen.relationshipDelta;
+        if (chosen.relationshipDelta < 0 && theo != null)
+            theo.DecreaseRegulacion(regulacionPenaltyPerBadChoice);
 
         if (DecisionRecord.Instance != null)
             DecisionRecord.Instance.RecordChoice(

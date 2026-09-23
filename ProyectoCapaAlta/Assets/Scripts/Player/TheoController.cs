@@ -27,11 +27,33 @@ public class TheoController : MonoBehaviour
     public float dashStaminaCost = 34f;
     public float dashCooldown = 0.6f;
 
-    // ─── ESTAMINA / MOTIVACIÓN ─────────────────────────────────
+    // ─── ESTAMINA / MOTIVACIÓN — agregar ───────────────────────
     [Header("Estamina / Motivación")]
     public float maxStamina = 100f;
     public float staminaRegenRate = 8f;
     public float staminaRegenRateSitting = 25f;
+    public float jumpStaminaCost = 5f; // NUEVO: costo por salto
+
+    // ─── REGULACIÓN EMOCIONAL (M9) — NUEVO ─────────────────────
+    [Header("Regulación Emocional")]
+    public float maxRegulacion = 100f;
+    public float regulacionRegenRateSitting = 20f;
+    public float regulacionRegenRateCallingMom = 45f;
+    private float currentRegulacion;
+
+
+    public float CurrentRegulacion => currentRegulacion;
+    public float MaxRegulacion => maxRegulacion;
+    public float RegulacionPercent01 => maxRegulacion > 0f ? currentRegulacion / maxRegulacion : 0f;
+    public bool IsCallingMom => isCallingMom;
+
+
+    // ─── TELÉFONO SATELITAL (temporal, hasta Bloque 6) ─────────
+    [Header("Teléfono satelital (temporal)")]
+    [Tooltip("Esto lo controlará el inventario cuando exista el Bloque 6")]
+    public bool phoneEquipped = false;
+    public Key callMomKey = Key.T;
+    private bool isCallingMom = false;
 
     // ─── MOCHILA (E) ───────────────────────────────────────────
     [Header("Mochila")]
@@ -46,6 +68,7 @@ public class TheoController : MonoBehaviour
     public Transform groundCheck;
     public float groundCheckRadius = 0.08f;
     public LayerMask groundLayer;
+
 
     // ─── REFERENCIAS ───────────────────────────────────────────
     private Rigidbody2D rb;
@@ -74,6 +97,19 @@ public class TheoController : MonoBehaviour
     private float sitHoldCounter;
     private bool isInDialogue;
 
+    #if UNITY_EDITOR
+        [ContextMenu("DEBUG: Bajar Regulación 20")]
+        void DebugDecreaseRegulacion() => DecreaseRegulacion(20f);
+
+        [ContextMenu("DEBUG: Restaurar Estamina y Regulación")]
+        void DebugRestoreAll()
+        {
+            currentStamina = maxStamina;
+            currentRegulacion = maxRegulacion;
+        }
+    #endif
+
+
     private bool canMove
     {
         get
@@ -94,6 +130,7 @@ public class TheoController : MonoBehaviour
         originalGravityScale = rb.gravityScale;
         facingLeft = sr.flipX;
         currentStamina = maxStamina;
+        currentRegulacion = maxRegulacion;
     }
 
     void Update()
@@ -111,6 +148,7 @@ public class TheoController : MonoBehaviour
         HandleFlip();
         HandleBackpackInput();
         HandleSitInput();
+        HandleCallMomInput();
         HandleAnimations();
     }
 
@@ -177,9 +215,19 @@ public class TheoController : MonoBehaviour
 
     void Jump()
     {
-        rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
+        if (currentStamina <= 0f) return; // solo bloquea completamente en 0
+
+        float staminaPercent = currentStamina / maxStamina;
+        float jumpMultiplier = staminaPercent < 0.25f
+            ? Mathf.Clamp01(staminaPercent / 0.25f) // de 0% a 25% escala linealmente de 0 a 1
+            : 1f; // por encima de 25%, salto normal
+
+        float effectiveJumpForce = jumpForce * jumpMultiplier;
+
+        rb.linearVelocity = new Vector2(rb.linearVelocity.x, effectiveJumpForce);
         coyoteTimeCounter = 0f;
         jumpBufferCounter = 0f;
+        currentStamina = Mathf.Max(0f, currentStamina - jumpStaminaCost);
     }
 
     // ─── MOVIMIENTO LATERAL ────────────────────────────────────
@@ -255,9 +303,20 @@ public class TheoController : MonoBehaviour
     // ─── ESTAMINA ──────────────────────────────────────────────
     void HandleStaminaRegen()
     {
-        if (currentStamina >= maxStamina) return;
-        float regenRate = isSitting ? staminaRegenRateSitting : staminaRegenRate;
-        currentStamina = Mathf.Min(maxStamina, currentStamina + regenRate * Time.deltaTime);
+        if (currentStamina < maxStamina)
+        {
+            float regenRate = isSitting ? staminaRegenRateSitting : staminaRegenRate;
+            currentStamina = Mathf.Min(maxStamina, currentStamina + regenRate * Time.deltaTime);
+        }
+
+        // NUEVO: Regulación Emocional NO se recarga sola — solo al sentarse o llamar a mamá
+        if (currentRegulacion < maxRegulacion)
+        {
+            if (isSitting)
+                currentRegulacion = Mathf.Min(maxRegulacion, currentRegulacion + regulacionRegenRateSitting * Time.deltaTime);
+            else if (isCallingMom)
+                currentRegulacion = Mathf.Min(maxRegulacion, currentRegulacion + regulacionRegenRateCallingMom * Time.deltaTime);
+        }
     }
 
     // ─── MOCHILA (E) ───────────────────────────────────────────
@@ -305,6 +364,27 @@ public class TheoController : MonoBehaviour
             StandUp();
     }
 
+    // ─── LLAMAR MADRE  ────────────────────────────────────
+    void HandleCallMomInput()
+    {
+        if (!phoneEquipped || isBackpackOpen || isInDialogue) { isCallingMom = false; return; }
+
+        bool holdingCall = Keyboard.current[callMomKey].isPressed;
+
+        if (holdingCall && isGrounded && !isSitting)
+        {
+            if (!isCallingMom)
+            {
+                isCallingMom = true;
+                rb.linearVelocity = new Vector2(0f, rb.linearVelocity.y);
+            }
+        }
+        else
+        {
+            isCallingMom = false;
+        }
+    }
+
     // ─── MÉTODOS PÚBLICOS ──────────────────────────────────────
     public void TriggerNotebook()
     {
@@ -336,6 +416,21 @@ public class TheoController : MonoBehaviour
                 anim.SetBool("IsBackpack", false);
             }
         }
+    }
+
+    public void DecreaseRegulacion(float amount)
+    {
+        currentRegulacion = Mathf.Max(0f, currentRegulacion - amount);
+    }
+
+    public void IncreaseRegulacionPermanent(float amount) // llamar cuando se recolecta una carta del padre
+    {
+        maxRegulacion += amount;
+    }
+
+    public void IncreaseMotivacionPermanent(float amount) // llamar cuando se completa el set de un personaje secundario
+    {
+        maxStamina += amount;
     }
 
     // ─── ANIMACIONES ───────────────────────────────────────────

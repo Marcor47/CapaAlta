@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using static CardData;
 
 public class CardInventory : MonoBehaviour
 {
@@ -14,7 +16,21 @@ public class CardInventory : MonoBehaviour
     // Otros sistemas pueden suscribirse para reaccionar
     public event System.Action<CardData> OnCardAdded;
 
-    // ──────────────────────────────────────────────────────────
+
+
+    [Header("Bonos permanentes")]
+    public float regulacionBonusPerFatherCard = 10f;
+    public float motivacionBonusPerSecondaryGroup = 10f;
+
+    private TheoController theo;
+
+    private static readonly Dictionary<string, int> secondaryGroupTotals = new Dictionary<string, int>
+    {
+        { "Grace", 2 }, { "Les", 3 }, { "Duke", 3 }, { "Benny", 3 }
+    };
+
+
+
     void Awake()
     {
         if (Instance != null && Instance != this)
@@ -24,6 +40,7 @@ public class CardInventory : MonoBehaviour
         }
         Instance = this;
         DontDestroyOnLoad(gameObject);
+        theo = FindAnyObjectByType<TheoController>();
     }
 
     // ─── AÑADIR CARTA ──────────────────────────────────────────
@@ -36,9 +53,31 @@ public class CardInventory : MonoBehaviour
         collectedIDs.Add(card.cardID);
 
         OnCardAdded?.Invoke(card);
+        CheckPermanentBonuses(card);
 
         Debug.Log($"[CardInventory] Carta recolectada: {card.cardID} — {card.authorName}");
     }
+
+
+    // ─── AÑADIR CARTA DA MEJORA PERMANENTE ──────────────────────────────────────────
+    private void CheckPermanentBonuses(CardData card)
+    {
+        if (theo == null) return;
+
+        if (card.cardType == CardType.Father)
+        {
+            theo.IncreaseRegulacionPermanent(regulacionBonusPerFatherCard);
+            return;
+        }
+
+        if (card.cardType == CardType.Secondary && secondaryGroupTotals.TryGetValue(card.authorName, out int total))
+        {
+            int collectedFromAuthor = collectedCards.Count(c => c.authorName == card.authorName);
+            if (collectedFromAuthor >= total)
+                theo.IncreaseMotivacionPermanent(motivacionBonusPerSecondaryGroup);
+        }
+    }
+
 
     // ─── CONSULTAS ─────────────────────────────────────────────
     public bool IsCollected(string cardID)
