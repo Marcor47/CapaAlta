@@ -96,9 +96,12 @@ public class TheoController : MonoBehaviour
     private bool isSitting;
     private float sitHoldCounter;
     private bool isInDialogue;
+    private bool isNotebookLoopActive = false;
 
-    #if UNITY_EDITOR
-        [ContextMenu("DEBUG: Bajar Regulación 20")]
+    public event System.Action OnNotebookLoopStarted;
+
+#if UNITY_EDITOR
+    [ContextMenu("DEBUG: Bajar Regulación 20")]
         void DebugDecreaseRegulacion() => DecreaseRegulacion(20f);
 
         [ContextMenu("DEBUG: Restaurar Estamina y Regulación")]
@@ -303,16 +306,17 @@ public class TheoController : MonoBehaviour
     // ─── ESTAMINA ──────────────────────────────────────────────
     void HandleStaminaRegen()
     {
+        bool activelyMeditating = isSitting && isNotebookLoopActive;
+
         if (currentStamina < maxStamina)
         {
-            float regenRate = isSitting ? staminaRegenRateSitting : staminaRegenRate;
+            float regenRate = activelyMeditating ? staminaRegenRateSitting : staminaRegenRate;
             currentStamina = Mathf.Min(maxStamina, currentStamina + regenRate * Time.deltaTime);
         }
 
-        // NUEVO: Regulación Emocional NO se recarga sola — solo al sentarse o llamar a mamá
         if (currentRegulacion < maxRegulacion)
         {
-            if (isSitting)
+            if (activelyMeditating)
                 currentRegulacion = Mathf.Min(maxRegulacion, currentRegulacion + regulacionRegenRateSitting * Time.deltaTime);
             else if (isCallingMom)
                 currentRegulacion = Mathf.Min(maxRegulacion, currentRegulacion + regulacionRegenRateCallingMom * Time.deltaTime);
@@ -395,9 +399,16 @@ public class TheoController : MonoBehaviour
         anim.SetBool("IsSitting", true);
     }
 
+    public void OnNotebookLoopReached()
+    {
+        isNotebookLoopActive = true;
+        OnNotebookLoopStarted?.Invoke();
+    }
+
     public void StandUp()
     {
         isSitting = false;
+        isNotebookLoopActive = false; // NUEVO
         sitHoldCounter = 0f;
         anim.SetBool("IsSitting", false);
         // TODO: EmotionSystem.Instance.StopRecharge();
