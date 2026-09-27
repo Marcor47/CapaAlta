@@ -47,9 +47,36 @@ public class AccountManager : MonoBehaviour
         return true;
     }
 
+
+
+    public bool DeleteStudent(string username)
+    {
+        var account = accounts.Find(a => a.username == username && a.role == "Student");
+        if (account == null) return false;
+
+        accounts.Remove(account);
+        SaveAccounts();
+        return true;
+    }
+
+    public void SaveProgress() => SaveAccounts();
+
+    public void MarkChapterCompleted(int chapter)
+    {
+        if (CurrentUser == null) return;
+        if (!CurrentUser.progress.chaptersCompleted.Contains(chapter))
+            CurrentUser.progress.chaptersCompleted.Add(chapter);
+        SaveProgress();
+    }
+
+
+    public UserAccount GetStudent(string username)
+    => accounts.Find(a => a.username == username && a.role == "Student");
+
+
     public List<UserAccount> GetAllStudents() => accounts.FindAll(a => a.role == "Student");
 
-    public void Logout() => CurrentUser = null;
+
 
     // ─── PERSISTENCIA LOCAL (PlayerPrefs) ───────────────────────
     void SaveAccounts()
@@ -68,6 +95,12 @@ public class AccountManager : MonoBehaviour
         if (wrapper != null && wrapper.accounts != null)
             accounts = wrapper.accounts;
     }
+
+    // Agregar a AccountManager:
+    public void Logout()
+    {
+        CurrentUser = null;
+    }
 }
 
 [System.Serializable]
@@ -76,6 +109,38 @@ public class UserAccount
     public string username;
     public string password;
     public string role; // "Teacher" o "Student"
+    public StudentProgress progress = new StudentProgress();
+}
+
+[System.Serializable]
+public class StudentProgress
+{
+    public List<int> chaptersCompleted = new List<int>();
+    public List<CollectedCardRecord> allTimeCollectedCards = new List<CollectedCardRecord>();
+    public int decisionsCount = 0;
+    public string lastPlayed = "";
+
+    // NUEVO — relaciones con NPCs
+    public List<string> npcRelationshipKeys = new List<string>();
+    public List<int> npcRelationshipValues = new List<int>();
+    public List<string> completedNodesSaved = new List<string>();
+    public int manzanasAvailable = 0;
+    public List<string> manzanasUsedOnSaved = new List<string>();
+
+    // NUEVO — libreta
+    //public List<NotebookEntry> notebookEntries = new List<NotebookEntry>();
+    public List<int> chaptersUnlocked = new List<int> { 1 };
+
+    // NUEVO — bonos permanentes de barras (Theo no es singleton, así que el bono vive acá)
+    public float staminaBonusPermanent = 0f;
+    public float regulacionBonusPermanent = 0f;
+}
+
+[System.Serializable]
+public class CollectedCardRecord
+{
+    public string cardID;
+    public string authorName;
 }
 
 [System.Serializable]

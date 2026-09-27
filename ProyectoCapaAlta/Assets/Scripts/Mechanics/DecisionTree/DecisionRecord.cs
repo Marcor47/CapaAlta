@@ -22,13 +22,48 @@ public class DecisionRecord : MonoBehaviour
     // ──────────────────────────────────────────────────────────
     void Awake()
     {
-        if (Instance != null && Instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
+        if (Instance != null && Instance != this) { Destroy(gameObject); return; }
         Instance = this;
         DontDestroyOnLoad(gameObject);
+        LoadFromAccount(); // NUEVO
+    }
+
+    public void LoadFromAccount()
+    {
+        if (AccountManager.Instance == null || AccountManager.Instance.CurrentUser == null) return;
+        var p = AccountManager.Instance.CurrentUser.progress;
+
+        npcRelationships.Clear();
+        for (int i = 0; i < p.npcRelationshipKeys.Count; i++)
+            npcRelationships[p.npcRelationshipKeys[i]] = p.npcRelationshipValues[i];
+
+        completedNodes = new HashSet<string>(p.completedNodesSaved);
+        manzanasAvailable = p.manzanasAvailable;
+        manzanasUsedOn = new HashSet<string>(p.manzanasUsedOnSaved);
+    }
+
+
+    public void SaveToAccount()
+    {
+        if (AccountManager.Instance == null || AccountManager.Instance.CurrentUser == null) return;
+        var p = AccountManager.Instance.CurrentUser.progress;
+
+        p.npcRelationshipKeys = new List<string>(npcRelationships.Keys);
+        p.npcRelationshipValues = new List<int>(npcRelationships.Values);
+        p.completedNodesSaved = new List<string>(completedNodes);
+        p.manzanasAvailable = manzanasAvailable;
+        p.manzanasUsedOnSaved = new List<string>(manzanasUsedOn);
+
+        AccountManager.Instance.SaveProgress();
+    }
+
+    public void ResetState()
+    {
+        npcRelationships.Clear();
+        completedNodes.Clear();
+        manzanasAvailable = 0;
+        manzanasUsedOn.Clear();
+        choiceHistory.Clear();
     }
 
     // ─── RELACIONES ────────────────────────────────────────────
@@ -122,6 +157,7 @@ public class DecisionRecord : MonoBehaviour
         public int relationshipDelta;
     }
 
+    // Dentro de RecordChoice(), agregar antes del Debug.Log final:
     public void RecordChoice(string nodeID, string npcID, int roundIndex, int optionIndex, int relationshipDelta)
     {
         choiceHistory.Add(new ChoiceRecord
@@ -132,6 +168,12 @@ public class DecisionRecord : MonoBehaviour
             optionIndex = optionIndex,
             relationshipDelta = relationshipDelta
         });
+
+        if (AccountManager.Instance != null && AccountManager.Instance.CurrentUser != null)
+        {
+            AccountManager.Instance.CurrentUser.progress.decisionsCount++;
+            AccountManager.Instance.SaveProgress();
+        }
 
         Debug.Log($"[DecisionRecord] Elección registrada: {nodeID} ronda {roundIndex} → opción {optionIndex} (delta {relationshipDelta})");
     }

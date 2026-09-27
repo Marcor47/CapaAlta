@@ -33,14 +33,27 @@ public class CardInventory : MonoBehaviour
 
     void Awake()
     {
-        if (Instance != null && Instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
+        if (Instance != null && Instance != this) { Destroy(gameObject); return; }
         Instance = this;
         DontDestroyOnLoad(gameObject);
         theo = FindAnyObjectByType<TheoController>();
+        LoadFromAccount(); // NUEVO
+    }
+
+    public void LoadFromAccount()
+    {
+        if (AccountManager.Instance == null || AccountManager.Instance.CurrentUser == null) return;
+        var saved = AccountManager.Instance.CurrentUser.progress.allTimeCollectedCards;
+        // Nota: esto marca cuáles ya se recolectaron ALGUNA VEZ, para los bonos —
+        // no repuebla collectedCards/collectedIDs de la sesión actual, porque esas
+        // representan lo recogido en ESTE intento del capítulo (se reinician al reiniciar).
+        // Los bonos permanentes ya viven aparte, en theo.maxStamina/maxRegulacion (ver abajo).
+    }
+
+    public void ResetState()
+    {
+        collectedCards.Clear();
+        collectedIDs.Clear();
     }
 
     // ─── AÑADIR CARTA ──────────────────────────────────────────
@@ -63,19 +76,32 @@ public class CardInventory : MonoBehaviour
     private void CheckPermanentBonuses(CardData card)
     {
         if (theo == null) return;
+        if (AccountManager.Instance == null || AccountManager.Instance.CurrentUser == null) return;
+
+        var progress = AccountManager.Instance.CurrentUser.progress;
+
+        // Si esta carta YA fue recolectada alguna vez por este alumno (aunque haya reiniciado el capítulo), no repetir el bono
+        bool alreadyCollectedEver = progress.allTimeCollectedCards.Exists(c => c.cardID == card.cardID);
+        if (alreadyCollectedEver) return;
+
+        progress.allTimeCollectedCards.Add(new CollectedCardRecord { cardID = card.cardID, authorName = card.authorName });
 
         if (card.cardType == CardType.Father)
         {
             theo.IncreaseRegulacionPermanent(regulacionBonusPerFatherCard);
-            return;
+            progress.regulacionBonusPermanent += regulacionBonusPerFatherCard; // NUEVO
+        }
+        else if (card.cardType == CardType.Secondary && secondaryGroupTotals.TryGetValue(card.authorName, out int total))
+        {
+            int allTimeFromAuthor = progress.allTimeCollectedCards.Count(c => c.authorName == card.authorName);
+            if (allTimeFromAuthor == total)
+            {
+                theo.IncreaseMotivacionPermanent(motivacionBonusPerSecondaryGroup);
+                progress.staminaBonusPermanent += motivacionBonusPerSecondaryGroup; // NUEVO — ojo, revisa el nombre exacto del campo (ver StudentProgress arriba: es staminaBonusPermanent)
+            }
         }
 
-        if (card.cardType == CardType.Secondary && secondaryGroupTotals.TryGetValue(card.authorName, out int total))
-        {
-            int collectedFromAuthor = collectedCards.Count(c => c.authorName == card.authorName);
-            if (collectedFromAuthor >= total)
-                theo.IncreaseMotivacionPermanent(motivacionBonusPerSecondaryGroup);
-        }
+        AccountManager.Instance.SaveProgress();
     }
 
 

@@ -132,8 +132,15 @@ public class TheoController : MonoBehaviour
         anim = GetComponent<Animator>();
         originalGravityScale = rb.gravityScale;
         facingLeft = sr.flipX;
+
+        if (AccountManager.Instance != null && AccountManager.Instance.CurrentUser != null)
+        {
+            maxStamina += AccountManager.Instance.CurrentUser.progress.staminaBonusPermanent;
+            maxRegulacion += AccountManager.Instance.CurrentUser.progress.regulacionBonusPermanent;
+        }
         currentStamina = maxStamina;
         currentRegulacion = maxRegulacion;
+
     }
 
     void Update()
