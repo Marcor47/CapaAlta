@@ -1972,7 +1972,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &550833655
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3598,13 +3598,14 @@ GameObject:
   - component: {fileID: 1046681107}
   - component: {fileID: 1046681109}
   - component: {fileID: 1046681108}
+  - component: {fileID: 1046681110}
   m_Layer: 5
   m_Name: SettingsPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1046681107
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3663,6 +3664,24 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1046681106}
   m_CullTransparentMesh: 1
+--- !u!114 &1046681110
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1046681106}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f278e32e4d0dc7249a8e691ecb5f9dfd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AudioSettingsPanel
+  settingsPanel: {fileID: 1046681106}
+  volumeUpButton: {fileID: 118138819}
+  volumeDownButton: {fileID: 1509458334}
+  backButton: {fileID: 1100178366}
+  volumeText: {fileID: 821032660}
+  volumeStep: 0.1
 --- !u!1 &1090802895
 GameObject:
   m_ObjectHideFlags: 0
