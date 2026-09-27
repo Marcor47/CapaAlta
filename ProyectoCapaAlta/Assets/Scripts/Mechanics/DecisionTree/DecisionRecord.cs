@@ -106,6 +106,8 @@ public class DecisionRecord : MonoBehaviour
     public void AddManzana()
     {
         manzanasAvailable++;
+        if (InventorySystem.Instance != null)
+            InventorySystem.Instance.UnlockItem(InventorySystem.ItemType.Manzana); // NUEVO
         Debug.Log($"[DecisionRecord] Manzanas disponibles: {manzanasAvailable}");
     }
 

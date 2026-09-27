@@ -25,10 +25,11 @@ public class ManzanaGiver : MonoBehaviour
         }
 
         bool canGive = DecisionRecord.Instance != null
-            && DecisionRecord.Instance.ManzanasAvailable > 0
-            && trigger.IsCompleted
-            && DialogueManager.Instance != null
-            && !DialogueManager.Instance.IsOpen;
+        && DecisionRecord.Instance.ManzanasAvailable > 0
+        && InventorySystem.Instance != null && InventorySystem.Instance.IsManzanaEquipped // NUEVO
+        && trigger.IsCompleted
+        && DialogueManager.Instance != null
+        && !DialogueManager.Instance.IsOpen;
 
         if (promptUI != null) promptUI.SetActive(canGive);
 
