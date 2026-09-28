@@ -22,8 +22,20 @@ public class InventoryHUD : MonoBehaviour
 
     void Start()
     {
+        if (InventorySystem.Instance == null)
+        {
+            Debug.LogWarning("[InventoryHUD] No hay InventorySystem en la escena.");
+            return;
+        }
+
+        InventorySystem.Instance.OnEquippedChanged += UpdateIcon;
+        UpdateIcon(InventorySystem.Instance.Equipped);
+    }
+
+    void OnDestroy()
+    {
         if (InventorySystem.Instance != null)
-            UpdateIcon(InventorySystem.Instance.Equipped);
+            InventorySystem.Instance.OnEquippedChanged -= UpdateIcon;
     }
 
     void UpdateIcon(InventorySystem.ItemType item)
