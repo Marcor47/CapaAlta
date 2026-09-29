@@ -79,7 +79,15 @@ public class InventorySystem : MonoBehaviour
 
     public void TryEquip(ItemType item)
     {
-        if (!IsUnlocked(item)) return;
+        Debug.Log("Intentando equipar: " + item);
+        if (!IsUnlocked(item))
+        {
+            Debug.Log("El objeto NO está desbloqueado: " + item);
+            return;
+        }
+
+
+        Debug.Log("Objeto equipado: " + equippedItem);
 
         equippedItem = item;
         SyncToTheo();

@@ -33,6 +33,7 @@ public class InventoryUIController : MonoBehaviour
     void PopulateSlots()
     {
         foreach (Transform child in slotsContainer) Destroy(child.gameObject);
+        Canvas.ForceUpdateCanvases(); // NUEVO — limpia el layout pendiente antes de seguir
         if (InventorySystem.Instance == null) return;
 
         foreach (var item in InventorySystem.Instance.GetUnlockedItemsOrdered())
@@ -43,7 +44,7 @@ public class InventoryUIController : MonoBehaviour
             if (icon != null) icon.sprite = InventorySystem.Instance.GetSpriteFor(item);
 
             var button = go.GetComponent<Button>();
-            InventorySystem.ItemType capturedItem = item; // evita el bug de closures en loops
+            InventorySystem.ItemType capturedItem = item;
             if (button != null)
                 button.onClick.AddListener(() => InventorySystem.Instance.TryEquip(capturedItem));
         }
