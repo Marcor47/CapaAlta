@@ -12,6 +12,13 @@ public class InventorySystem : MonoBehaviour
     [Header("Ítems desbloqueados al inicio")]
     public bool telefonoDesbloqueadoDesdeElInicio = true; // la madre lo entrega en Cap1
 
+    [Header("Sprites por ítem (para la UI y la mano de Theo)")]
+    public Sprite manzanaSprite;
+    public Sprite telefonoSprite;
+
+    private static readonly ItemType[] itemOrder = { ItemType.Manzana, ItemType.Telefono };
+
+
     private HashSet<ItemType> unlockedItems = new HashSet<ItemType>();
     private ItemType equippedItem = ItemType.None;
     private TheoController theo;
@@ -35,11 +42,8 @@ public class InventorySystem : MonoBehaviour
 
     void Update()
     {
-        if (theo != null && theo.IsInDialogue) return; // no cambiar de ítem en medio de un diálogo
-
-        if (Keyboard.current.digit1Key.wasPressedThisFrame) TryEquip(ItemType.Manzana);
-        if (Keyboard.current.digit2Key.wasPressedThisFrame) TryEquip(ItemType.Telefono);
-        if (Keyboard.current.digit0Key.wasPressedThisFrame) TryEquip(ItemType.None);
+        if (theo != null && theo.IsInDialogue) return;
+        if (Keyboard.current.qKey.wasPressedThisFrame) TryEquip(ItemType.None);
     }
 
     public void UnlockItem(ItemType item)
@@ -47,6 +51,29 @@ public class InventorySystem : MonoBehaviour
         if (item == ItemType.None) return;
         unlockedItems.Add(item);
     }
+
+
+
+    public System.Collections.Generic.List<ItemType> GetUnlockedItemsOrdered()
+    {
+        var list = new System.Collections.Generic.List<ItemType>();
+        foreach (var item in itemOrder)
+            if (unlockedItems.Contains(item)) list.Add(item);
+        return list;
+    }
+
+    public Sprite GetSpriteFor(ItemType item)
+    {
+        switch (item)
+        {
+            case ItemType.Manzana: return manzanaSprite;
+            case ItemType.Telefono: return telefonoSprite;
+            default: return null;
+        }
+    }
+
+
+
 
     public bool IsUnlocked(ItemType item) => item == ItemType.None || unlockedItems.Contains(item);
 
