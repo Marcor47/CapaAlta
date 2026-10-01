@@ -44,6 +44,23 @@ public class LoginSceneController : MonoBehaviour
     public Button settingsButton;
     public Button exitButton;
 
+    [Header("Notificación fin de capítulo")]
+    public GameObject notificationPanel;
+    public TextMeshProUGUI notificationText;
+    public Button notificationCloseButton;
+
+    [Header("Compendio — indicador pendiente")]
+    public GameObject compendiumPendingBadge;
+
+
+    [Header("Compendio")]
+    public GameObject compendiumHomePanel; // botones "Cartas" y "Personajes"
+    public Button compendiumCardsButton;
+    public Button compendiumCharactersButton; // TODO: sin funcionalidad aún
+    public GameObject compendiumCardsPanel;
+    public Button compendiumBackButton;
+
+
     void Start()
     {
         startButton.onClick.AddListener(ShowLoginForm);
@@ -52,15 +69,32 @@ public class LoginSceneController : MonoBehaviour
         dashboardBackButton.onClick.AddListener(() => ShowOnly(teacherHomePanel));
         settingsButton.onClick.AddListener(() => settingsPanel.SetActive(true));
         exitButton.onClick.AddListener(HandleExit);
+        notificationCloseButton.onClick.AddListener(() => notificationPanel.SetActive(false));
+        compendiumButton.onClick.AddListener(() => { compendiumHomePanel.SetActive(true); UpdatePendingBadge(); });
+        compendiumCardsButton.onClick.AddListener(() => { compendiumHomePanel.SetActive(false); compendiumCardsPanel.SetActive(true); });
+        compendiumBackButton.onClick.AddListener(() => { compendiumCardsPanel.SetActive(false); compendiumHomePanel.SetActive(false); });
 
         if (AccountManager.Instance.CurrentUser != null)
         {
-            // Ya había una sesión activa (volvió del gameplay vía "Menú Principal") — no repetir login
-            if (AccountManager.Instance.CurrentUser.role == "Teacher") { ShowOnly(teacherHomePanel); RefreshStudentList(); }
-            else ShowOnly(studentHomePanel);
+            if (AccountManager.Instance.CurrentUser.role == "Teacher")
+            {
+                ShowOnly(teacherHomePanel);
+                RefreshStudentList();
+            }
+            else
+            {
+                ShowOnly(studentHomePanel);
+                UpdatePendingBadge();
+
+                if (AccountManager.Instance.justFinishedChapter)
+                {
+                    ShowChapterEndNotification();
+                    AccountManager.Instance.justFinishedChapter = false;
+                }
+            }
             return;
         }
-        
+
         ShowOnly(startPanel);
         errorText.text = "";
     }
@@ -113,8 +147,44 @@ public class LoginSceneController : MonoBehaviour
         else
         {
             ShowOnly(studentHomePanel);
+            UpdatePendingBadge();
+
+            if (AccountManager.Instance.justFinishedChapter)
+            {
+                ShowChapterEndNotification();
+                AccountManager.Instance.justFinishedChapter = false;
+            }
         }
     }
+
+
+
+
+    void ShowChapterEndNotification()
+    {
+        int pending = CountPendingCards();
+        if (pending <= 0) return;
+
+        notificationText.text = $"Recolectaste {pending} carta(s) en el Capítulo {AccountManager.Instance.justFinishedChapterNumber}. ¡Respóndelas en el Compendio!";
+        notificationPanel.SetActive(true);
+    }
+
+    int CountPendingCards()
+    {
+        var progress = AccountManager.Instance.CurrentUser.progress;
+        int count = 0;
+        foreach (var card in progress.allTimeCollectedCards)
+            if (!progress.epistolaryResponses.Exists(r => r.cardID == card.cardID)) count++;
+        return count;
+    }
+
+    public void UpdatePendingBadge()
+    {
+        if (compendiumPendingBadge != null)
+            compendiumPendingBadge.SetActive(CountPendingCards() > 0);
+    }
+
+
 
     // ─── GESTIÓN DE ALUMNOS ─────────────────────────────────────
     void TryAddStudent()

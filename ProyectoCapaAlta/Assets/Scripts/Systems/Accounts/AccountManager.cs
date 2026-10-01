@@ -3,11 +3,18 @@ using UnityEngine;
 
 public class AccountManager : MonoBehaviour
 {
+
+    [HideInInspector] public bool justFinishedChapter = false;
+    [HideInInspector] public int justFinishedChapterNumber = -1;
+
+
     public static AccountManager Instance { get; private set; }
 
     private const string SaveKey = "CapaAlta_Accounts";
     private const string TeacherUsername = "Profesor Martin";
     private const string TeacherPassword = "12345";
+
+
 
     private List<UserAccount> accounts = new List<UserAccount>();
     public UserAccount CurrentUser { get; private set; }
@@ -120,6 +127,9 @@ public class StudentProgress
     public int decisionsCount = 0;
     public string lastPlayed = "";
 
+
+    public List<EpistolaryResponse> epistolaryResponses = new List<EpistolaryResponse>();
+
     // NUEVO — relaciones con NPCs
     public List<string> npcRelationshipKeys = new List<string>();
     public List<int> npcRelationshipValues = new List<int>();
@@ -134,6 +144,14 @@ public class StudentProgress
     // NUEVO — bonos permanentes de barras (Theo no es singleton, así que el bono vive acá)
     public float staminaBonusPermanent = 0f;
     public float regulacionBonusPermanent = 0f;
+}
+
+[System.Serializable]
+public class EpistolaryResponse
+{
+    public string cardID;
+    public string reflectionText;
+    public List<string> linkedHSE = new List<string>();
 }
 
 [System.Serializable]

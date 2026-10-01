@@ -24,10 +24,7 @@ public class CardInventory : MonoBehaviour
 
     private TheoController theo;
 
-    private static readonly Dictionary<string, int> secondaryGroupTotals = new Dictionary<string, int>
-    {
-        { "Grace", 2 }, { "Les", 3 }, { "Duke", 3 }, { "Benny", 3 }
-    };
+    
 
 
 
@@ -91,7 +88,7 @@ public class CardInventory : MonoBehaviour
             theo.IncreaseRegulacionPermanent(regulacionBonusPerFatherCard);
             progress.regulacionBonusPermanent += regulacionBonusPerFatherCard; // NUEVO
         }
-        else if (card.cardType == CardType.Secondary && secondaryGroupTotals.TryGetValue(card.authorName, out int total))
+        else if (card.cardType == CardType.Secondary && CardGroupData.SecondaryGroupTotals.TryGetValue(card.authorName, out int total))
         {
             int allTimeFromAuthor = progress.allTimeCollectedCards.Count(c => c.authorName == card.authorName);
             if (allTimeFromAuthor == total)
