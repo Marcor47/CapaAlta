@@ -1,8 +1,7 @@
-﻿using System.Collections.Generic;
-using TMPro;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using TMPro;
 
 public class LoginSceneController : MonoBehaviour
 {
@@ -61,33 +60,32 @@ public class LoginSceneController : MonoBehaviour
     public GameObject compendiumCardsPanel;
     public Button compendiumBackButton;
 
-    private List<GameObject> navStack = new List<GameObject>();
-    private GameObject currentPanel;
 
     void Start()
     {
-        startButton.onClick.AddListener(() => NavigateTo(loginFormPanel));
+        startButton.onClick.AddListener(ShowLoginForm);
         loginButton.onClick.AddListener(TryLogin);
         addStudentButton.onClick.AddListener(TryAddStudent);
-        dashboardBackButton.onClick.AddListener(HandleBackOrExit);
+        dashboardBackButton.onClick.AddListener(() => ShowOnly(teacherHomePanel));
         settingsButton.onClick.AddListener(() => settingsPanel.SetActive(true));
-        exitButton.onClick.AddListener(HandleBackOrExit);
+        exitButton.onClick.AddListener(HandleExit);
         notificationCloseButton.onClick.AddListener(() => notificationPanel.SetActive(false));
-        compendiumBackButton.onClick.AddListener(HandleBackOrExit);
-        compendiumButton.onClick.AddListener(() => { NavigateTo(compendiumHomePanel); UpdatePendingBadge(); });
-        compendiumCardsButton.onClick.AddListener(() => NavigateTo(compendiumCardsPanel));
+        compendiumButton.onClick.AddListener(() => { compendiumHomePanel.SetActive(true); UpdatePendingBadge(); });
+        compendiumCardsButton.onClick.AddListener(() => { compendiumHomePanel.SetActive(false); compendiumCardsPanel.SetActive(true); });
+        compendiumBackButton.onClick.AddListener(() => { compendiumCardsPanel.SetActive(false); compendiumHomePanel.SetActive(false); });
 
         if (AccountManager.Instance.CurrentUser != null)
         {
             if (AccountManager.Instance.CurrentUser.role == "Teacher")
             {
-                GoHomeAfterLogin(teacherHomePanel);
+                ShowOnly(teacherHomePanel);
                 RefreshStudentList();
             }
             else
             {
-                GoHomeAfterLogin(studentHomePanel);
+                ShowOnly(studentHomePanel);
                 UpdatePendingBadge();
+
                 if (AccountManager.Instance.justFinishedChapter)
                 {
                     ShowChapterEndNotification();
@@ -97,70 +95,38 @@ public class LoginSceneController : MonoBehaviour
             return;
         }
 
-        NavigateTo(startPanel, pushCurrent: false); // en vez de ShowOnly(startPanel)
+        ShowOnly(startPanel);
         errorText.text = "";
     }
 
-    void HandleBackOrExit()
+    void HandleExit()
     {
-        if (currentPanel == startPanel)
+        if (AccountManager.Instance.CurrentUser != null)
         {
-            Application.Quit(); // no hace nada en WebGL, sí en una futura build de escritorio
-            return;
-        }
+            if (DecisionRecord.Instance != null) DecisionRecord.Instance.ResetState();
+            if (CardInventory.Instance != null) CardInventory.Instance.ResetState();
+            //if (NotebookManager.Instance != null) NotebookManager.Instance.ResetState();
 
-        if (currentPanel == studentHomePanel || currentPanel == teacherHomePanel)
+            AccountManager.Instance.Logout();
+            ShowOnly(startPanel);
+        }
+        else
         {
-            DoLogout();
-            return;
+            Application.Quit(); // no hace nada en WebGL, pero no está de más para una futura build de escritorio
         }
-
-        if (navStack.Count > 0)
-        {
-            GameObject previous = navStack[navStack.Count - 1];
-            navStack.RemoveAt(navStack.Count - 1);
-            NavigateTo(previous, pushCurrent: false);
-        }
-    }
-
-    void DoLogout()
-    {
-        if (DecisionRecord.Instance != null) DecisionRecord.Instance.ResetState();
-        if (CardInventory.Instance != null) CardInventory.Instance.ResetState();
-
-        AccountManager.Instance.Logout();
-        navStack.Clear();
-        NavigateTo(startPanel, pushCurrent: false);
     }
 
     // ─── NAVEGACIÓN ENTRE VISTAS ─────────────────────────────────
-    void HideAllPanels()
+    void ShowOnly(GameObject panelToShow)
     {
-        startPanel.SetActive(false);
-        loginFormPanel.SetActive(false);
-        studentHomePanel.SetActive(false);
-        teacherHomePanel.SetActive(false);
-        studentDashboardPanel.SetActive(false);
-        compendiumHomePanel.SetActive(false);
-        compendiumCardsPanel.SetActive(false);
+        startPanel.SetActive(panelToShow == startPanel);
+        loginFormPanel.SetActive(panelToShow == loginFormPanel);
+        studentHomePanel.SetActive(panelToShow == studentHomePanel);
+        teacherHomePanel.SetActive(panelToShow == teacherHomePanel);
+        studentDashboardPanel.SetActive(panelToShow == studentDashboardPanel);
     }
 
-    void NavigateTo(GameObject panel, bool pushCurrent = true)
-    {
-        if (pushCurrent && currentPanel != null)
-            navStack.Add(currentPanel);
-
-        HideAllPanels();
-        panel.SetActive(true);
-        currentPanel = panel;
-    }
-
-    void GoHomeAfterLogin(GameObject homePanel)
-    {
-        navStack.Clear(); // el Home es un "punto de partida" — Atrás desde acá significa cerrar sesión, no volver al login
-        NavigateTo(homePanel, pushCurrent: false);
-    }
-
+    void ShowLoginForm() => ShowOnly(loginFormPanel);
 
     // ─── LOGIN ────────────────────────────────────────────────
     void TryLogin()
@@ -175,12 +141,12 @@ public class LoginSceneController : MonoBehaviour
 
         if (AccountManager.Instance.CurrentUser.role == "Teacher")
         {
-            GoHomeAfterLogin(teacherHomePanel);
+            ShowOnly(teacherHomePanel);
             RefreshStudentList();
         }
         else
         {
-            GoHomeAfterLogin(studentHomePanel);
+            ShowOnly(studentHomePanel);
             UpdatePendingBadge();
 
             if (AccountManager.Instance.justFinishedChapter)
@@ -262,6 +228,6 @@ public class LoginSceneController : MonoBehaviour
         dashboardCards.text = $"Cartas recolectadas: {student.progress.allTimeCollectedCards.Count}";
         dashboardDecisions.text = $"Decisiones registradas: {student.progress.decisionsCount}";
 
-        NavigateTo(studentDashboardPanel);
+        ShowOnly(studentDashboardPanel);
     }
 }
