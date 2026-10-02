@@ -5,10 +5,8 @@ using TMPro;
 public class AudioSettingsPanel : MonoBehaviour
 {
     [Header("UI")]
-    public GameObject settingsPanel;
     public Button volumeUpButton;
     public Button volumeDownButton;
-    public Button backButton;
     public TextMeshProUGUI volumeText;
 
     [Header("Configuración")]
@@ -18,7 +16,6 @@ public class AudioSettingsPanel : MonoBehaviour
     {
         volumeUpButton.onClick.AddListener(() => ChangeVolume(volumeStep));
         volumeDownButton.onClick.AddListener(() => ChangeVolume(-volumeStep));
-        backButton.onClick.AddListener(() => settingsPanel.SetActive(false));
         UpdateVolumeText();
     }
 

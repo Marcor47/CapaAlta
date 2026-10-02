@@ -107,8 +107,8 @@ public class EpistolaryResponsePanel : MonoBehaviour
         }
 
         AccountManager.Instance.SaveProgress();
-        gameObject.SetActive(false);
-
         if (loginController != null) loginController.UpdatePendingBadge();
+
+        if (loginController != null) loginController.GoBack(); // NUEVO — reemplaza gameObject.SetActive(false)
     }
 }

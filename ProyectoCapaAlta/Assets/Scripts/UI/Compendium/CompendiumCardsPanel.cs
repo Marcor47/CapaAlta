@@ -11,6 +11,12 @@ public class CompendiumCardsPanel : MonoBehaviour
     public GameObject groupHeaderPrefab; // TextMeshProUGUI
     public GameObject cardSlotPrefab;    // Button + "Icon" (Image) + "QuestionMarkText" (TMP) + "PendingBadge" (GameObject)
     public EpistolaryResponsePanel responsePanel;
+    private LoginSceneController loginController;
+
+    void Start()
+    {
+        loginController = FindAnyObjectByType<LoginSceneController>();
+    }
 
     void OnEnable()
     {
@@ -91,6 +97,8 @@ public class CompendiumCardsPanel : MonoBehaviour
     {
         var cardData = CardDatabase.Instance?.GetByID(cardID);
         if (cardData == null || responsePanel == null) return;
+
+        if (loginController != null) loginController.OpenPanel(responsePanel.gameObject);
         responsePanel.OpenFor(cardID, cardData.cardText, cardData.cardSprite);
     }
 }

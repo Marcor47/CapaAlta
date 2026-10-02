@@ -61,6 +61,10 @@ public class LoginSceneController : MonoBehaviour
     public GameObject compendiumCardsPanel;
     public Button compendiumBackButton;
 
+
+    [Header("Respuesta epistolar")]
+    public GameObject epistolaryResponsePanel;
+
     private List<GameObject> navStack = new List<GameObject>();
     private GameObject currentPanel;
 
@@ -70,7 +74,7 @@ public class LoginSceneController : MonoBehaviour
         loginButton.onClick.AddListener(TryLogin);
         addStudentButton.onClick.AddListener(TryAddStudent);
         dashboardBackButton.onClick.AddListener(HandleBackOrExit);
-        settingsButton.onClick.AddListener(() => settingsPanel.SetActive(true));
+        settingsButton.onClick.AddListener(() => NavigateTo(settingsPanel));
         exitButton.onClick.AddListener(HandleBackOrExit);
         notificationCloseButton.onClick.AddListener(() => notificationPanel.SetActive(false));
         compendiumBackButton.onClick.AddListener(HandleBackOrExit);
@@ -143,6 +147,8 @@ public class LoginSceneController : MonoBehaviour
         studentDashboardPanel.SetActive(false);
         compendiumHomePanel.SetActive(false);
         compendiumCardsPanel.SetActive(false);
+        settingsPanel.SetActive(false);          // NUEVO
+        epistolaryResponsePanel.SetActive(false); // NUEVO
     }
 
     void NavigateTo(GameObject panel, bool pushCurrent = true)
@@ -192,6 +198,8 @@ public class LoginSceneController : MonoBehaviour
     }
 
 
+    public void OpenPanel(GameObject panel) => NavigateTo(panel);
+    public void GoBack() => HandleBackOrExit();
 
 
     void ShowChapterEndNotification()
