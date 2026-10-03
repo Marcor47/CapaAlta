@@ -99,6 +99,6 @@ public class CompendiumCardsPanel : MonoBehaviour
         if (cardData == null || responsePanel == null) return;
 
         if (loginController != null) loginController.OpenPanel(responsePanel.gameObject);
-        responsePanel.OpenFor(cardID, cardData.cardText, cardData.cardSprite);
+        responsePanel.OpenFor(cardID, cardData.authorName, cardData.cardText, cardData.cardSprite);
     }
 }

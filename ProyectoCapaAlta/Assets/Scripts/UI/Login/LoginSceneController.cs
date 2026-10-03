@@ -38,7 +38,7 @@ public class LoginSceneController : MonoBehaviour
     public TextMeshProUGUI dashboardChapters;
     public TextMeshProUGUI dashboardCards;
     public TextMeshProUGUI dashboardDecisions;
-    public Button dashboardBackButton;
+    
 
     [Header("Persistentes (engranaje / salir)")]
     public GameObject settingsPanel;
@@ -59,7 +59,7 @@ public class LoginSceneController : MonoBehaviour
     public Button compendiumCardsButton;
     public Button compendiumCharactersButton; // TODO: sin funcionalidad aún
     public GameObject compendiumCardsPanel;
-    public Button compendiumBackButton;
+    
 
 
     [Header("Respuesta epistolar")]
@@ -73,11 +73,11 @@ public class LoginSceneController : MonoBehaviour
         startButton.onClick.AddListener(() => NavigateTo(loginFormPanel));
         loginButton.onClick.AddListener(TryLogin);
         addStudentButton.onClick.AddListener(TryAddStudent);
-        dashboardBackButton.onClick.AddListener(HandleBackOrExit);
+        
         settingsButton.onClick.AddListener(() => NavigateTo(settingsPanel));
         exitButton.onClick.AddListener(HandleBackOrExit);
         notificationCloseButton.onClick.AddListener(() => notificationPanel.SetActive(false));
-        compendiumBackButton.onClick.AddListener(HandleBackOrExit);
+        
         compendiumButton.onClick.AddListener(() => { NavigateTo(compendiumHomePanel); UpdatePendingBadge(); });
         compendiumCardsButton.onClick.AddListener(() => NavigateTo(compendiumCardsPanel));
 
@@ -133,8 +133,10 @@ public class LoginSceneController : MonoBehaviour
         if (CardInventory.Instance != null) CardInventory.Instance.ResetState();
 
         AccountManager.Instance.Logout();
+        usernameInput.text = "";
+        passwordInput.text = "";
         navStack.Clear();
-        NavigateTo(startPanel, pushCurrent: false);
+        NavigateTo(loginFormPanel, pushCurrent: false); // antes: startPanel
     }
 
     // ─── NAVEGACIÓN ENTRE VISTAS ─────────────────────────────────

@@ -7,37 +7,40 @@ public class EpistolaryResponsePanel : MonoBehaviour
 {
     [Header("Cara frontal (carta original)")]
     public GameObject frontSide;
+    public TextMeshProUGUI frontAuthorText;
     public TextMeshProUGUI frontCardText;
     public Image frontCardImage;
-    public Button flipButton;
 
     [Header("Cara trasera (respuesta del alumno)")]
     public GameObject backSide;
     public TMP_InputField reflectionInput;
-    public Transform hseTogglesContainer; // con Vertical Layout Group + Content Size Fitter
-    public GameObject hseTogglePrefab;    // Toggle + TextMeshProUGUI hijo
+    public Transform hseTogglesContainer;
+    public GameObject hseTogglePrefab;
     public Button saveButton;
-    public Button backToFrontButton;
+
+    [Header("Botón único de voltear")]
+    public Button flipButton;
 
     [Header("Lista oficial de HSE (13)")]
-    public List<string> hseNames = new List<string>(); // completa acá los 13 nombres oficiales de tu Anexo D
+    public List<string> hseNames = new List<string>();
 
     private string currentCardID;
     private List<Toggle> hseToggles = new List<Toggle>();
     private LoginSceneController loginController;
+    private bool showingFront = true;
 
     void Start()
     {
-        flipButton.onClick.AddListener(() => SetSide(false));
-        backToFrontButton.onClick.AddListener(() => SetSide(true));
+        flipButton.onClick.AddListener(() => SetSide(!showingFront));
         saveButton.onClick.AddListener(SaveResponse);
         loginController = FindAnyObjectByType<LoginSceneController>();
         BuildHSEToggles();
     }
 
-    public void OpenFor(string cardID, string cardText, Sprite cardSprite)
+    public void OpenFor(string cardID, string authorName, string cardText, Sprite cardSprite)
     {
         currentCardID = cardID;
+        frontAuthorText.text = authorName;
         frontCardText.text = cardText;
         frontCardImage.sprite = cardSprite;
 
@@ -47,6 +50,13 @@ public class EpistolaryResponsePanel : MonoBehaviour
 
         SetSide(true);
         gameObject.SetActive(true);
+    }
+
+    void SetSide(bool showFront)
+    {
+        showingFront = showFront;
+        frontSide.SetActive(showFront);
+        backSide.SetActive(!showFront);
     }
 
     void BuildHSEToggles()
@@ -76,12 +86,6 @@ public class EpistolaryResponsePanel : MonoBehaviour
         return progress.epistolaryResponses.Find(r => r.cardID == currentCardID);
     }
 
-    void SetSide(bool showFront)
-    {
-        frontSide.SetActive(showFront);
-        backSide.SetActive(!showFront);
-    }
-
     void SaveResponse()
     {
         var progress = AccountManager.Instance.CurrentUser.progress;
@@ -107,8 +111,6 @@ public class EpistolaryResponsePanel : MonoBehaviour
         }
 
         AccountManager.Instance.SaveProgress();
-        if (loginController != null) loginController.UpdatePendingBadge();
-
-        if (loginController != null) loginController.GoBack(); // NUEVO — reemplaza gameObject.SetActive(false)
+        if (loginController != null) { loginController.UpdatePendingBadge(); loginController.GoBack(); }
     }
 }
