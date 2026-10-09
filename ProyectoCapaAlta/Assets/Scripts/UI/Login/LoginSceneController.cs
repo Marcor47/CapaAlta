@@ -43,6 +43,7 @@ public class LoginSceneController : MonoBehaviour
     public GameObject dashboardResponsePrefab;    // 3 TextMeshProUGUI: carta/autor, reflexión, HSE vinculadas
     public TextMeshProUGUI dashboardNoResponsesText; // "Sin respuestas registradas todavía" — opcional
 
+    public DashboardHSEChart hseChart;
 
     [Header("Persistentes (engranaje / salir)")]
     public GameObject settingsPanel;
@@ -277,7 +278,7 @@ public class LoginSceneController : MonoBehaviour
         dashboardDecisions.text = $"Decisiones registradas: {student.progress.decisionsCount}";
 
         PopulateDashboardResponses(student);
-
+        if (hseChart != null) hseChart.Populate(student);
         NavigateTo(studentDashboardPanel);
     }
 
