@@ -38,7 +38,11 @@ public class LoginSceneController : MonoBehaviour
     public TextMeshProUGUI dashboardChapters;
     public TextMeshProUGUI dashboardCards;
     public TextMeshProUGUI dashboardDecisions;
-    
+
+    public Transform dashboardResponsesContainer; // Content de un Scroll View, con Grid o Vertical Layout + Content Size Fitter
+    public GameObject dashboardResponsePrefab;    // 3 TextMeshProUGUI: carta/autor, reflexión, HSE vinculadas
+    public TextMeshProUGUI dashboardNoResponsesText; // "Sin respuestas registradas todavía" — opcional
+
 
     [Header("Persistentes (engranaje / salir)")]
     public GameObject settingsPanel;
@@ -272,6 +276,31 @@ public class LoginSceneController : MonoBehaviour
         dashboardCards.text = $"Cartas recolectadas: {student.progress.allTimeCollectedCards.Count}";
         dashboardDecisions.text = $"Decisiones registradas: {student.progress.decisionsCount}";
 
+        PopulateDashboardResponses(student);
+
         NavigateTo(studentDashboardPanel);
+    }
+
+    void PopulateDashboardResponses(UserAccount student)
+    {
+        foreach (Transform child in dashboardResponsesContainer) Destroy(child.gameObject);
+        Canvas.ForceUpdateCanvases();
+
+        var responses = student.progress.epistolaryResponses;
+
+        if (dashboardNoResponsesText != null)
+            dashboardNoResponsesText.gameObject.SetActive(responses.Count == 0);
+
+        foreach (var response in responses)
+        {
+            var cardData = CardDatabase.Instance?.GetByID(response.cardID);
+            GameObject go = Instantiate(dashboardResponsePrefab, dashboardResponsesContainer);
+
+            var texts = go.GetComponentsInChildren<TextMeshProUGUI>();
+            // Se asume: texts[0] = carta/autor, texts[1] = reflexión, texts[2] = HSE vinculadas
+            if (texts.Length > 0) texts[0].text = cardData != null ? $"Carta de {cardData.authorName}" : response.cardID;
+            if (texts.Length > 1) texts[1].text = response.reflectionText;
+            if (texts.Length > 2) texts[2].text = response.linkedHSE.Count > 0 ? string.Join(", ", response.linkedHSE) : "(sin HSE vinculada)";
+        }
     }
 }
