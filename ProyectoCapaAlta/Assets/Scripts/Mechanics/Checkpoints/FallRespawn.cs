@@ -13,9 +13,20 @@ public class FallRespawn : MonoBehaviour
     {
         theo = GetComponent<TheoController>();
         rb = GetComponent<Rigidbody2D>();
+        if (CheckpointManager.Instance == null) return;
 
-        if (CheckpointManager.Instance != null)
-            CheckpointManager.Instance.SetCheckpoint(transform.position); // punto de entrada del capítulo
+        Vector3 spawn = transform.position;
+        var account = AccountManager.Instance;
+
+        if (account != null && account.resumeFromCheckpoint)
+        {
+            if (account.TryGetCheckpoint(CheckpointManager.Instance.chapter, out Vector2 saved))
+                spawn = new Vector3(saved.x, saved.y, transform.position.z);
+            account.resumeFromCheckpoint = false;
+        }
+
+        transform.position = spawn;
+        CheckpointManager.Instance.SetCheckpoint(spawn, persist: false); // el punto de entrada no pisa el checkpoint guardado
     }
 
     void Update()

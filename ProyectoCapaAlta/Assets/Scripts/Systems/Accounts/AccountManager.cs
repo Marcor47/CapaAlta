@@ -108,6 +108,94 @@ public class AccountManager : MonoBehaviour
     {
         CurrentUser = null;
     }
+
+    [HideInInspector] public bool resumeFromCheckpoint = false;
+
+    public bool HasStartedChapter(int chapter)
+        => CurrentUser != null && CurrentUser.progress.chaptersStarted.Contains(chapter);
+
+    // "Iniciar" (primera vez) y "Reiniciar"
+    public void StartChapterFresh(int chapter)
+    {
+        var p = CurrentUser.progress;
+
+        if (!p.chaptersStarted.Contains(chapter))
+        {
+            p.chaptersStarted.Add(chapter);
+            TakeSnapshot(chapter); // foto de las relaciones al entrar por primera vez
+        }
+        else
+        {
+            RestoreSnapshot(chapter); // reinicio: vuelve al estado de relaciones del inicio del capítulo
+            p.completedNodesSaved.RemoveAll(id => id.StartsWith($"Cap{chapter}_"));
+        }
+
+        p.checkpoints.RemoveAll(c => c.chapter == chapter);
+        resumeFromCheckpoint = false;
+        SaveProgress();
+
+        // Los singletons de gameplay sobreviven entre escenas: hay que refrescarlos
+        if (DecisionRecord.Instance != null) DecisionRecord.Instance.LoadFromAccount();
+        if (CardInventory.Instance != null) CardInventory.Instance.ResetState();
+    }
+
+    public void PrepareContinue() => resumeFromCheckpoint = true;
+
+    void TakeSnapshot(int chapter)
+    {
+        var p = CurrentUser.progress;
+        p.chapterSnapshots.RemoveAll(s => s.chapter == chapter);
+        p.chapterSnapshots.Add(new ChapterSnapshot
+        {
+            chapter = chapter,
+            npcKeys = new List<string>(p.npcRelationshipKeys),
+            npcValues = new List<int>(p.npcRelationshipValues),
+            manzanasAvailable = p.manzanasAvailable,
+            manzanasUsedOn = new List<string>(p.manzanasUsedOnSaved)
+        });
+    }
+
+    void RestoreSnapshot(int chapter)
+    {
+        var p = CurrentUser.progress;
+        var s = p.chapterSnapshots.Find(x => x.chapter == chapter);
+        if (s == null) return;
+        p.npcRelationshipKeys = new List<string>(s.npcKeys);
+        p.npcRelationshipValues = new List<int>(s.npcValues);
+        p.manzanasAvailable = s.manzanasAvailable;
+        p.manzanasUsedOnSaved = new List<string>(s.manzanasUsedOn);
+    }
+
+    public void SaveCheckpoint(int chapter, Vector3 pos)
+    {
+        if (CurrentUser == null) return;
+        var list = CurrentUser.progress.checkpoints;
+        var existing = list.Find(c => c.chapter == chapter);
+        if (existing == null) { existing = new ChapterCheckpointSave { chapter = chapter }; list.Add(existing); }
+        existing.x = pos.x;
+        existing.y = pos.y;
+        SaveProgress();
+    }
+
+    public bool TryGetCheckpoint(int chapter, out Vector2 pos)
+    {
+        pos = default;
+        if (CurrentUser == null) return false;
+        var c = CurrentUser.progress.checkpoints.Find(x => x.chapter == chapter);
+        if (c == null) return false;
+        pos = new Vector2(c.x, c.y);
+        return true;
+    }
+
+    public void ClearCheckpoint(int chapter)
+    {
+        if (CurrentUser == null) return;
+        CurrentUser.progress.checkpoints.RemoveAll(c => c.chapter == chapter);
+        SaveProgress();
+    }
+
+
+
 }
 
 [System.Serializable]
@@ -122,6 +210,10 @@ public class UserAccount
 [System.Serializable]
 public class StudentProgress
 {
+    public List<int> chaptersStarted = new List<int>();
+    public List<ChapterCheckpointSave> checkpoints = new List<ChapterCheckpointSave>();
+    public List<ChapterSnapshot> chapterSnapshots = new List<ChapterSnapshot>();
+
     public List<int> chaptersCompleted = new List<int>();
     public List<CollectedCardRecord> allTimeCollectedCards = new List<CollectedCardRecord>();
     public int decisionsCount = 0;
@@ -144,6 +236,20 @@ public class StudentProgress
     // NUEVO — bonos permanentes de barras (Theo no es singleton, así que el bono vive acá)
     public float staminaBonusPermanent = 0f;
     public float regulacionBonusPermanent = 0f;
+}
+
+
+[System.Serializable]
+public class ChapterCheckpointSave { public int chapter; public float x; public float y; }
+
+[System.Serializable]
+public class ChapterSnapshot
+{
+    public int chapter;
+    public List<string> npcKeys = new List<string>();
+    public List<int> npcValues = new List<int>();
+    public int manzanasAvailable;
+    public List<string> manzanasUsedOn = new List<string>();
 }
 
 [System.Serializable]

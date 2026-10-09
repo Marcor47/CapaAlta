@@ -47,6 +47,8 @@ public class ChapterEndTrigger : MonoBehaviour
         }
 
         AccountManager.Instance.MarkChapterCompleted(chapter);
+        AccountManager.Instance.ClearCheckpoint(chapter);
+
         AccountManager.Instance.justFinishedChapter = true;
         AccountManager.Instance.justFinishedChapterNumber = chapter;
 

@@ -64,7 +64,12 @@ public class LoginSceneController : MonoBehaviour
     public Button compendiumCardsButton;
     public Button compendiumCharactersButton; // TODO: sin funcionalidad aún
     public GameObject compendiumCardsPanel;
-    
+
+    [Header("Capítulos")]
+    public GameObject chaptersPanel;
+
+    [Header("Profesor — habilitar capítulos")]
+    public Toggle[] chapterToggles; // 4 toggles, índice 0 = Cap1
 
 
     [Header("Respuesta epistolar")]
@@ -86,12 +91,13 @@ public class LoginSceneController : MonoBehaviour
         compendiumButton.onClick.AddListener(() => { NavigateTo(compendiumHomePanel); UpdatePendingBadge(); });
         compendiumCardsButton.onClick.AddListener(() => NavigateTo(compendiumCardsPanel));
 
+        chaptersButton.onClick.AddListener(() => NavigateTo(chaptersPanel));
+
         if (AccountManager.Instance.CurrentUser != null)
         {
             if (AccountManager.Instance.CurrentUser.role == "Teacher")
             {
-                GoHomeAfterLogin(teacherHomePanel);
-                RefreshStudentList();
+                ShowTeacherHome();
             }
             else
             {
@@ -156,6 +162,7 @@ public class LoginSceneController : MonoBehaviour
         compendiumCardsPanel.SetActive(false);
         settingsPanel.SetActive(false);          // NUEVO
         epistolaryResponsePanel.SetActive(false); // NUEVO
+        chaptersPanel.SetActive(false);
     }
 
     void NavigateTo(GameObject panel, bool pushCurrent = true)
@@ -188,8 +195,7 @@ public class LoginSceneController : MonoBehaviour
 
         if (AccountManager.Instance.CurrentUser.role == "Teacher")
         {
-            GoHomeAfterLogin(teacherHomePanel);
-            RefreshStudentList();
+            ShowTeacherHome();
         }
         else
         {
@@ -302,6 +308,27 @@ public class LoginSceneController : MonoBehaviour
             if (texts.Length > 0) texts[0].text = cardData != null ? $"Carta de {cardData.authorName}" : response.cardID;
             if (texts.Length > 1) texts[1].text = response.reflectionText;
             if (texts.Length > 2) texts[2].text = response.linkedHSE.Count > 0 ? string.Join(", ", response.linkedHSE) : "(sin HSE vinculada)";
+        }
+    }
+
+    void ShowTeacherHome()
+    {
+        GoHomeAfterLogin(teacherHomePanel);
+        RefreshStudentList();
+        SetupChapterToggles();
+    }
+
+    void SetupChapterToggles()
+    {
+        for (int i = 0; i < chapterToggles.Length; i++)
+        {
+            int chapter = i + 1;
+            var toggle = chapterToggles[i];
+
+            toggle.onValueChanged.RemoveAllListeners();
+            toggle.isOn = CourseSettings.Instance.IsChapterUnlocked(chapter);
+            toggle.interactable = chapter != 1; // Cap1 siempre habilitado
+            toggle.onValueChanged.AddListener(on => CourseSettings.Instance.SetChapterUnlocked(chapter, on));
         }
     }
 }
