@@ -29,12 +29,20 @@ public class EpistolaryResponsePanel : MonoBehaviour
     private LoginSceneController loginController;
     private bool showingFront = true;
 
+
+    public static EpistolaryResponsePanel Instance { get; private set; }
+
     void Start()
     {
         flipButton.onClick.AddListener(() => SetSide(!showingFront));
         saveButton.onClick.AddListener(SaveResponse);
         loginController = FindAnyObjectByType<LoginSceneController>();
         BuildHSEToggles();
+    }
+
+    void Awake()
+    {
+        Instance = this;
     }
 
     public void OpenFor(string cardID, string authorName, string cardText, Sprite cardSprite)
