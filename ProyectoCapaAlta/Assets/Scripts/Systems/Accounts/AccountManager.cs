@@ -220,6 +220,9 @@ public class StudentProgress
     public string lastPlayed = "";
 
 
+    public List<SavedChoice> choices = new List<SavedChoice>();
+
+
     public List<EpistolaryResponse> epistolaryResponses = new List<EpistolaryResponse>();
 
     // NUEVO — relaciones con NPCs
@@ -237,6 +240,18 @@ public class StudentProgress
     public float staminaBonusPermanent = 0f;
     public float regulacionBonusPermanent = 0f;
 }
+
+
+[System.Serializable]
+public class SavedChoice
+{
+    public string nodeID;
+    public string npcID;
+    public int roundIndex;
+    public int optionIndex;
+    public int relationshipDelta;
+}
+
 
 
 [System.Serializable]

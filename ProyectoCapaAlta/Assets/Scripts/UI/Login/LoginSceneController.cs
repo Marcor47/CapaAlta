@@ -3,6 +3,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using System.Linq;
 
 public class LoginSceneController : MonoBehaviour
 {
@@ -25,6 +26,12 @@ public class LoginSceneController : MonoBehaviour
     [Header("Vista 3.1 — Alumno")]
     public Button chaptersButton; // TODO: conectar cuando exista el panel de capítulos
     public Button compendiumButton; // TODO: conectar cuando exista el compendio
+    [Header("Respuesta epistolar")]
+    public GameObject epistolaryResponsePanel;
+
+    private List<GameObject> navStack = new List<GameObject>();
+    private GameObject currentPanel;
+
 
     [Header("Vista 3.2 — Profesor")]
     public TMP_InputField newStudentUsernameInput;
@@ -44,6 +51,20 @@ public class LoginSceneController : MonoBehaviour
     public TextMeshProUGUI dashboardNoResponsesText; // "Sin respuestas registradas todavía" — opcional
 
     public DashboardHSEChart hseChart;
+
+
+    [Header("Dashboard — métricas ampliadas")]
+    public DashboardDonutChart decisionsDonut;
+    public TextMeshProUGUI dashboardRelationsText;
+    public TextMeshProUGUI dashboardChapterStatusText;
+    public TextMeshProUGUI dashboardResponseRateText;
+
+    private static readonly string[,] npcDisplay =
+    {
+    { "gaz", "Gaz" }, { "haru", "Haru" }, { "lee_wilber", "Lee y Wilber" },
+    { "ryland_astro", "Ryland y Astro" }, { "padre", "Jason" }
+};
+
 
     [Header("Persistentes (engranaje / salir)")]
     public GameObject settingsPanel;
@@ -72,11 +93,7 @@ public class LoginSceneController : MonoBehaviour
     public Toggle[] chapterToggles; // 4 toggles, índice 0 = Cap1
 
 
-    [Header("Respuesta epistolar")]
-    public GameObject epistolaryResponsePanel;
-
-    private List<GameObject> navStack = new List<GameObject>();
-    private GameObject currentPanel;
+    
 
     void Start()
     {
@@ -285,6 +302,8 @@ public class LoginSceneController : MonoBehaviour
 
         PopulateDashboardResponses(student);
         if (hseChart != null) hseChart.Populate(student);
+
+        PopulateDashboardExtras(student);
         NavigateTo(studentDashboardPanel);
     }
 
@@ -330,5 +349,44 @@ public class LoginSceneController : MonoBehaviour
             toggle.interactable = chapter != 1; // Cap1 siempre habilitado
             toggle.onValueChanged.AddListener(on => CourseSettings.Instance.SetChapterUnlocked(chapter, on));
         }
+    }
+
+
+    void PopulateDashboardExtras(UserAccount student)
+    {
+        var p = student.progress;
+
+        // Dona de decisiones
+        int pos = p.choices.Count(c => c.relationshipDelta > 0);
+        int neu = p.choices.Count(c => c.relationshipDelta == 0);
+        int neg = p.choices.Count(c => c.relationshipDelta < 0);
+        if (decisionsDonut != null) decisionsDonut.SetValues(pos, neu, neg);
+
+        // Relación actual con cada personaje
+        var rel = new System.Text.StringBuilder();
+        for (int i = 0; i < npcDisplay.GetLength(0); i++)
+        {
+            int idx = p.npcRelationshipKeys.IndexOf(npcDisplay[i, 0]);
+            string state = idx < 0 ? "Sin encuentro"
+                : p.npcRelationshipValues[idx] > 0 ? "Buena"
+                : p.npcRelationshipValues[idx] < 0 ? "Mala" : "Neutral";
+            rel.AppendLine($"{npcDisplay[i, 1]}: {state}");
+        }
+        dashboardRelationsText.text = rel.ToString();
+
+        // Estado por capítulo
+        var ch = new System.Text.StringBuilder();
+        for (int c = 1; c <= 4; c++)
+        {
+            string st = p.chaptersCompleted.Contains(c) ? "Completado"
+                : p.chaptersStarted.Contains(c) ? "En curso" : "Sin iniciar";
+            ch.AppendLine($"Capítulo {c}: {st}");
+        }
+        dashboardChapterStatusText.text = ch.ToString();
+
+        // Tasa de respuesta epistolar
+        int collected = p.allTimeCollectedCards.Count;
+        int answered = p.allTimeCollectedCards.Count(card => p.epistolaryResponses.Exists(r => r.cardID == card.cardID));
+        dashboardResponseRateText.text = $"Cartas respondidas: {answered} / {collected}";
     }
 }

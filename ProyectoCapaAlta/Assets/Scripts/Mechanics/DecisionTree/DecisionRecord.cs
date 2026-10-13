@@ -174,6 +174,16 @@ public class DecisionRecord : MonoBehaviour
         if (AccountManager.Instance != null && AccountManager.Instance.CurrentUser != null)
         {
             AccountManager.Instance.CurrentUser.progress.decisionsCount++;
+
+            AccountManager.Instance.CurrentUser.progress.choices.Add(new SavedChoice
+            {
+                nodeID = nodeID,
+                npcID = npcID,
+                roundIndex = roundIndex,
+                optionIndex = optionIndex,
+                relationshipDelta = relationshipDelta
+            });
+
             AccountManager.Instance.SaveProgress();
         }
 
