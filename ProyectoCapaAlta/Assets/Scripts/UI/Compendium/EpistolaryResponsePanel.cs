@@ -32,21 +32,24 @@ public class EpistolaryResponsePanel : MonoBehaviour
 
     public static EpistolaryResponsePanel Instance { get; private set; }
 
-    void Start()
+    private bool initialized = false;
+
+    void EnsureInitialized()
     {
+        if (initialized) return;
+        initialized = true;
+
         flipButton.onClick.AddListener(() => SetSide(!showingFront));
         saveButton.onClick.AddListener(SaveResponse);
         loginController = FindAnyObjectByType<LoginSceneController>();
         BuildHSEToggles();
     }
 
-    void Awake()
-    {
-        Instance = this;
-    }
+
 
     public void OpenFor(string cardID, string authorName, string cardText, Sprite cardSprite)
     {
+        EnsureInitialized();
         currentCardID = cardID;
         frontAuthorText.text = authorName;
         frontCardText.text = cardText;

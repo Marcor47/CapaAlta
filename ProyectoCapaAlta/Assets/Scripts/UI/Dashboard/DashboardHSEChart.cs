@@ -10,13 +10,15 @@ public class DashboardHSEChart : MonoBehaviour
     public Transform barsContainer; // Vertical Layout Group + Content Size Fitter
     public GameObject barRowPrefab; // hijo "Label" (TMP) + hijo "BarFill" (Image, Type=Filled, Horizontal)
 
+    public EpistolaryResponsePanel responsePanelRef;
+
     public void Populate(UserAccount student)
     {
         foreach (Transform child in barsContainer) Destroy(child.gameObject);
         Canvas.ForceUpdateCanvases();
 
-        if (EpistolaryResponsePanel.Instance == null) return;
-        var hseNames = EpistolaryResponsePanel.Instance.hseNames;
+        if (responsePanelRef == null) return;
+        var hseNames = responsePanelRef.hseNames;
 
         Dictionary<string, int> counts = new Dictionary<string, int>();
         foreach (var hse in hseNames) counts[hse] = 0;

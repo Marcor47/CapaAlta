@@ -40,6 +40,14 @@ public class LoginSceneController : MonoBehaviour
     public Transform studentListContainer;
     public GameObject studentListItemPrefab; // ahora necesita Button "Ver" y Button "Eliminar" además del texto
 
+    [Header("Profesor — hub")]
+    public GameObject teacherStudentsPanel;
+    public GameObject teacherChaptersPanel;
+    public Button teacherStudentsButton;
+    public Button teacherChaptersButton;
+    public TextMeshProUGUI teacherStatusText;
+
+
     [Header("Vista — Dashboard de un alumno")]
     public TextMeshProUGUI dashboardStudentName;
     public TextMeshProUGUI dashboardChapters;
@@ -51,7 +59,7 @@ public class LoginSceneController : MonoBehaviour
     public TextMeshProUGUI dashboardNoResponsesText; // "Sin respuestas registradas todavía" — opcional
 
     public DashboardHSEChart hseChart;
-
+    public ScrollRect dashboardScroll; // arrastra DashboardScrollView
 
     [Header("Dashboard — métricas ampliadas")]
     public DashboardDonutChart decisionsDonut;
@@ -109,6 +117,18 @@ public class LoginSceneController : MonoBehaviour
         compendiumCardsButton.onClick.AddListener(() => NavigateTo(compendiumCardsPanel));
 
         chaptersButton.onClick.AddListener(() => NavigateTo(chaptersPanel));
+
+        teacherStudentsButton.onClick.AddListener(() =>
+        {
+            NavigateTo(teacherStudentsPanel);
+            teacherStatusText.text = "";
+            RefreshStudentList();
+        });
+        teacherChaptersButton.onClick.AddListener(() =>
+        {
+            NavigateTo(teacherChaptersPanel);
+            SetupChapterToggles();
+        });
 
         if (AccountManager.Instance.CurrentUser != null)
         {
@@ -177,9 +197,11 @@ public class LoginSceneController : MonoBehaviour
         studentDashboardPanel.SetActive(false);
         compendiumHomePanel.SetActive(false);
         compendiumCardsPanel.SetActive(false);
-        settingsPanel.SetActive(false);          // NUEVO
-        epistolaryResponsePanel.SetActive(false); // NUEVO
+        settingsPanel.SetActive(false);
+        epistolaryResponsePanel.SetActive(false);
         chaptersPanel.SetActive(false);
+        teacherStudentsPanel.SetActive(false);
+        teacherChaptersPanel.SetActive(false);
     }
 
     void NavigateTo(GameObject panel, bool pushCurrent = true)
@@ -261,9 +283,16 @@ public class LoginSceneController : MonoBehaviour
     // ─── GESTIÓN DE ALUMNOS ─────────────────────────────────────
     void TryAddStudent()
     {
-        bool added = AccountManager.Instance.AddStudent(newStudentUsernameInput.text, newStudentPasswordInput.text);
-        if (!added) { errorText.text = "No se pudo agregar (¿usuario vacío o ya existe?)."; return; }
+        string newName = newStudentUsernameInput.text;
+        bool added = AccountManager.Instance.AddStudent(newName, newStudentPasswordInput.text);
 
+        if (!added)
+        {
+            teacherStatusText.text = "No se pudo agregar (¿usuario vacío o ya existe?).";
+            return;
+        }
+
+        teacherStatusText.text = $"Alumno \"{newName}\" agregado.";
         newStudentUsernameInput.text = "";
         newStudentPasswordInput.text = "";
         RefreshStudentList();
@@ -305,6 +334,9 @@ public class LoginSceneController : MonoBehaviour
 
         PopulateDashboardExtras(student);
         NavigateTo(studentDashboardPanel);
+
+        Canvas.ForceUpdateCanvases();
+        if (dashboardScroll != null) dashboardScroll.verticalNormalizedPosition = 1f;
     }
 
     void PopulateDashboardResponses(UserAccount student)
@@ -333,8 +365,6 @@ public class LoginSceneController : MonoBehaviour
     void ShowTeacherHome()
     {
         GoHomeAfterLogin(teacherHomePanel);
-        RefreshStudentList();
-        SetupChapterToggles();
     }
 
     void SetupChapterToggles()

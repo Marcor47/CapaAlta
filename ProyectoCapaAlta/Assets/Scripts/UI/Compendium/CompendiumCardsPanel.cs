@@ -1,16 +1,17 @@
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
 
 public class CompendiumCardsPanel : MonoBehaviour
 {
     [Header("Referencias")]
-    public Transform groupsContainer; // dentro de un Scroll View, con Vertical Layout Group + Content Size Fitter
-    public GameObject groupHeaderPrefab; // TextMeshProUGUI
-    public GameObject cardSlotPrefab;    // Button + "Icon" (Image) + "QuestionMarkText" (TMP) + "PendingBadge" (GameObject)
+    public Transform groupsContainer;   // Content del Scroll View
+    public GameObject groupPrefab;      // CardGroup: hijos "Header" (TMP) y "CardsRow"
+    public GameObject cardSlotPrefab;   // Button + "Icon" + "QuestionMarkText" + "PendingBadge"
     public EpistolaryResponsePanel responsePanel;
+
     private LoginSceneController loginController;
 
     void Start()
@@ -25,70 +26,78 @@ public class CompendiumCardsPanel : MonoBehaviour
 
     void Populate()
     {
-        foreach (Transform child in groupsContainer) Destroy(child.gameObject);
-        Canvas.ForceUpdateCanvases();
+        ClearChildren(groupsContainer);
 
+        if (AccountManager.Instance == null || AccountManager.Instance.CurrentUser == null) return;
         var progress = AccountManager.Instance.CurrentUser.progress;
 
-        foreach (var authorName in CardGroupData.SecondaryGroupsInOrder)
+        foreach (var author in CardGroupData.SecondaryGroupsInOrder)
+            BuildGroup(author, CardGroupData.SecondaryGroupTotals[author], CardsOfGroup(author, false), progress);
+
+        BuildGroup(CardGroupData.FatherDisplayName, CardGroupData.FatherTotalCards, CardsOfGroup(null, true), progress);
+    }
+
+    // Separa el hijo antes de destruirlo, para que el layout no vea objetos "fantasma"
+    void ClearChildren(Transform parent)
+    {
+        for (int i = parent.childCount - 1; i >= 0; i--)
         {
-            int total = CardGroupData.SecondaryGroupTotals[authorName];
-            var collected = progress.allTimeCollectedCards.Where(c => c.authorName == authorName).ToList();
-            BuildGroup(collected.Count > 0 ? authorName : "?", total, collected, progress);
+            var child = parent.GetChild(i);
+            child.SetParent(null);
+            Destroy(child.gameObject);
         }
-
-        var fatherCards = progress.allTimeCollectedCards.Where(IsFatherCard).ToList();
-        BuildGroup(fatherCards.Count > 0 ? CardGroupData.FatherDisplayName : "?", CardGroupData.FatherTotalCards, fatherCards, progress);
     }
 
-    bool IsFatherCard(CollectedCardRecord record)
+    List<CardData> CardsOfGroup(string author, bool father)
     {
-        var data = CardDatabase.Instance?.GetByID(record.cardID);
-        return data != null && data.cardType == CardData.CardType.Father;
+        if (CardDatabase.Instance == null) return new List<CardData>();
+
+        return CardDatabase.Instance.allCards
+            .Where(c => c != null && (father
+                ? c.cardType == CardData.CardType.Father
+                : c.cardType == CardData.CardType.Secondary && c.authorName == author))
+            .OrderBy(c => c.chapter).ThenBy(c => c.cardID)
+            .ToList();
     }
 
-    void BuildGroup(string displayName, int total, List<CollectedCardRecord> collected, StudentProgress progress)
+    void BuildGroup(string authorName, int expectedTotal, List<CardData> groupCards, StudentProgress progress)
     {
-        GameObject header = Instantiate(groupHeaderPrefab, groupsContainer);
-        var headerText = header.GetComponentInChildren<TextMeshProUGUI>();
-        if (headerText != null) headerText.text = displayName;
+        int slotCount = Mathf.Max(expectedTotal, groupCards.Count);
+        int collectedCount = groupCards.Count(c => progress.allTimeCollectedCards.Exists(r => r.cardID == c.cardID));
 
-        GameObject rowGO = new GameObject("CardsRow", typeof(RectTransform));
-        rowGO.transform.SetParent(groupsContainer, false);
-        var hlg = rowGO.AddComponent<HorizontalLayoutGroup>();
-        hlg.spacing = 10; hlg.childControlWidth = false; hlg.childControlHeight = false;
-        var csf = rowGO.AddComponent<ContentSizeFitter>();
-        csf.horizontalFit = ContentSizeFitter.FitMode.PreferredSize;
-        csf.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
+        GameObject group = Instantiate(groupPrefab, groupsContainer);
+        var header = group.transform.Find("Header")?.GetComponent<TextMeshProUGUI>();
+        var row = group.transform.Find("CardsRow");
+        if (row == null) return;
 
-        for (int i = 0; i < total; i++)
+        string displayName = collectedCount > 0 ? authorName : "?";
+        if (header != null) header.text = $"{displayName}  ({collectedCount}/{slotCount})";
+
+        for (int i = 0; i < slotCount; i++)
         {
-            GameObject slot = Instantiate(cardSlotPrefab, rowGO.transform);
+            GameObject slot = Instantiate(cardSlotPrefab, row);
             var icon = slot.transform.Find("Icon")?.GetComponent<Image>();
             var questionMark = slot.transform.Find("QuestionMarkText")?.gameObject;
             var badge = slot.transform.Find("PendingBadge")?.gameObject;
             var button = slot.GetComponent<Button>();
 
-            if (i < collected.Count)
+            CardData card = i < groupCards.Count ? groupCards[i] : null;
+            bool collected = card != null && progress.allTimeCollectedCards.Exists(r => r.cardID == card.cardID);
+            bool answered = collected && progress.epistolaryResponses.Exists(r => r.cardID == card.cardID);
+
+            if (icon != null) { icon.enabled = collected; if (collected) icon.sprite = card.cardSprite; }
+            if (questionMark != null) questionMark.SetActive(!collected);
+            if (badge != null) badge.SetActive(collected && !answered);
+
+            if (button != null)
             {
-                var record = collected[i];
-                var cardData = CardDatabase.Instance?.GetByID(record.cardID);
-
-                if (icon != null) { icon.enabled = true; icon.sprite = cardData != null ? cardData.cardSprite : null; }
-                if (questionMark != null) questionMark.SetActive(false);
-
-                bool answered = progress.epistolaryResponses.Exists(r => r.cardID == record.cardID);
-                if (badge != null) badge.SetActive(!answered);
-
-                string capturedID = record.cardID;
-                if (button != null) { button.interactable = true; button.onClick.AddListener(() => OpenCard(capturedID)); }
-            }
-            else
-            {
-                if (icon != null) icon.enabled = false;
-                if (questionMark != null) questionMark.SetActive(true);
-                if (badge != null) badge.SetActive(false);
-                if (button != null) button.interactable = false;
+                button.onClick.RemoveAllListeners();
+                button.interactable = collected;
+                if (collected)
+                {
+                    string capturedID = card.cardID;
+                    button.onClick.AddListener(() => OpenCard(capturedID));
+                }
             }
         }
     }
