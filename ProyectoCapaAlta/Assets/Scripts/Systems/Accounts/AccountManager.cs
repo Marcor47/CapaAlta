@@ -194,7 +194,17 @@ public class AccountManager : MonoBehaviour
         SaveProgress();
     }
 
+    public void MarkNpcMet(string npcID)
+    {
+        if (CurrentUser == null || string.IsNullOrEmpty(npcID)) return;
+        var met = CurrentUser.progress.metNpcs;
+        if (met.Contains(npcID)) return;
+        met.Add(npcID);
+        SaveProgress();
+    }
 
+    public bool HasMetNpc(string npcID)
+        => CurrentUser != null && CurrentUser.progress.metNpcs.Contains(npcID);
 
 }
 
@@ -221,6 +231,8 @@ public class StudentProgress
 
 
     public List<SavedChoice> choices = new List<SavedChoice>();
+
+    public List<string> metNpcs = new List<string>();
 
 
     public List<EpistolaryResponse> epistolaryResponses = new List<EpistolaryResponse>();

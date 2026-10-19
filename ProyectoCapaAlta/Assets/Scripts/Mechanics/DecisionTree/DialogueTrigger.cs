@@ -95,6 +95,9 @@ public class DialogueTrigger : MonoBehaviour
         if (DecisionRecord.Instance != null)
             DecisionRecord.Instance.MarkNodeCompleted(dialogueNode.nodeID);
 
+        if (AccountManager.Instance != null)
+            AccountManager.Instance.MarkNpcMet(dialogueNode.npcID);
+
         if (dialogueNode.givesManzanaOnEnd && DecisionRecord.Instance != null)
             DecisionRecord.Instance.AddManzana();
 

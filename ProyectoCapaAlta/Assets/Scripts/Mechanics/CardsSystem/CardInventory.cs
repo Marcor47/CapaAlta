@@ -65,6 +65,9 @@ public class CardInventory : MonoBehaviour
         OnCardAdded?.Invoke(card);
         CheckPermanentBonuses(card);
 
+        if (card.cardType == CardType.Father && AccountManager.Instance != null)
+            AccountManager.Instance.MarkNpcMet("padre");
+
         Debug.Log($"[CardInventory] Carta recolectada: {card.cardID} — {card.authorName}");
     }
 

@@ -94,6 +94,9 @@ public class LoginSceneController : MonoBehaviour
     public Button compendiumCharactersButton; // TODO: sin funcionalidad aún
     public GameObject compendiumCardsPanel;
 
+    [Header("Personajes Compendium")]
+    public GameObject compendiumCharactersPanel;
+
     [Header("Capítulos")]
     public GameObject chaptersPanel;
 
@@ -115,6 +118,7 @@ public class LoginSceneController : MonoBehaviour
         
         compendiumButton.onClick.AddListener(() => { NavigateTo(compendiumHomePanel); UpdatePendingBadge(); });
         compendiumCardsButton.onClick.AddListener(() => NavigateTo(compendiumCardsPanel));
+        compendiumCharactersButton.onClick.AddListener(() => NavigateTo(compendiumCharactersPanel));
 
         chaptersButton.onClick.AddListener(() => NavigateTo(chaptersPanel));
 
@@ -202,6 +206,7 @@ public class LoginSceneController : MonoBehaviour
         chaptersPanel.SetActive(false);
         teacherStudentsPanel.SetActive(false);
         teacherChaptersPanel.SetActive(false);
+        compendiumCharactersPanel.SetActive(false);
     }
 
     void NavigateTo(GameObject panel, bool pushCurrent = true)
