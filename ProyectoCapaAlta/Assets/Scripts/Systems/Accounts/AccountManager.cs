@@ -234,6 +234,7 @@ public class StudentProgress
 
     public List<string> metNpcs = new List<string>();
 
+    public List<string> unlockedItems = new List<string>();
 
     public List<EpistolaryResponse> epistolaryResponses = new List<EpistolaryResponse>();
 

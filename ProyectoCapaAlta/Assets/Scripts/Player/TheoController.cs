@@ -52,7 +52,7 @@ public class TheoController : MonoBehaviour
     [Header("Teléfono satelital (temporal)")]
     [Tooltip("Esto lo controlará el inventario cuando exista el Bloque 6")]
     public bool phoneEquipped = false;
-    public Key callMomKey = Key.T;
+    
     private bool isCallingMom = false;
 
     // ─── MOCHILA (E) ───────────────────────────────────────────
@@ -98,7 +98,13 @@ public class TheoController : MonoBehaviour
     private bool isInDialogue;
     private bool isNotebookLoopActive = false;
 
+    public bool FacingLeft => facingLeft;
+
     public event System.Action OnNotebookLoopStarted;
+
+
+
+
 
 #if UNITY_EDITOR
     [ContextMenu("DEBUG: Bajar Regulación 20")]
@@ -110,7 +116,10 @@ public class TheoController : MonoBehaviour
             currentStamina = maxStamina;
             currentRegulacion = maxRegulacion;
         }
-    #endif
+#endif
+
+
+    
 
 
     private bool canMove
@@ -120,6 +129,7 @@ public class TheoController : MonoBehaviour
             if (isSitting) return false;
             if (isBackpackOpen && isGrounded) return false;
             if (isInDialogue) return false;
+            if (isCallingMom) return false; // NUEVO
             return true;
         }
     }
@@ -158,7 +168,7 @@ public class TheoController : MonoBehaviour
         HandleFlip();
         HandleBackpackInput();
         HandleSitInput();
-        HandleCallMomInput();
+        
         HandleAnimations();
     }
 
@@ -376,24 +386,11 @@ public class TheoController : MonoBehaviour
     }
 
     // ─── LLAMAR MADRE  ────────────────────────────────────
-    void HandleCallMomInput()
+
+    public void SetCallingMom(bool value)
     {
-        if (!phoneEquipped || isBackpackOpen || isInDialogue) { isCallingMom = false; return; }
-
-        bool holdingCall = Keyboard.current[callMomKey].isPressed;
-
-        if (holdingCall && isGrounded && !isSitting)
-        {
-            if (!isCallingMom)
-            {
-                isCallingMom = true;
-                rb.linearVelocity = new Vector2(0f, rb.linearVelocity.y);
-            }
-        }
-        else
-        {
-            isCallingMom = false;
-        }
+        isCallingMom = value;
+        if (value) rb.linearVelocity = new Vector2(0f, rb.linearVelocity.y);
     }
 
     // ─── MÉTODOS PÚBLICOS ──────────────────────────────────────

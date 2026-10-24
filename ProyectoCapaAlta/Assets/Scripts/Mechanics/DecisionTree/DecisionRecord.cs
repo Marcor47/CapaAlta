@@ -148,6 +148,14 @@ public class DecisionRecord : MonoBehaviour
         return true;
     }
 
+    public bool RemoveManzana()
+    {
+        if (manzanasAvailable <= 0) return false;
+        manzanasAvailable--;
+        SaveToAccount();
+        return true;
+    }
+
     // ─── HISTORIAL DE ELECCIONES ────────────────────────────────
     [System.Serializable]
     public class ChoiceRecord

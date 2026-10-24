@@ -185,6 +185,7 @@ public class LoginSceneController : MonoBehaviour
         if (CardInventory.Instance != null) CardInventory.Instance.ResetState();
 
         AccountManager.Instance.Logout();
+        if (InventorySystem.Instance != null) InventorySystem.Instance.ResetState();
         usernameInput.text = "";
         passwordInput.text = "";
         navStack.Clear();
