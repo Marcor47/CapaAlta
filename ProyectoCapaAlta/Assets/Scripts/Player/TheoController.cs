@@ -73,7 +73,7 @@ public class TheoController : MonoBehaviour
     // ─── DETECCIÓN DE SUELO ────────────────────────────────────
     [Header("Detección de suelo")]
     public Transform groundCheck;
-    public float groundCheckRadius = 0.08f;
+    public Vector2 groundCheckSize = new Vector2(0.3f, 0.1f);
     public LayerMask groundLayer;
 
 
@@ -187,16 +187,31 @@ public class TheoController : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (isDashing) { HandleDash(); return; }
+        if (isDashing)
+        {
+            HandleDash();
+            return;
+        }
 
         CheckGround();
         HandleCoyoteTime();
 
-        if (isClimbing) return;                                         // NUEVO: la escalada controla la velocidad
-        if (isHooked && !isGrounded) { ApplySwingControl(); return; }   // NUEVO: columpio en el aire
+        // Ejecutar el salto en el ciclo de física.
+        if (jumpBufferCounter > 0f && coyoteTimeCounter > 0f)
+            Jump();
 
-        if (canMove) ApplyMovement();
-        else rb.linearVelocity = new Vector2(0f, rb.linearVelocity.y);
+        if (isClimbing) return;
+
+        if (isHooked && !isGrounded)
+        {
+            ApplySwingControl();
+            return;
+        }
+
+        if (canMove)
+            ApplyMovement();
+        else
+            rb.linearVelocity = new Vector2(0f, rb.linearVelocity.y);
 
         ApplyBetterGravity();
     }
@@ -229,16 +244,24 @@ public class TheoController : MonoBehaviour
             Keyboard.current.upArrowKey.wasReleasedThisFrame)
             jumpHeld = false;
 
-        if (jumpBufferCounter > 0f && coyoteTimeCounter > 0f)
-            Jump();
+        //if (jumpBufferCounter > 0f && coyoteTimeCounter > 0f)
+        //    Jump();
     }
 
     // ─── SUELO ─────────────────────────────────────────────────
     void CheckGround()
     {
         wasGrounded = isGrounded;
-        isGrounded = Physics2D.OverlapCircle(
-            groundCheck.position, groundCheckRadius, groundLayer);
+
+        bool touchingGround = Physics2D.OverlapBox(
+            groundCheck.position,
+            groundCheckSize,
+            0f,
+            groundLayer
+        );
+
+        // Solo consideramos que está en el suelo si no está subiendo.
+        isGrounded = touchingGround && rb.linearVelocity.y <= 0.05f;
     }
 
     void HandleCoyoteTime()
@@ -500,6 +523,6 @@ public class TheoController : MonoBehaviour
     {
         if (groundCheck == null) return;
         Gizmos.color = Color.green;
-        Gizmos.DrawWireSphere(groundCheck.position, groundCheckRadius);
+        Gizmos.DrawWireCube(groundCheck.position, groundCheckSize);
     }
 }
