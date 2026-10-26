@@ -433,6 +433,54 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 81155680}
   m_CullTransparentMesh: 1
+--- !u!1 &85139809
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 85139811}
+  - component: {fileID: 85139810}
+  m_Layer: 0
+  m_Name: CursorManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &85139810
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 85139809}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c97cdc275321a2b49983f1c161aa56c0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CursorManager
+  defaultCursor: {fileID: 2800000, guid: 69faeeae6505741409d1a12f1dfd7d9a, type: 3}
+  defaultHotspot: {x: 2, y: 29}
+  aimCursor: {fileID: 2800000, guid: 7a310da6bee0edd4b8509ba4d352949c, type: 3}
+  aimHotspot: {x: 2, y: 29}
+--- !u!4 &85139811
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 85139809}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -2.9309, y: -3.99757, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &100233877
 GameObject:
   m_ObjectHideFlags: 0
@@ -1942,6 +1990,63 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 557422337}
   m_CullTransparentMesh: 1
+--- !u!1001 &588088860
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 2535691727202549020, guid: 1610df54410a864499fd2db7f033f90b, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -2.833858
+      objectReference: {fileID: 0}
+    - target: {fileID: 2535691727202549020, guid: 1610df54410a864499fd2db7f033f90b, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -4.3327036
+      objectReference: {fileID: 0}
+    - target: {fileID: 2535691727202549020, guid: 1610df54410a864499fd2db7f033f90b, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2535691727202549020, guid: 1610df54410a864499fd2db7f033f90b, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2535691727202549020, guid: 1610df54410a864499fd2db7f033f90b, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2535691727202549020, guid: 1610df54410a864499fd2db7f033f90b, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2535691727202549020, guid: 1610df54410a864499fd2db7f033f90b, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2535691727202549020, guid: 1610df54410a864499fd2db7f033f90b, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2535691727202549020, guid: 1610df54410a864499fd2db7f033f90b, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2535691727202549020, guid: 1610df54410a864499fd2db7f033f90b, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8792870255250170913, guid: 1610df54410a864499fd2db7f033f90b, type: 3}
+      propertyPath: m_Name
+      value: ManzanaWorld
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 1610df54410a864499fd2db7f033f90b, type: 3}
 --- !u!1 &589559178
 GameObject:
   m_ObjectHideFlags: 0
@@ -3526,6 +3631,8 @@ MonoBehaviour:
   regulacionRegenRateCallingMom: 45
   phoneEquipped: 0
   backpackKey: 19
+  swingForce: 30
+  maxSwingSpeed: 16
   sitHoldTime: 0.05
   groundCheck: {fileID: 1471465516}
   groundCheckRadius: 0.1
@@ -5690,7 +5797,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ManzanaTool
   aimLineMaxLength: 6
   cooldown: 0.3
-  applePrefab: {fileID: 0}
+  applePrefab: {fileID: 3034710659112385650, guid: f386c4450446e7742bbcf897edf13036, type: 3}
   throwSpeed: 10
 --- !u!114 &1443519457
 MonoBehaviour:
@@ -5706,7 +5813,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::OndaTool
   aimLineMaxLength: 6
   cooldown: 0.3
-  rockPrefab: {fileID: 0}
+  rockPrefab: {fileID: 2853371213640904987, guid: 3bc5340e6481901479676bff111be844, type: 3}
   rockSpeed: 14
   maxRange: 8
 --- !u!114 &1443519458
@@ -8087,3 +8194,5 @@ SceneRoots:
   - {fileID: 1416531010}
   - {fileID: 1448646013}
   - {fileID: 1035437256}
+  - {fileID: 588088860}
+  - {fileID: 85139811}

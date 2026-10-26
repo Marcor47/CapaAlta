@@ -59,6 +59,13 @@ public class TheoController : MonoBehaviour
     [Header("Mochila")]
     public Key backpackKey = Key.E;
 
+    // ─── HERRAMIENTAS ───────────────────────────────────────────
+    [Header("Herramientas (gancho / pinchos)")]
+    public float swingForce = 30f;
+    public float maxSwingSpeed = 16f;
+    private bool isHooked;
+    private bool isClimbing;
+
     // ─── SENTARSE / LIBRETA ────────────────────────────────────
     [Header("Sentarse / Libreta")]
     public float sitHoldTime = 1.0f;
@@ -103,6 +110,12 @@ public class TheoController : MonoBehaviour
     public event System.Action OnNotebookLoopStarted;
 
 
+    public bool IsHooked => isHooked;
+    public bool IsClimbing => isClimbing;
+    public void SetHooked(bool value) { isHooked = value; }
+    public void SetClimbing(bool value) { isClimbing = value; }
+    public void ConsumeStamina(float amount) { currentStamina = Mathf.Max(0f, currentStamina - amount); }
+    public bool JumpFromTool() => PerformJump();
 
 
 
@@ -179,12 +192,19 @@ public class TheoController : MonoBehaviour
         CheckGround();
         HandleCoyoteTime();
 
-        if (canMove)
-            ApplyMovement();
-        else
-            rb.linearVelocity = new Vector2(0f, rb.linearVelocity.y);
+        if (isClimbing) return;                                         // NUEVO: la escalada controla la velocidad
+        if (isHooked && !isGrounded) { ApplySwingControl(); return; }   // NUEVO: columpio en el aire
+
+        if (canMove) ApplyMovement();
+        else rb.linearVelocity = new Vector2(0f, rb.linearVelocity.y);
 
         ApplyBetterGravity();
+    }
+
+    void ApplySwingControl()
+    {
+        if (canMove) rb.AddForce(new Vector2(moveInput * swingForce, 0f));
+        rb.linearVelocity = Vector2.ClampMagnitude(rb.linearVelocity, maxSwingSpeed);
     }
 
     // ─── INPUT ─────────────────────────────────────────────────
@@ -235,19 +255,23 @@ public class TheoController : MonoBehaviour
 
     void Jump()
     {
-        if (currentStamina <= 0f) return; // solo bloquea completamente en 0
+        if (isClimbing) return; // los pinchos manejan su propio salto
+        PerformJump();
+    }
+
+    bool PerformJump()
+    {
+        if (currentStamina <= 0f) return false;
 
         float staminaPercent = currentStamina / maxStamina;
-        float jumpMultiplier = staminaPercent < 0.25f
-            ? Mathf.Clamp01(staminaPercent / 0.25f) // de 0% a 25% escala linealmente de 0 a 1
-            : 1f; // por encima de 25%, salto normal
-
+        float jumpMultiplier = staminaPercent < 0.25f ? Mathf.Clamp01(staminaPercent / 0.25f) : 1f;
         float effectiveJumpForce = jumpForce * jumpMultiplier;
 
         rb.linearVelocity = new Vector2(rb.linearVelocity.x, effectiveJumpForce);
         coyoteTimeCounter = 0f;
         jumpBufferCounter = 0f;
         currentStamina = Mathf.Max(0f, currentStamina - jumpStaminaCost);
+        return true;
     }
 
     // ─── MOVIMIENTO LATERAL ────────────────────────────────────
@@ -290,6 +314,7 @@ public class TheoController : MonoBehaviour
     // ─── DASH ──────────────────────────────────────────────────
     void HandleDashInput()
     {
+        if (isHooked || isClimbing) return;
         if (!dashEnabled || !canMove) return;
         if (currentStamina < dashStaminaCost) return;
         if (dashCooldownCounter > 0f) return;
@@ -324,7 +349,7 @@ public class TheoController : MonoBehaviour
     void HandleStaminaRegen()
     {
         bool activelyMeditating = isSitting && isNotebookLoopActive;
-
+        if (isClimbing) return;
         if (currentStamina < maxStamina)
         {
             float regenRate = activelyMeditating ? staminaRegenRateSitting : staminaRegenRate;
@@ -356,6 +381,7 @@ public class TheoController : MonoBehaviour
     // ─── SENTARSE / LIBRETA ────────────────────────────────────
     void HandleSitInput()
     {
+        if (isClimbing) { sitHoldCounter = 0f; return; }
         if (!isGrounded || isBackpackOpen || isInDialogue) return;
 
         bool holdingDown = Keyboard.current.sKey.isPressed ||

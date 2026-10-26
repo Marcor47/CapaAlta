@@ -38,7 +38,7 @@ public abstract class AimedTool : ToolBehaviour
         if (InputBlocked || Time.time < nextAllowedTime) return;
 
         if (mouse.leftButton.wasPressedThisFrame && CanStartAiming())
-            aiming = true;
+            aiming = true; CursorManager.Instance?.SetAim();
     }
 
     void UpdateAimLine()
@@ -59,6 +59,7 @@ public abstract class AimedTool : ToolBehaviour
     {
         aiming = false;
         if (controller != null && controller.aimLine != null) controller.aimLine.enabled = false;
+        CursorManager.Instance?.SetDefault();
     }
 
     protected virtual void OnDisable() => CancelAim();
