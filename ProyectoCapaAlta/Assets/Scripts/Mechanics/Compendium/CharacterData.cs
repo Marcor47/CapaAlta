@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+Ôªøusing System.Collections.Generic;
 
 public static class CharacterData
 {
@@ -14,16 +14,16 @@ public static class CharacterData
     public static readonly List<Entry> Entries = new List<Entry>
     {
         new Entry { npcID = "gaz", displayName = "Gaz",
-            description = "Alpinista competitivo. Quiere subir la montaÒa en tiempo rÈcord y me llama \"chico\"." },
+            description = "Alpinista competitivo. Quiere subir la monta√±a en tiempo r√©cord y me llama \"chico\"." },
         new Entry { npcID = "haru", displayName = "Haru",
-            description = "Chica de mi edad que fotografÌa el camino. Le gusta apreciar los pequeÒos momentos y me puso de apodo \"Azul\"." },
+            description = "Chica de mi edad que fotograf√≠a el camino. Le gusta apreciar los peque√±os momentos y me puso de apodo \"Azul\"." },
         new Entry { npcID = "lee_wilber", displayName = "Lee y Wilber",
-            description = "Dos ingenieros, socios de negocio. Perdieron todo cuando una avalancha se llevÛ su mina. Acampan donde ocurriÛ para recordar, y preparan hamburguesas." },
+            description = "Dos ingenieros, socios de negocio. Perdieron todo cuando una avalancha se llev√≥ su mina. Acampan donde ocurri√≥ para recordar, y preparan hamburguesas." },
         new Entry { npcID = "ryland_astro", displayName = "Ryland y Astro",
             description = "Pareja de adultos mayores que pasea en bicicleta doble. Dicen que me parezco a su hijo, Arthur. Astro me dio mi primera manzana." },
         new Entry { npcID = "padre", displayName = "Jason",
-            description = "Mi padre, al que llaman \"El Viajero\". Es el guÌa espiritual de su pueblo. En sus cartas dice que nos extraÒa." },
+            description = "Mi padre, al que llaman \"El Viajero\". Es el gu√≠a espiritual de su pueblo. En sus cartas dice que nos extra√±a." },
         new Entry { npcID = "mely", displayName = "Mely", alwaysKnown = true,
-            description = "Mi mam·. AntropÛloga y exalpinista, nunca se queda quieta en un solo lugar. Me dejÛ al inicio del sendero y me dio el telÈfono satelital." }
+            description = "Mi mam√°. Antrop√≥loga y exalpinista, nunca se queda quieta en un solo lugar. Me dej√≥ al inicio del sendero y me dio el tel√©fono satelital." }
     };
 }

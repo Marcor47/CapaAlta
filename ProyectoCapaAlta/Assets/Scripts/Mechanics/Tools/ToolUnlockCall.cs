@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -11,12 +11,12 @@ public class ToolUnlockCall : MonoBehaviour
     [Header("Herramienta que se desbloquea")]
     public InventorySystem.ItemType toolToUnlock = InventorySystem.ItemType.Onda;
 
-    [Header("Llamada de mamá")]
-    public string speakerName = "Mamá";
+    [Header("Llamada de mamÃ¡")]
+    public string speakerName = "MamÃ¡";
     public DialogueLine[] callLines;
 
     [Header("UI y sonido")]
-    public GameObject ringingPromptUI;  // "Mamá te está llamando: equipa el teléfono (mantén E) y haz click"
+    public GameObject ringingPromptUI;  // "MamÃ¡ te estÃ¡ llamando: equipa el telÃ©fono (mantÃ©n E) y haz click"
     public GameObject unlockedToastUI;  // opcional: "Herramienta desbloqueada"
     public float toastSeconds = 3f;
     public AudioSource ringtone;
@@ -24,6 +24,9 @@ public class ToolUnlockCall : MonoBehaviour
     private TheoController theo;
     private bool ringing;
     private bool done;
+
+    private bool lockedMovement;
+
 
     void Start() => theo = FindAnyObjectByType<TheoController>();
 
@@ -40,6 +43,9 @@ public class ToolUnlockCall : MonoBehaviour
 
         ringing = true;
         AnyRinging = true;
+        lockedMovement = theo != null && InventorySystem.Instance != null
+                 && InventorySystem.Instance.IsUnlocked(InventorySystem.ItemType.Telefono);
+        if (lockedMovement) theo.SetMovementLocked(true);
         if (ringingPromptUI != null) ringingPromptUI.SetActive(true);
         if (ringtone != null) ringtone.Play();
     }
@@ -61,8 +67,21 @@ public class ToolUnlockCall : MonoBehaviour
             LastAnswerFrame = Time.frameCount;
             if (ringingPromptUI != null) ringingPromptUI.SetActive(false);
             if (ringtone != null) ringtone.Stop();
+            UnlockMovement();
             StartCoroutine(AnswerRoutine());
         }
+    }
+
+    void UnlockMovement()
+    {
+        if (lockedMovement && theo != null) theo.SetMovementLocked(false);
+        lockedMovement = false;
+    }
+
+    void OnDestroy()
+    {
+        if (ringing) AnyRinging = false;
+        UnlockMovement();
     }
 
     IEnumerator AnswerRoutine()
@@ -86,8 +105,4 @@ public class ToolUnlockCall : MonoBehaviour
         }
     }
 
-    void OnDestroy()
-    {
-        if (ringing) AnyRinging = false; // evita que quede "sonando" al cambiar de escena
-    }
 }

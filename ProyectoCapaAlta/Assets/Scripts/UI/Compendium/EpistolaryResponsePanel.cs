@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+ï»¿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -18,7 +18,7 @@ public class EpistolaryResponsePanel : MonoBehaviour
     public GameObject hseTogglePrefab;
     public Button saveButton;
 
-    [Header("Botón único de voltear")]
+    [Header("BotÃ³n Ãºnico de voltear")]
     public Button flipButton;
 
     [Header("Lista oficial de HSE (13)")]

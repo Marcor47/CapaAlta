@@ -1,4 +1,4 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 
@@ -9,7 +9,7 @@ public class ChapterEndTrigger : MonoBehaviour
     public string mainMenuSceneName = "LoginScene";
 
     [Header("UI")]
-    public GameObject promptUI; // ej. "Presiona Enter para terminar el capítulo"
+    public GameObject promptUI; // ej. "Presiona Enter para terminar el capÃ­tulo"
 
     private bool playerInRange = false;
 
@@ -42,7 +42,7 @@ public class ChapterEndTrigger : MonoBehaviour
     {
         if (AccountManager.Instance == null)
         {
-            Debug.LogError("¡AccountManager.Instance es NULL! No se puede cambiar de escena.");
+            Debug.LogError("Â¡AccountManager.Instance es NULL! No se puede cambiar de escena.");
             return;
         }
 

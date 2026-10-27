@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 
@@ -17,7 +17,7 @@ public class EmotionalVignetteController : MonoBehaviour
     void Update()
     {
         if (theo == null || vignette == null) return;
-        // A menos regulaci�n, m�s vi�eta (c�rculo m�s cerrado)
+        // A menos regulación, más viñeta (círculo más cerrado)
         vignette.intensity.value = 1f - theo.RegulacionPercent01;
     }
 }

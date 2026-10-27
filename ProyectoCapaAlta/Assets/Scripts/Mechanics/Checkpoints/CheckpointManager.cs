@@ -1,10 +1,10 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 
 public class CheckpointManager : MonoBehaviour
 {
     public static CheckpointManager Instance { get; private set; }
 
-    [Tooltip("Número de capítulo de esta escena (1-4)")]
+    [Tooltip("NÃºmero de capÃ­tulo de esta escena (1-4)")]
     public int chapter = 1;
 
     private Vector3 currentCheckpoint;

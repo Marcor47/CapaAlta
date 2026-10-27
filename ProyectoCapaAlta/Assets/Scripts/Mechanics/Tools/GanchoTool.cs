@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -12,6 +12,10 @@ public class GanchoTool : AimedTool
     public string grappableTag = "Grappable";
     public LayerMask hookMask = ~0;
 
+    [Header("Carga y enfriamiento")]
+    public float holdTime = 1f;
+    public float toolCooldown = 0.3f;
+
     private bool hooked;
     private bool casting;
     private Vector2 anchorPoint;
@@ -22,6 +26,7 @@ public class GanchoTool : AimedTool
 
     protected override void Update()
     {
+        SyncValues();
         if (casting) return;
 
         if (hooked)
@@ -35,6 +40,26 @@ public class GanchoTool : AimedTool
         base.Update();
     }
 
+    protected override void Awake()
+    {
+        base.Awake();
+        SyncValues();
+    }
+
+    void SyncValues()
+    {
+        chargeTime = holdTime;
+        cooldown = toolCooldown;
+        aimLineMaxLength = maxRange;
+    }
+
+    public override void ResetOnRespawn()
+    {
+        base.ResetOnRespawn();
+        StopAllCoroutines();
+        casting = false;
+        Release();
+    }
     protected override void OnAimConfirmed(Vector2 from, Vector2 target)
     {
         Vector2 dir = target - from;

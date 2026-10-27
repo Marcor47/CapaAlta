@@ -1,11 +1,11 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(DialogueTrigger))]
 public class ManzanaGiver : MonoBehaviour
 {
     [Header("UI")]
-    [Tooltip("Ej. un texto o �cono 'Presiona E para dar manzana'")]
+    [Tooltip("Ej. un texto o ícono 'Presiona E para dar manzana'")]
     public GameObject promptUI;
 
     private DialogueTrigger trigger;

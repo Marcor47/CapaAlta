@@ -1,10 +1,10 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using UnityEngine.Tilemaps;
 
 [CreateAssetMenu(fileName = "GroundTile", menuName = "Capa Alta/Ground Tile (autotile)")]
 public class GroundTile : TileBase
 {
-    // Posición de cada pieza en la hoja (8 columnas x 4 filas, de izquierda a derecha y de arriba abajo)
+    // PosiciÃ³n de cada pieza en la hoja (8 columnas x 4 filas, de izquierda a derecha y de arriba abajo)
     public const int Columns = 8;
     public const int SlotCount = 32;
     public const int TL = 0, T0 = 1, T1 = 2, T2 = 3, TR = 4, S = 5, FL = 6, FM = 7,
@@ -17,7 +17,7 @@ public class GroundTile : TileBase
 
     public override void RefreshTile(Vector3Int position, ITilemap tilemap)
     {
-        // Al pintar o borrar, se actualizan también los 8 vecinos
+        // Al pintar o borrar, se actualizan tambiÃ©n los 8 vecinos
         for (int dy = -1; dy <= 1; dy++)
             for (int dx = -1; dx <= 1; dx++)
                 tilemap.RefreshTile(position + new Vector3Int(dx, dy, 0));
@@ -74,7 +74,7 @@ public class GroundTile : TileBase
         return Choose(p, C0, C1, C2, C3);
     }
 
-    // Variante fija por posición: no cambia al repintar y no parpadea
+    // Variante fija por posiciÃ³n: no cambia al repintar y no parpadea
     Sprite Choose(Vector3Int p, params int[] options)
     {
         unchecked

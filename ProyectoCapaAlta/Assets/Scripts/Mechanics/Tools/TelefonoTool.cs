@@ -1,11 +1,11 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class TelefonoTool : ToolBehaviour
 {
     public override InventorySystem.ItemType Type => InventorySystem.ItemType.Telefono;
 
-    [Header("Comentarios de mamá (se elige uno al azar)")]
+    [Header("Comentarios de mamÃ¡ (se elige uno al azar)")]
     [TextArea(1, 3)] public string[] momComments;
     public float secondsBetweenComments = 5f;
 
@@ -63,7 +63,7 @@ public class TelefonoTool : ToolBehaviour
         if (momComments == null || momComments.Length == 0) return;
 
         string text = momComments[Random.Range(0, momComments.Length)];
-        if (bubble != null) bubble.Show("Mamá", text);
+        if (bubble != null) bubble.Show("MamÃ¡", text);
 
         if (babbleSource != null && babbleClips != null && babbleClips.Length > 0)
         {

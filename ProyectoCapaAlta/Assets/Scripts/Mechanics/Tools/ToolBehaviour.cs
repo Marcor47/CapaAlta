@@ -1,10 +1,10 @@
-using UnityEngine;
+Ôªøusing UnityEngine;
 using UnityEngine.InputSystem;
 
 public abstract class ToolBehaviour : MonoBehaviour
 {
     public abstract InventorySystem.ItemType Type { get; }
-
+    public virtual void ResetOnRespawn() { }
     protected TheoController theo;
     protected ToolController controller;
     private float unblockTime;
@@ -15,14 +15,14 @@ public abstract class ToolBehaviour : MonoBehaviour
         controller = GetComponent<ToolController>();
     }
 
-    // No se inician acciones en di·logo/pausa, con la mochila abierta, sentado o en dash,
-    // ni durante 0.15 s despuÈs (para que el click que cierra un di·logo no active nada)
+    // No se inician acciones en di√°logo/pausa, con la mochila abierta, sentado o en dash,
+    // ni durante 0.15 s despu√©s (para que el click que cierra un di√°logo no active nada)
     protected bool InputBlocked
     {
         get
         {
             bool blockedNow = theo == null || theo.IsInDialogue || theo.IsBackpackOpen
-                              || theo.IsSitting || theo.IsDashing;
+                  || theo.IsSitting || theo.IsDashing || theo.IsRespawning;
             if (blockedNow) unblockTime = Time.unscaledTime + 0.15f;
             return blockedNow || Time.unscaledTime < unblockTime;
         }

@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 public class InventoryUIController : MonoBehaviour
@@ -33,7 +33,7 @@ public class InventoryUIController : MonoBehaviour
     void PopulateSlots()
     {
         foreach (Transform child in slotsContainer) Destroy(child.gameObject);
-        Canvas.ForceUpdateCanvases(); // NUEVO � limpia el layout pendiente antes de seguir
+        Canvas.ForceUpdateCanvases(); // NUEVO — limpia el layout pendiente antes de seguir
         if (InventorySystem.Instance == null) return;
 
         foreach (var item in InventorySystem.Instance.GetUnlockedItemsOrdered())

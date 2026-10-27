@@ -1,13 +1,24 @@
+ï»¿using System.Collections;
 using UnityEngine;
 
 public class FallRespawn : MonoBehaviour
 {
-    [Header("Configuración")]
-    public float fallThresholdY = -10f; // ajusta según el nivel más bajo jugable de cada capítulo
+    [Header("ConfiguraciÃ³n")]
+    public float fallThresholdY = -10f;          // red de seguridad bajo el vacÃ­o
     public float regulacionPenaltyOnFall = 20f;
+
+    [Header("TransiciÃ³n")]
+    public float fadeOutTime = 0.3f;
+    public float blackHold = 0.35f;              // pantalla negra: la cÃ¡mara se acomoda
+    public float fadeInTime = 0.3f;
+    public bool restoreStaminaOnRespawn = true;
+    public float totalRespawnTime = 4f;   // desde que cae hasta que recupera el control (3 a 5)
 
     private TheoController theo;
     private Rigidbody2D rb;
+    private bool respawning;
+
+    public bool IsRespawning => respawning;
 
     void Start()
     {
@@ -26,20 +37,57 @@ public class FallRespawn : MonoBehaviour
         }
 
         transform.position = spawn;
-        CheckpointManager.Instance.SetCheckpoint(spawn, persist: false); // el punto de entrada no pisa el checkpoint guardado
+        CheckpointManager.Instance.SetCheckpoint(spawn, persist: false);
     }
 
     void Update()
     {
-        if (transform.position.y < fallThresholdY)
+        if (!respawning && transform.position.y < fallThresholdY)
             Respawn();
     }
 
-    void Respawn()
+    // hideTheo = true (agua): Theo se congela y se oculta. false (vacÃ­o): sigue cayendo mientras oscurece.
+    // preDelay: segundos antes de empezar el fundido.
+    public void Respawn(float penaltyOverride = -1f, bool hideTheo = false, float preDelay = 0f)
     {
-        Vector3 checkpoint = CheckpointManager.Instance != null ? CheckpointManager.Instance.GetCheckpoint() : transform.position;
-        transform.position = checkpoint;
-        if (rb != null) rb.linearVelocity = Vector2.zero;
-        if (theo != null) theo.DecreaseRegulacion(regulacionPenaltyOnFall);
+        if (respawning) return;
+        respawning = true;
+        StartCoroutine(RespawnRoutine(penaltyOverride, hideTheo, preDelay));
+    }
+
+    IEnumerator RespawnRoutine(float penaltyOverride, bool hideTheo, float preDelay)
+    {
+        float startTime = Time.unscaledTime;
+
+        if (theo != null)
+        {
+            theo.BeginRespawn(hideTheo);
+            theo.DecreaseRegulacion(penaltyOverride >= 0f ? penaltyOverride : regulacionPenaltyOnFall);
+        }
+
+        if (preDelay > 0f) yield return new WaitForSecondsRealtime(preDelay);
+
+        var fader = ScreenFader.Instance;
+        yield return fader.FadeTo(1f, fadeOutTime);
+
+        Vector3 cp = CheckpointManager.Instance != null ? CheckpointManager.Instance.GetCheckpoint() : transform.position;
+        if (theo != null)
+        {
+            theo.EndRespawn(cp);
+            if (restoreStaminaOnRespawn) theo.RestoreStamina();
+        }
+        else
+        {
+            transform.position = cp;
+            if (rb != null) rb.linearVelocity = Vector2.zero;
+        }
+
+        // completa el tiempo total en pantalla negra
+        float remaining = totalRespawnTime - (Time.unscaledTime - startTime) - fadeInTime;
+        yield return new WaitForSecondsRealtime(Mathf.Max(blackHold, remaining));
+
+        yield return fader.FadeTo(0f, fadeInTime);
+        if (theo != null) theo.FinishRespawn();
+        respawning = false;
     }
 }

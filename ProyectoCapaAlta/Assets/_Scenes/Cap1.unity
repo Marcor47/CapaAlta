@@ -4003,6 +4003,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::FallRespawn
   fallThresholdY: -10
   regulacionPenaltyOnFall: 20
+  fadeOutTime: 0.3
+  blackHold: 0.35
+  fadeInTime: 0.3
+  restoreStaminaOnRespawn: 1
+  totalRespawnTime: 4
 --- !u!1 &1022385214
 GameObject:
   m_ObjectHideFlags: 0
@@ -12953,6 +12958,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d1d56368fcce464bb92d7da354cffbd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Checkpoint
+  spriteRenderer: {fileID: 0}
+  offSprite: {fileID: 0}
+  litAnimator: {fileID: 0}
+  spawnOffset: {x: 0.75, y: 0.55}
+  matchRadius: 0.15
 --- !u!1 &1440681328
 GameObject:
   m_ObjectHideFlags: 0
@@ -13160,6 +13170,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ManzanaTool
   aimLineMaxLength: 6
   cooldown: 0.3
+  chargeTime: 0
   applePrefab: {fileID: 3034710659112385650, guid: f386c4450446e7742bbcf897edf13036, type: 3}
   throwSpeed: 10
 --- !u!114 &1443519457
@@ -13175,10 +13186,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::OndaTool
   aimLineMaxLength: 6
-  cooldown: 0.3
-  rockPrefab: {fileID: 2853371213640904987, guid: 3bc5340e6481901479676bff111be844, type: 3}
-  rockSpeed: 14
-  maxRange: 8
+  cooldown: 0.5
+  chargeTime: 0
+  ballPrefab: {fileID: 2853371213640904987, guid: 3bc5340e6481901479676bff111be844, type: 3}
+  ballSpeed: 14
+  maxRange: 7
+  holdTime: 0.5
+  toolCooldown: 0.3
 --- !u!114 &1443519458
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13227,12 +13241,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GanchoTool
   aimLineMaxLength: 6
   cooldown: 0.3
-  maxRange: 9
+  chargeTime: 0
+  maxRange: 7
   castDuration: 0.08
   grappableTag: Grappable
   hookMask:
     serializedVersion: 2
     m_Bits: 4294967295
+  holdTime: 0.5
+  toolCooldown: 0.3
 --- !u!1 &1448646009
 GameObject:
   m_ObjectHideFlags: 0
@@ -15136,9 +15153,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b32907a40a78e246a0247c82f49c82a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BreakableObject
-  fallGravityScale: 1
-  destroyAfterSeconds: 0
+  visual: {fileID: 0}
+  intactSprite: {fileID: 0}
+  crackedSprite: {fileID: 0}
+  rubbleSprite: {fileID: 0}
+  crackDuration: 0.25
+  regrowDuration: 0.6
+  hitCooldown: 0.35
+  startBroken: 0
+  bobAmplitude: 0.06
+  bobSpeed: 2
+  rubbleLayerName: Default
+  breakFx: {fileID: 0}
+  regrowFx: {fileID: 0}
   onBroken:
+    m_PersistentCalls:
+      m_Calls: []
+  onRestored:
     m_PersistentCalls:
       m_Calls: []
 --- !u!50 &1908690232

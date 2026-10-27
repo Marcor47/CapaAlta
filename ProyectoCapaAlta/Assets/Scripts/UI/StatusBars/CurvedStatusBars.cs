@@ -1,4 +1,4 @@
-using UnityEngine;
+Ôªøusing UnityEngine;
 using UnityEngine.UI;
 
 public class CurvedStatusBars : MonoBehaviour
@@ -23,7 +23,7 @@ public class CurvedStatusBars : MonoBehaviour
     {
         if (ring == null) return;
 
-        // Solo visible cuando est· por debajo del m·ximo
+        // Solo visible cuando est√° por debajo del m√°ximo
         bool shouldShow = targetPercent01 < 0.999f;
         if (ring.gameObject.activeSelf != shouldShow)
             ring.gameObject.SetActive(shouldShow);

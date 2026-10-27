@@ -1,11 +1,11 @@
-using UnityEngine;
+Ôªøusing UnityEngine;
 using UnityEngine.InputSystem;
 
 public class PinchosTool : ToolBehaviour
 {
     public override InventorySystem.ItemType Type => InventorySystem.ItemType.Pinchos;
 
-    [Header("DetecciÛn de pared (ver el cubo celeste en Scene)")]
+    [Header("Detecci√≥n de pared (ver el cubo celeste en Scene)")]
     public string climbableTag = "Climbable";
     public Vector2 wallCheckOffset = new Vector2(0.4f, 0.4f); // X = hacia donde mira, Y = altura
     public Vector2 wallCheckSize = new Vector2(0.4f, 0.6f);
@@ -14,7 +14,7 @@ public class PinchosTool : ToolBehaviour
     public float climbSpeed = 3.5f;
     public float climbStaminaPerSecond = 20f;
     public float hangStaminaPerSecond = 4f;
-    public Vector2 topOutImpulse = new Vector2(3f, 5f);   // empujÛn al llegar al borde superior
+    public Vector2 topOutImpulse = new Vector2(3f, 5f);   // empuj√≥n al llegar al borde superior
 
     private Rigidbody2D rb;
     private bool climbing;
@@ -27,6 +27,8 @@ public class PinchosTool : ToolBehaviour
         base.Awake();
         if (theo != null) rb = theo.GetComponent<Rigidbody2D>();
     }
+
+    public override void ResetOnRespawn() => StopClimbing();
 
     Vector2 WallCheckCenter(float dir)
     {
@@ -50,13 +52,13 @@ public class PinchosTool : ToolBehaviour
         if (!climbing)
         {
             float facing = theo.FacingLeft ? -1f : 1f;
-            if (!InputBlocked && mouse.leftButton.wasPressedThisFrame
+            if (!InputBlocked && !ToolUnlockCall.AnyRinging && mouse.leftButton.wasPressedThisFrame
                 && theo.CurrentStamina > 0f && WallAhead(facing))
                 StartClimbing(facing);
             return;
         }
 
-        // Soltarse: click derecho, sin estamina, o di·logo/pausa
+        // Soltarse: click derecho, sin estamina, o di√°logo/pausa
         if (mouse.rightButton.wasPressedThisFrame || theo.CurrentStamina <= 0f || theo.IsInDialogue)
         {
             StopClimbing();
@@ -71,7 +73,7 @@ public class PinchosTool : ToolBehaviour
             return;
         }
 
-        // Se acabÛ la pared: si iba subiendo, un empujÛn para subirse al borde
+        // Se acab√≥ la pared: si iba subiendo, un empuj√≥n para subirse al borde
         if (!WallAhead(climbDir))
         {
             bool goingUp = verticalInput > 0f;
@@ -101,6 +103,8 @@ public class PinchosTool : ToolBehaviour
 
     void StartClimbing(float dir)
     {
+        
+
         climbing = true;
         climbDir = dir;       // se fija al engancharse: girar el sprite no suelta la pared
         verticalInput = 0f;

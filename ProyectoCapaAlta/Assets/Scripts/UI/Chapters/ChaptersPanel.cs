@@ -1,4 +1,4 @@
-using TMPro;
+ï»¿using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -20,7 +20,7 @@ public class ChaptersPanel : MonoBehaviour
             bool unlocked = CourseSettings.Instance != null && CourseSettings.Instance.IsChapterUnlocked(chapter);
             bool started = AccountManager.Instance.HasStartedChapter(chapter);
 
-            card.titleText.text = $"Capítulo {chapter}";
+            card.titleText.text = $"CapÃ­tulo {chapter}";
             card.lockIcon.SetActive(!unlocked);
             card.buttonsGroup.SetActive(unlocked);
             card.startButton.gameObject.SetActive(unlocked && !started);
@@ -44,7 +44,7 @@ public class ChaptersPanel : MonoBehaviour
 
         if (!Application.CanStreamedLevelBeLoaded(sceneName))
         {
-            statusText.text = $"El Capítulo {chapter} aún está en desarrollo.";
+            statusText.text = $"El CapÃ­tulo {chapter} aÃºn estÃ¡ en desarrollo.";
             return;
         }
 

@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
@@ -9,7 +9,7 @@ public class AudioSettingsPanel : MonoBehaviour
     public Button volumeDownButton;
     public TextMeshProUGUI volumeText;
 
-    [Header("Configuraci�n")]
+    [Header("Configuración")]
     public float volumeStep = 0.1f;
 
     void Start()

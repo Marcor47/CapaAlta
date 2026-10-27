@@ -1,10 +1,10 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 
 public class EquippedItemHandDisplay : MonoBehaviour
 {
-    [Header("Tamaño en la mano")]
-    [Tooltip("Tamaño deseado en unidades del mundo, sin importar el tamaño real del sprite")]
-    public float targetSize = 0.5f; // ajusta este valor mirando la escena — ver nota abajo
+    [Header("TamaÃ±o en la mano")]
+    [Tooltip("TamaÃ±o deseado en unidades del mundo, sin importar el tamaÃ±o real del sprite")]
+    public float targetSize = 0.5f; // ajusta este valor mirando la escena â€” ver nota abajo
 
     private SpriteRenderer sr;
 
@@ -39,7 +39,7 @@ public class EquippedItemHandDisplay : MonoBehaviour
         sr.enabled = true;
         sr.sprite = InventorySystem.Instance.GetSpriteFor(item);
 
-        // NUEVO — normaliza el tamaño visual sin importar el tamaño real del sprite
+        // NUEVO â€” normaliza el tamaÃ±o visual sin importar el tamaÃ±o real del sprite
         if (sr.sprite != null)
         {
             float largestSide = Mathf.Max(sr.sprite.bounds.size.x, sr.sprite.bounds.size.y);

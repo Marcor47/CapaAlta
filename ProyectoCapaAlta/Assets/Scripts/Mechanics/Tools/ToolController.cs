@@ -1,10 +1,10 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 
 public class ToolController : MonoBehaviour
 {
-    [Header("Puntos y líneas compartidas")]
-    public Transform toolOrigin;   // mano de Theo (si queda vacío, usa el centro de Theo)
-    public LineRenderer aimLine;   // línea de apuntado
+    [Header("Puntos y lÃ­neas compartidas")]
+    public Transform toolOrigin;   // mano de Theo (si queda vacÃ­o, usa el centro de Theo)
+    public LineRenderer aimLine;   // lÃ­nea de apuntado
     public LineRenderer ropeLine;  // cuerda del gancho (entrega 2)
 
     private ToolBehaviour[] tools;

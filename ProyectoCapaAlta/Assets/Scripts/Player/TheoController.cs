@@ -118,6 +118,16 @@ public class TheoController : MonoBehaviour
     public bool JumpFromTool() => PerformJump();
 
 
+    private bool movementLocked;
+    public bool IsMovementLocked => movementLocked;
+    public void SetMovementLocked(bool value)
+    {
+        movementLocked = value;
+        if (value) rb.linearVelocity = new Vector2(0f, rb.linearVelocity.y);
+    }
+
+
+
 
 #if UNITY_EDITOR
     [ContextMenu("DEBUG: Bajar Regulación 20")]
@@ -139,6 +149,8 @@ public class TheoController : MonoBehaviour
     {
         get
         {
+            if (IsRespawning) return false;
+            if (movementLocked) return false;
             if (isSitting) return false;
             if (isBackpackOpen && isGrounded) return false;
             if (isInDialogue) return false;
@@ -391,6 +403,7 @@ public class TheoController : MonoBehaviour
     // ─── MOCHILA (E) ───────────────────────────────────────────
     void HandleBackpackInput()
     {
+        if (IsRespawning) { isBackpackOpen = false; anim.SetBool("IsBackpack", false); return; }
         if (isSitting || isInDialogue)
         {
             anim.SetBool("IsBackpack", false);
@@ -405,7 +418,7 @@ public class TheoController : MonoBehaviour
     void HandleSitInput()
     {
         if (isClimbing) { sitHoldCounter = 0f; return; }
-        if (!isGrounded || isBackpackOpen || isInDialogue) return;
+        if (!isGrounded || isBackpackOpen || isInDialogue || IsRespawning) return;
 
         bool holdingDown = Keyboard.current.sKey.isPressed ||
                            Keyboard.current.downArrowKey.isPressed;
@@ -496,6 +509,52 @@ public class TheoController : MonoBehaviour
     {
         maxStamina += amount;
     }
+
+    // ─── RESPAWN ───────────────────────────────────────────────
+    public bool IsRespawning { get; private set; }
+    private readonly System.Collections.Generic.List<SpriteRenderer> hiddenRenderers = new System.Collections.Generic.List<SpriteRenderer>();
+
+    public void BeginRespawn(bool freezeAndHide)
+    {
+        IsRespawning = true;
+
+        isDashing = false;
+        rb.gravityScale = originalGravityScale;
+        moveInput = 0f;
+        jumpBufferCounter = 0f;
+        if (isSitting) StandUp();
+        isBackpackOpen = false;
+        anim.SetBool("IsBackpack", false);
+
+        foreach (var tool in GetComponentsInChildren<ToolBehaviour>(true))
+            tool.ResetOnRespawn();                 // suelta gancho, cancela escalada/carga/apuntado
+
+        if (freezeAndHide)
+        {
+            rb.linearVelocity = Vector2.zero;
+            rb.bodyType = RigidbodyType2D.Kinematic;
+            foreach (var r in GetComponentsInChildren<SpriteRenderer>())
+                if (r.enabled) { r.enabled = false; hiddenRenderers.Add(r); }   // incluye el ítem en la mano
+        }
+    }
+
+    public void EndRespawn(Vector3 position)
+    {
+        transform.position = position;
+        rb.bodyType = RigidbodyType2D.Dynamic;
+        rb.gravityScale = originalGravityScale;
+        rb.linearVelocity = Vector2.zero;
+        rb.angularVelocity = 0f;
+
+        foreach (var r in hiddenRenderers) if (r != null) r.enabled = true;
+        hiddenRenderers.Clear();
+
+        
+    }
+
+    public void FinishRespawn() => IsRespawning = false;
+
+    public void RestoreStamina() => currentStamina = maxStamina;
 
     // ─── ANIMACIONES ───────────────────────────────────────────
     void HandleAnimations()

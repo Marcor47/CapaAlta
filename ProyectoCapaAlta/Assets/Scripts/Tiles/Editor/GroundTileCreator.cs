@@ -1,4 +1,4 @@
-using System.Linq;
+﻿using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
@@ -19,7 +19,7 @@ public static class GroundTileCreator
         if (sprites.Length == 0)
         {
             EditorUtility.DisplayDialog("Capa Alta",
-                "La imagen no tiene sprites. Pon Sprite Mode = Multiple y c�rtala con Grid By Cell Size 16x16.", "OK");
+                "La imagen no tiene sprites. Pon Sprite Mode = Multiple y córtala con Grid By Cell Size 16x16.", "OK");
             return;
         }
 
