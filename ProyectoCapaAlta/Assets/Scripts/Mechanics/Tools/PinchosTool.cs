@@ -21,6 +21,7 @@ public class PinchosTool : ToolBehaviour
     private float climbDir = 1f;
     private float verticalInput;
     private float savedGravity;
+    private bool needRelease = true;   // tras soltarse, hay que soltar el click antes de volver a engancharse
 
     protected override void Awake()
     {
@@ -51,8 +52,10 @@ public class PinchosTool : ToolBehaviour
 
         if (!climbing)
         {
+            if (!mouse.leftButton.isPressed) needRelease = false;   // soltó el click: puede volver a engancharse
+
             float facing = theo.FacingLeft ? -1f : 1f;
-            if (!InputBlocked && !ToolUnlockCall.AnyRinging && mouse.leftButton.wasPressedThisFrame
+            if (!needRelease && !InputBlocked && !ToolUnlockCall.AnyRinging && mouse.leftButton.isPressed
                 && theo.CurrentStamina > 0f && WallAhead(facing))
                 StartClimbing(facing);
             return;
@@ -118,12 +121,13 @@ public class PinchosTool : ToolBehaviour
     {
         if (!climbing) return;
         climbing = false;
+        needRelease = true;
         verticalInput = 0f;
         if (rb != null) rb.gravityScale = savedGravity;
         if (theo != null) theo.SetClimbing(false);
     }
 
-    void OnDisable() => StopClimbing();
+    void OnDisable() { StopClimbing(); needRelease = true; }
 
     void OnDrawGizmosSelected()
     {

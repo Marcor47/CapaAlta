@@ -16,6 +16,7 @@ public class TheoController : MonoBehaviour
     public float jumpForce = 17f;
     public float fallGravityMultiplier = 1.5f;
     public float lowJumpMultiplier = 1.6f;
+    public float maxFallSpeed = 18f;   // velocidad máxima de caída (unidades/seg)
     public float coyoteTime = 0.12f;
     public float jumpBufferTime = 0.10f;
 
@@ -332,6 +333,8 @@ public class TheoController : MonoBehaviour
         else if (rb.linearVelocity.y > 0f && !jumpHeld)
             rb.linearVelocity += Vector2.up *
                 Physics2D.gravity.y * (lowJumpMultiplier - 1f) * Time.fixedDeltaTime;
+        if (rb.linearVelocity.y < -maxFallSpeed)
+            rb.linearVelocity = new Vector2(rb.linearVelocity.x, -maxFallSpeed);
     }
 
     // ─── FLIP ──────────────────────────────────────────────────
@@ -553,6 +556,49 @@ public class TheoController : MonoBehaviour
     }
 
     public void FinishRespawn() => IsRespawning = false;
+
+    // Hundimiento (agua): Theo cae despacio y se desvanece; al terminar queda oculto y congelado hasta EndRespawn
+    public void BeginSink(float duration, float sinkSpeed)
+    {
+        StartCoroutine(SinkRoutine(duration, sinkSpeed));
+    }
+
+    System.Collections.IEnumerator SinkRoutine(float duration, float sinkSpeed)
+    {
+        var rends = GetComponentsInChildren<SpriteRenderer>();
+        var startA = new float[rends.Length];
+        for (int i = 0; i < rends.Length; i++) startA[i] = rends[i].color.a;
+
+        rb.gravityScale = 0f;
+        rb.linearVelocity = new Vector2(0f, -sinkSpeed);
+
+        anim.Play("TheoFall");   // nombre del estado, tal como aparece en tu Animator
+        float t = 0f;
+        while (t < duration)
+        {
+            t += Time.deltaTime;
+            float k = 1f - Mathf.Clamp01(t / duration);
+            for (int i = 0; i < rends.Length; i++)
+            {
+                if (!rends[i].enabled) continue;
+                var c = rends[i].color; c.a = startA[i] * k; rends[i].color = c;
+            }
+            rb.linearVelocity = new Vector2(0f, -sinkSpeed);   // sin deriva horizontal
+            anim.SetBool("IsGrounded", false);
+            anim.SetFloat("VerticalSpeed", -10f);   // fuerza la pose de caída aunque se hunda lento
+            yield return null;
+        }
+
+        rb.linearVelocity = Vector2.zero;
+        rb.bodyType = RigidbodyType2D.Kinematic;
+        for (int i = 0; i < rends.Length; i++)
+        {
+            if (!rends[i].enabled) continue;
+            var c = rends[i].color; c.a = startA[i]; rends[i].color = c;   // devuelve su alpha original
+            rends[i].enabled = false;
+            hiddenRenderers.Add(rends[i]);                                  // EndRespawn los vuelve a activar
+        }
+    }
 
     public void RestoreStamina() => currentStamina = maxStamina;
 
