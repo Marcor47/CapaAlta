@@ -17,5 +17,5 @@ MonoBehaviour:
   cardType: 1
   chapter: 1
   cardText: Texto_Prueba_Grace_01
-  cardSprite: {fileID: 21300000, guid: 12d1ca348b0fe214ea384c7361f84971, type: 3}
+  cardSprite: {fileID: 21300000, guid: 0f62e51aff50ddd409c524747f8bb435, type: 3}
   babbleAudio: {fileID: 0}
