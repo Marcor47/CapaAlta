@@ -1410,8 +1410,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 411, y: 115}
-  m_SizeDelta: {x: 279.2, y: 182.3}
+  m_AnchoredPosition: {x: 463, y: 34}
+  m_SizeDelta: {x: 269.5, y: 250.75}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &349891248
 MonoBehaviour:
@@ -1460,10 +1460,10 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 55
+  m_fontSize: 55.55
   m_fontSizeBase: 55
   m_fontWeight: 400
-  m_enableAutoSizing: 0
+  m_enableAutoSizing: 1
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 1
@@ -3738,6 +3738,7 @@ MonoBehaviour:
   jumpForce: 14
   fallGravityMultiplier: 2.8
   lowJumpMultiplier: 2.2
+  maxFallSpeed: 18
   coyoteTime: 0.15
   jumpBufferTime: 0.12
   dashEnabled: 1
@@ -3751,7 +3752,9 @@ MonoBehaviour:
   jumpStaminaCost: 10
   maxRegulacion: 100
   regulacionRegenRateSitting: 20
-  regulacionRegenRateCallingMom: 45
+  regulacionRegenRateCallingMom: 60
+  drainedStaminaCap: 0.5
+  drainRecoverThreshold: 0.5
   phoneEquipped: 0
   backpackKey: 19
   swingForce: 30
@@ -4067,7 +4070,6 @@ GameObject:
   - component: {fileID: 1035437256}
   - component: {fileID: 1035437255}
   - component: {fileID: 1035437254}
-  - component: {fileID: 1035437257}
   m_Layer: 0
   m_Name: ZonaLlamada
   m_TagString: Untagged
@@ -4168,21 +4170,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 737132487}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1035437257
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1035437253}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 23c83c8e2c18a4d4c8a805dd3fbf212e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::CallBubbleUI
-  bubbleRoot: {fileID: 1132397076}
-  speakerText: {fileID: 2102435885}
-  messageText: {fileID: 1323745779}
 --- !u!1 &1117889334
 GameObject:
   m_ObjectHideFlags: 0
@@ -12722,10 +12709,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5fc396f4914b5df4bb95f8426f6fd7cb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TelefonoTool
+  minWait: 2
+  maxWait: 4
+  answerChance: 0.5
+  callCooldown: 6
+  dotsInterval: 0.35
+  dotsRoot: {fileID: 349891246}
+  dotsText: {fileID: 349891248}
+  noAnswerText: "Mam\xE1 no contesta..."
+  cooldownText: "Sin se\xF1al por ahora..."
+  tempMessageSeconds: 1.5
+  speakerName: "Mam\xE1"
   momComments:
   - "Si sigues intentando, ning\xFAn obst\xE1culo te detendr\xE1."
   - "T\xF3mate tu tiempo de apreciar lo que tienes en el camino, Theo."
-  secondsBetweenComments: 5
+  linesPerCall: 2
   babbleSource: {fileID: 0}
   babbleClips: []
   babbleSecondsPerCharacter: 0.05

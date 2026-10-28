@@ -8,6 +8,18 @@ public class ManzanaTool : AimedTool
     public ThrownProjectile applePrefab;
     public float throwSpeed = 10f;
 
+    [Header("Apuntado y enfriamiento")]
+    public float maxRange = 6f;
+    public float toolCooldown = 0.3f;
+
+    protected override void Update()
+    {
+        chargeTime = 0f;                 // la manzana no se carga
+        cooldown = toolCooldown;
+        aimLineMaxLength = maxRange;
+        base.Update();
+    }
+
     protected override bool CanStartAiming() =>
         applePrefab != null && DecisionRecord.Instance != null && DecisionRecord.Instance.ManzanasAvailable > 0;
 

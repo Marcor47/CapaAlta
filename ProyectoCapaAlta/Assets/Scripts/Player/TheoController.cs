@@ -42,6 +42,17 @@ public class TheoController : MonoBehaviour
     public float regulacionRegenRateCallingMom = 45f;
     private float currentRegulacion;
 
+    [Header("Agotamiento emocional")]
+    [Range(0f, 1f)] public float drainedStaminaCap = 0.5f;       // tope de Motivación mientras está agotado
+    [Range(0f, 1f)] public float drainRecoverThreshold = 0.5f;   // fracción de Regulación que hay que superar
+    private bool isEmotionallyDrained;
+    private bool momConnected;
+    public bool IsEmotionallyDrained => isEmotionallyDrained;
+    public float EffectiveMaxStamina => isEmotionallyDrained ? maxStamina * drainedStaminaCap : maxStamina;
+
+
+
+
 
     public float CurrentRegulacion => currentRegulacion;
     public float MaxRegulacion => maxRegulacion;
@@ -386,19 +397,26 @@ public class TheoController : MonoBehaviour
     // ─── ESTAMINA ──────────────────────────────────────────────
     void HandleStaminaRegen()
     {
+        // Con Regulación en 0, la Motivación queda limitada hasta que la Regulación supere el umbral
+        if (currentRegulacion <= 0f) isEmotionallyDrained = true;
+        else if (currentRegulacion > maxRegulacion * drainRecoverThreshold) isEmotionallyDrained = false;
+
+        float cap = EffectiveMaxStamina;
+        if (currentStamina > cap) currentStamina = cap;
+
         bool activelyMeditating = isSitting && isNotebookLoopActive;
         if (isClimbing) return;
-        if (currentStamina < maxStamina)
+        if (currentStamina < cap)
         {
             float regenRate = activelyMeditating ? staminaRegenRateSitting : staminaRegenRate;
-            currentStamina = Mathf.Min(maxStamina, currentStamina + regenRate * Time.deltaTime);
+            currentStamina = Mathf.Min(cap, currentStamina + regenRate * Time.deltaTime);
         }
 
         if (currentRegulacion < maxRegulacion)
         {
             if (activelyMeditating)
                 currentRegulacion = Mathf.Min(maxRegulacion, currentRegulacion + regulacionRegenRateSitting * Time.deltaTime);
-            else if (isCallingMom)
+            else if (isCallingMom && momConnected)
                 currentRegulacion = Mathf.Min(maxRegulacion, currentRegulacion + regulacionRegenRateCallingMom * Time.deltaTime);
         }
     }
@@ -455,8 +473,11 @@ public class TheoController : MonoBehaviour
     public void SetCallingMom(bool value)
     {
         isCallingMom = value;
+        if (!value) momConnected = false;
         if (value) rb.linearVelocity = new Vector2(0f, rb.linearVelocity.y);
     }
+
+    public void SetMomConnected(bool value) { momConnected = value; }
 
     // ─── MÉTODOS PÚBLICOS ──────────────────────────────────────
     public void TriggerNotebook()
@@ -600,7 +621,7 @@ public class TheoController : MonoBehaviour
         }
     }
 
-    public void RestoreStamina() => currentStamina = maxStamina;
+    public void RestoreStamina() => currentStamina = EffectiveMaxStamina;
 
     // ─── ANIMACIONES ───────────────────────────────────────────
     void HandleAnimations()
