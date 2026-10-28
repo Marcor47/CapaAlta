@@ -31,8 +31,8 @@ Transform:
   m_GameObject: {fileID: 2915364709441561661}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -3.458, y: -4.331, z: 0}
-  m_LocalScale: {x: 0.48000002, y: 0.48000002, z: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 0.7, y: 0.7, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -175,6 +175,8 @@ MonoBehaviour:
   destroyOnHit: 0
   lifetime: 0
   breakableTag: Breakable
+  impactFx: {fileID: 0}
+  fxOnExpire: 1
   killY: -40
   returnAppleIfLost: 1
 --- !u!58 &8008094241771919906
