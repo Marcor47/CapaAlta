@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class InventoryUIController : MonoBehaviour
 {
@@ -28,6 +29,19 @@ public class InventoryUIController : MonoBehaviour
             if (isOpenNow) PopulateSlots();
             wasOpen = isOpenNow;
         }
+
+        if (isOpenNow) RefreshCounts();
+    }
+
+    void RefreshCounts()
+    {
+        if (DecisionRecord.Instance == null) return;
+        foreach (Transform slot in slotsContainer)
+        {
+            var countText = slot.Find("Count")?.GetComponent<TMP_Text>();
+            if (countText != null && countText.gameObject.activeSelf)
+                countText.text = DecisionRecord.Instance.ManzanasAvailable.ToString();
+        }
     }
 
     void PopulateSlots()
@@ -42,6 +56,13 @@ public class InventoryUIController : MonoBehaviour
 
             var icon = go.transform.Find("Icon")?.GetComponent<Image>();
             if (icon != null) icon.sprite = InventorySystem.Instance.GetSpriteFor(item);
+
+            var countText = go.transform.Find("Count")?.GetComponent<TMP_Text>();
+            if (countText != null)
+            {
+                bool isApple = item == InventorySystem.ItemType.Manzana;
+                countText.gameObject.SetActive(isApple);
+            }
 
             var button = go.GetComponent<Button>();
             InventorySystem.ItemType capturedItem = item;
