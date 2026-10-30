@@ -8,6 +8,9 @@ public class CardCollector : MonoBehaviour
     [Header("Datos de la carta")]
     public CardData cardData;
 
+    [Header("Aviso")]
+    public GameObject promptUI;   // PromptE hijo de la carta
+
     // ─── ESTADO ────────────────────────────────────────────────
     private bool isCollected = false;
     private bool playerInRange = false;
@@ -17,6 +20,7 @@ public class CardCollector : MonoBehaviour
     void Start()
     {
         sr = GetComponent<SpriteRenderer>();
+        if (promptUI != null) promptUI.SetActive(false);
 
         // Verifica si ya fue recolectada
         if (CardInventory.Instance != null &&
@@ -40,14 +44,14 @@ public class CardCollector : MonoBehaviour
     {
         if (isCollected || !other.CompareTag("Player")) return;
         playerInRange = true;
-        // TODO: UIHintManager.Instance.Show("Presiona E para leer");
+        if (promptUI != null) promptUI.SetActive(true);
     }
 
     void OnTriggerExit2D(Collider2D other)
     {
         if (!other.CompareTag("Player")) return;
         playerInRange = false;
-        // TODO: UIHintManager.Instance.Hide();
+        if (promptUI != null) promptUI.SetActive(false);
     }
 
     // ─── RECOLECCIÓN ───────────────────────────────────────────
@@ -71,6 +75,7 @@ public class CardCollector : MonoBehaviour
         isCollected = true;
         playerInRange = false;
 
+        if (promptUI != null) promptUI.SetActive(false);
         if (sr != null) sr.enabled = false;
         GetComponent<Collider2D>().enabled = false;
     }

@@ -20,7 +20,7 @@ public class ChapterEndTrigger : MonoBehaviour
         bool canFinish = DialogueManager.Instance == null || !DialogueManager.Instance.IsOpen;
         promptUI.SetActive(canFinish);
 
-        if (canFinish && Keyboard.current.enterKey.wasPressedThisFrame)
+        if (canFinish && Keyboard.current.eKey.wasPressedThisFrame)
             CompleteChapter();
     }
 
@@ -42,7 +42,9 @@ public class ChapterEndTrigger : MonoBehaviour
     {
         if (AccountManager.Instance == null)
         {
-            Debug.LogError("¡AccountManager.Instance es NULL! No se puede cambiar de escena.");
+            // Solo para pruebas: abriste Cap1 sin pasar por LoginScene
+            Debug.LogWarning("[ChapterEndTrigger] No hay AccountManager (¿abriste Cap1 directo?). Se vuelve al menú sin guardar progreso.");
+            SceneManager.LoadScene(mainMenuSceneName);
             return;
         }
 

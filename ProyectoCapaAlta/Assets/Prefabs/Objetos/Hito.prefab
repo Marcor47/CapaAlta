@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &4057315268227181365
+--- !u!1 &6825100144568762346
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,38 +8,39 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 3297383945920106558}
-  - component: {fileID: 5473220473597684173}
+  - component: {fileID: 7240626457093135233}
+  - component: {fileID: 1085894886697657232}
+  - component: {fileID: 201580485398347359}
   m_Layer: 0
-  m_Name: PromptEnter
+  m_Name: PromptE
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 0
---- !u!4 &3297383945920106558
+--- !u!4 &7240626457093135233
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4057315268227181365}
+  m_GameObject: {fileID: 6825100144568762346}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.076, y: 0.781, z: 0}
-  m_LocalScale: {x: 0.2074, y: 0.2487, z: 1}
+  m_LocalPosition: {x: -0.12, y: 0.8, z: 0}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8238851480504627645}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!212 &5473220473597684173
+--- !u!212 &1085894886697657232
 SpriteRenderer:
   serializedVersion: 2
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4057315268227181365}
+  m_GameObject: {fileID: 6825100144568762346}
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
@@ -79,18 +80,33 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 10
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
-  m_Color: {r: 0.7330974, g: 1, b: 0.0990566, a: 1}
+  m_Sprite: {fileID: 21300000, guid: 006aaf00bd0f33b43ac949833e0412c0, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 0.40625, y: 0.4375}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
+--- !u!114 &201580485398347359
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6825100144568762346}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eacbf2cdedb82a440babdd784a30f20b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KeyPromptAnimator
+  normal: {fileID: 21300000, guid: 006aaf00bd0f33b43ac949833e0412c0, type: 3}
+  pressed: {fileID: 21300000, guid: 657ef6dfc05c4f441819c71ee70ce93b, type: 3}
+  interval: 0.5
 --- !u!1 &8437404749923627468
 GameObject:
   m_ObjectHideFlags: 0
@@ -119,11 +135,11 @@ Transform:
   m_GameObject: {fileID: 8437404749923627468}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 50.613, y: -8.511, z: 0}
-  m_LocalScale: {x: 1.5, y: 1.5, z: 1}
+  m_LocalPosition: {x: 78, y: -8.5, z: 0}
+  m_LocalScale: {x: 2, y: 2, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 3297383945920106558}
+  - {fileID: 7240626457093135233}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &7243312385736301873
@@ -245,4 +261,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ChapterEndTrigger
   chapter: 1
   mainMenuSceneName: LoginScene
-  promptUI: {fileID: 4057315268227181365}
+  promptUI: {fileID: 6825100144568762346}
