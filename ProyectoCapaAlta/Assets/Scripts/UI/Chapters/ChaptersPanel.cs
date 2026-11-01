@@ -8,6 +8,14 @@ public class ChaptersPanel : MonoBehaviour
     public TextMeshProUGUI statusText;
     public string sceneNameFormat = "Cap{0}";   // Cap1, Cap2, Cap3, Cap4
 
+    [Header("Sprites de ficha")]
+    public Sprite fichaAbierta;
+    public Sprite fichaBloqueada;
+    public Sprite medallaPendiente;
+    public Sprite medallaCurso;
+    public Sprite medallaCompleto;
+    public Sprite candado;
+
     void OnEnable() => Refresh();
 
     void Refresh()
@@ -21,7 +29,19 @@ public class ChaptersPanel : MonoBehaviour
             bool started = AccountManager.Instance.HasStartedChapter(chapter);
 
             card.titleText.text = $"Capítulo {chapter}";
-            card.lockIcon.SetActive(!unlocked);
+
+
+
+            bool completed = AccountManager.Instance.CurrentUser.progress.chaptersCompleted.Contains(chapter);
+
+            card.background.sprite = unlocked ? fichaAbierta : fichaBloqueada;
+            card.rutaText.text = card.rutaName;
+            card.statusIcon.sprite = !unlocked ? candado : completed ? medallaCompleto : started ? medallaCurso : medallaPendiente;
+
+
+
+
+            
             card.buttonsGroup.SetActive(unlocked);
             card.startButton.gameObject.SetActive(unlocked && !started);
             card.continueButton.gameObject.SetActive(unlocked && started);
