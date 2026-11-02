@@ -75,6 +75,7 @@ public class CardInventory : MonoBehaviour
     // ─── AÑADIR CARTA DA MEJORA PERMANENTE ──────────────────────────────────────────
     private void CheckPermanentBonuses(CardData card)
     {
+        if (theo == null) theo = FindAnyObjectByType<TheoController>();
         if (theo == null) return;
         if (AccountManager.Instance == null || AccountManager.Instance.CurrentUser == null) return;
 

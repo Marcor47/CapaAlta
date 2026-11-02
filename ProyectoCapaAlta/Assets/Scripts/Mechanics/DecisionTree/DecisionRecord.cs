@@ -83,6 +83,12 @@ public class DecisionRecord : MonoBehaviour
         Debug.Log($"[DecisionRecord] {npcID}: {current} → {newValue}");
     }
 
+    public void ForceRelationship(string npcID, int value)
+    {
+        npcRelationships[npcID] = Mathf.Clamp(value, -1, 1);
+        Debug.Log($"[DecisionRecord] {npcID} fijado en {npcRelationships[npcID]}");
+    }
+
     // ─── ENCUENTROS ────────────────────────────────────────────
     public bool IsNodeCompleted(string nodeID)
     {

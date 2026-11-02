@@ -1,0 +1,271 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d6edfb0cc82e72348988115f5216b241, type: 3}
+  m_Name: Cap4_Padre_Enc1
+  m_EditorClassIdentifier: Assembly-CSharp::DialogueNode
+  nodeID: Cap4_Padre_Enc1
+  npcName: Jason
+  chapter: 4
+  npcID: padre
+  isSingleSpeaker: 0
+  rounds:
+  - conditionalOpenings:
+    - requiredRelationship: 1
+      npcLeadInLines:
+      - speakerName: Jason
+        text: "\xBFHijo? \xBFEres t\xFA?"
+      - speakerName: Jason
+        text: "Lo lograste. Solo, sin ayuda."
+      - speakerName: Jason
+        text: "Tu madre estar\xEDa muy orgullosa."
+      - speakerName: Jason
+        text: "Yo lo estoy, y muy sorprendido tambi\xE9n."
+      - speakerName: Theo
+        text: "..."
+      - speakerName: Theo
+        text: "Pap\xE1..."
+      - speakerName: Theo
+        text: "Yo..."
+      - speakerName: Theo
+        text: "Encontr\xE9 tus cartas."
+      - speakerName: Theo
+        text: "He vivido toda mi vida pensando que no viniste con nosotros porque no quer\xEDas."
+      - speakerName: Theo
+        text: "Pero ahora entiendo que lo hiciste para cuidar a muchos m\xE1s."
+      - speakerName: Theo
+        text: "A nuestro pueblo."
+      - speakerName: Jason
+        text: "Hijo..."
+      - speakerName: Jason
+        text: "Te mentir\xEDa si te digo que no he vivido arrepentido desde que se fueron."
+      - speakerName: Jason
+        text: "Me he equivocado muchas veces."
+      - speakerName: Jason
+        text: "Y mi mayor error fue no haber dado m\xE1s."
+      - speakerName: Jason
+        text: "Nuestro pueblo ya no me necesita."
+      - speakerName: Jason
+        text: "Pero ustedes s\xED."
+      - speakerName: Theo
+        text: "Pap\xE1..."
+      - speakerName: Theo
+        text: "Yo te perdono."
+      - speakerName: Theo
+        text: "Y s\xE9 que no ser\xE1 pronto, pero aprender\xE1s a perdonarte tambi\xE9n."
+      - speakerName: Jason
+        text: "Gracias, hijo."
+      - speakerName: Theo
+        text: "\xBFA\xFAn piensas quedarte en el pueblo?"
+      - speakerName: Jason
+        text: "Nuestro pueblo... a pesar de que los quiera mucho, debo tambi\xE9n decidir qu\xE9 es lo que quiero realmente."
+      - speakerName: Jason
+        text: "No puedo vivir todo el tiempo arrepentido sin hacer nada al respecto."
+      - speakerName: Jason
+        text: "Quisiera redimirme, hijo."
+      - speakerName: Theo
+        text: "Ven conmigo, pap\xE1."
+      - speakerName: Theo
+        text: "Mam\xE1 te extra\xF1a, y a\xFAn te ama."
+      - speakerName: Theo
+        text: "Podr\xEDamos regresar, juntos."
+      - speakerName: Jason
+        text: "\xBFMe ayudar\xEDas a empezar desde cero, hijo?"
+      - speakerName: Theo
+        text: "Har\xEDa el esfuerzo."
+      - speakerName: Jason
+        text: "Bueno, hijo."
+      - speakerName: Jason
+        text: "\xBFAntes de iniciar el viaje, qu\xE9 tal si damos una vuelta por el pueblo?"
+      - speakerName: Jason
+        text: "Hay mucha gente de la cual debo despedirme, y capaz sea bueno que conozcas un poco de tu cultura."
+      - speakerName: Theo
+        text: "Me encantar\xEDa, pa."
+      - speakerName: Jason
+        text: "Te quiero, hijo."
+      - speakerName: Theo
+        text: "Yo tambi\xE9n, pa."
+      - speakerName: Jason
+        text: "Descansa, hijo. Saldremos cuando salga el sol."
+      - speakerName: Theo
+        text: "Est\xE1 bien, pap\xE1..."
+    - requiredRelationship: 0
+      npcLeadInLines:
+      - speakerName: Jason
+        text: "\xBFHijo? \xBFEres t\xFA? Despierta, hijo."
+      - speakerName: Jason
+        text: "Casi no llegas. Menos mal que estaba cerca."
+      - speakerName: Jason
+        text: "Fue una suerte enorme que te encontrara a tiempo, hijo."
+      - speakerName: Jason
+        text: "Te pareces mucho a tu madre, \xBFsabes?"
+      - speakerName: Theo
+        text: "..."
+      - speakerName: Theo
+        text: "Pap\xE1..."
+      - speakerName: Theo
+        text: "Yo..."
+      - speakerName: Theo
+        text: "Encontr\xE9 algunas de tus cartas."
+      - speakerName: Theo
+        text: "S\xE9 que nos amabas, y a nuestro pueblo tambi\xE9n."
+      - speakerName: Theo
+        text: "Pero a\xFAn no entiendo por qu\xE9 no viniste con nosotros cuando mam\xE1 te lo pidi\xF3."
+      - speakerName: Jason
+        text: "Hay muchas cosas de las cuales me arrepiento, hijo."
+      - speakerName: Jason
+        text: "He vivido toda mi vida pensando que mi destino era aqu\xED, cuidando de los m\xEDos, mi pueblo."
+      - speakerName: Jason
+        text: "Pero he de aceptar que... ya no me necesitan... pero los que s\xED me necesitaban eran ustedes."
+      - speakerName: Jason
+        text: "No fue f\xE1cil para m\xED decirle que no a tu madre."
+      - speakerName: Jason
+        text: "Todo por lo que trabajaron nuestros ancestros, tus abuelos... nuestro legado y cultura."
+      - speakerName: Jason
+        text: "Ten\xEDa miedo de que todo se perdiera, hijo."
+      - speakerName: Jason
+        text: "Lo siento, hijo."
+      - speakerName: Theo
+        text: "Pap\xE1..."
+      - speakerName: Theo
+        text: "Yo quisiera entender..."
+      - speakerName: Theo
+        text: "Y har\xEDa el esfuerzo para lograrlo."
+      - speakerName: Theo
+        text: "Pero t\xFA tambi\xE9n debes dejar de castigarte, y empezar a decidir qu\xE9 es lo que t\xFA quieres."
+      - speakerName: Theo
+        text: "Mam\xE1 te extra\xF1a."
+      - speakerName: Theo
+        text: "Podr\xEDamos regresar, juntos."
+      - speakerName: Jason
+        text: "\xBFMe dar\xEDan esa oportunidad, hijo?"
+      - speakerName: Theo
+        text: "Obvio, pap\xE1, solo si me das la oportunidad de conocer tambi\xE9n este lugar que tanto amas."
+      - speakerName: Jason
+        text: "Me har\xEDa muy feliz eso, hijo."
+      - speakerName: Jason
+        text: "Muchas gracias."
+      - speakerName: Theo
+        text: "Te quiero, pap\xE1."
+      - speakerName: Jason
+        text: "Yo tambi\xE9n, hijo."
+      - speakerName: Jason
+        text: "Descansa, \xBFs\xED? Saldremos cuando te sientas mejor."
+      - speakerName: Theo
+        text: "Est\xE1 bien, pa..."
+    - requiredRelationship: -1
+      npcLeadInLines:
+      - speakerName: Jason
+        text: "\xBFHijo? \xBFEres t\xFA? Por favor, despierta, hijo."
+      - speakerName: Jason
+        text: "Por poco te pierdo en la tormenta. Menos mal que estaba cerca."
+      - speakerName: Jason
+        text: "No puedo creer que hayas llegado tan lejos en esas condiciones, hijo."
+      - speakerName: Jason
+        text: "Tu madre estar\xEDa muy orgullosa de ti."
+      - speakerName: Theo
+        text: "..."
+      - speakerName: Theo
+        text: "Pap\xE1..."
+      - speakerName: Theo
+        text: "Yo..."
+      - speakerName: Theo
+        text: "Vine hasta aqu\xED porque quer\xEDa saber."
+      - speakerName: Theo
+        text: "\xBFPor qu\xE9 no viniste con nosotros?"
+      - speakerName: Jason
+        text: "Hijo..."
+      - speakerName: Jason
+        text: "Es complicado."
+      - speakerName: Theo
+        text: "D\xEDmelo, pap\xE1."
+      - speakerName: Theo
+        text: "Sub\xED hasta aqu\xED para saber la verdad."
+      - speakerName: Jason
+        text: "Est\xE1 bien."
+      - speakerName: Jason
+        text: "Creo que mereces saber la verdad:"
+      - speakerName: Jason
+        text: "Cuando encontr\xE9 a tu madre subiendo la monta\xF1a, pens\xE9 que iba a ser como cualquier otro alpinista entusiasta."
+      - speakerName: Jason
+        text: "Me equivoqu\xE9."
+      - speakerName: Jason
+        text: "Era la persona m\xE1s inteligente, dulce y llena de vida que haya podido conocer."
+      - speakerName: Jason
+        text: "Le encant\xF3 nuestro pueblo y decidi\xF3 quedarse un tiempo."
+      - speakerName: Jason
+        text: "Nos terminamos enamorando y... naciste t\xFA aqu\xED."
+      - speakerName: Jason
+        text: "Durante el embarazo, tu madre pens\xF3 mucho en el futuro que quer\xEDa darte."
+      - speakerName: Jason
+        text: "Deb\xEDas ver el mundo, que nunca sintieras que algo estuviera fuera de tu alcance."
+      - speakerName: Jason
+        text: "Algo que aqu\xED no ibas a poder vivir como ella lo hizo."
+      - speakerName: Jason
+        text: "Yo no pod\xEDa dejar a mi pueblo desprotegido, todo en lo que trabajaron nuestros ancestros, y mis propios padres..."
+      - speakerName: Jason
+        text: "As\xED que acordamos que lo mejor era que vivieras con ella, sin m\xED."
+      - speakerName: Jason
+        text: "Y en serio..."
+      - speakerName: Jason
+        text: "En serio lo siento, hijo."
+      - speakerName: Jason
+        text: "No pasa un d\xEDa en el cual no piense en ti y en tu madre."
+      - speakerName: Jason
+        text: "Y yo no s\xE9 siquiera si nuestro pueblo sigue necesit\xE1ndome."
+      - speakerName: Jason
+        text: "Yo no s\xE9 qu\xE9 hacer."
+      - speakerName: Theo
+        text: "Pap\xE1..."
+      - speakerName: Theo
+        text: "Lo siento por ser duro contigo."
+      - speakerName: Theo
+        text: "No sab\xEDa que cargabas con tanto."
+      - speakerName: Jason
+        text: "No es tu culpa, hijo."
+      - speakerName: Jason
+        text: "No hab\xEDa forma de que lo supieras."
+      - speakerName: Theo
+        text: "Pap\xE1..."
+      - speakerName: Theo
+        text: "Entiendo que amas este pueblo tanto como nos amas a nosotros."
+      - speakerName: Theo
+        text: "No todas las opciones que tenemos son blancas o negras, sino grises."
+      - speakerName: Theo
+        text: "Hiciste lo mejor que pudiste por lo que amabas."
+      - speakerName: Theo
+        text: "Y eso est\xE1 bien."
+      - speakerName: Theo
+        text: "Si es que me lo permites..."
+      - speakerName: Theo
+        text: "Podr\xEDa quedarme un tiempo en el pueblo para conocer este hermoso lugar que tanto amas."
+      - speakerName: Jason
+        text: "Me har\xEDa muy feliz, hijo."
+      - speakerName: Jason
+        text: "Muchas gracias."
+      - speakerName: Theo
+        text: "Te quiero, pa."
+      - speakerName: Jason
+        text: "Yo tambi\xE9n, hijo."
+      - speakerName: Jason
+        text: "Descansa un poco, hijo."
+      - speakerName: Jason
+        text: "Cuando est\xE9s con m\xE1s fuerzas, saldremos, \xBFest\xE1 bien?"
+      - speakerName: Theo
+        text: "Est\xE1 bien, pap\xE1..."
+    npcLeadInLines: []
+    options: []
+    sharedFollowUpLines: []
+  givesManzanaOnEnd: 0
+  manzanaTutorialLines: []
+  manzanaGivenWhenBad: []
+  manzanaGivenWhenNeutral: []
+  manzanaGivenWhenGood: []

@@ -1,0 +1,163 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d6edfb0cc82e72348988115f5216b241, type: 3}
+  m_Name: Cap4_Gaz_Enc3
+  m_EditorClassIdentifier: Assembly-CSharp::DialogueNode
+  nodeID: Cap4_Gaz_Enc3
+  npcName: Gaz
+  chapter: 4
+  npcID: gaz
+  isSingleSpeaker: 1
+  rounds:
+  - conditionalOpenings:
+    - requiredRelationship: 1
+      npcLeadInLines:
+      - speakerName:
+        text: "...Ah, otra vez t\xFA."
+      - speakerName:
+        text: "Sabes, pens\xE9 realmente que ser\xEDa yo quien llegar\xEDa a la cima."
+      - speakerName:
+        text: "No tengo m\xE1s provisiones, y estoy cansado."
+      - speakerName:
+        text: "No creo que pueda subir m\xE1s, pero..."
+      - speakerName:
+        text: "Esto era m\xEDo, chico."
+      - speakerName:
+        text: "En serio me he esforzado demasiado."
+    - requiredRelationship: 0
+      npcLeadInLines:
+      - speakerName:
+        text: "...Ah, eres t\xFA."
+      - speakerName:
+        text: "Parece que al final, uno s\xED era mejor que el otro."
+      - speakerName:
+        text: "Ya no puedo seguir..."
+      - speakerName:
+        text: "He acabado con todo mi equipo, y apenas tengo fuerzas para ponerme a salvo."
+      - speakerName:
+        text: "Lo que no entiendo es c\xF3mo t\xFA pudiste hacerlo tan f\xE1cilmente."
+      - speakerName:
+        text: "Y yo no, despu\xE9s de tanto."
+    - requiredRelationship: -1
+      npcLeadInLines:
+      - speakerName:
+        text: "...Otra vez t\xFA. Claro, ten\xEDas que ser t\xFA."
+      - speakerName:
+        text: "Como ver\xE1s, ya no puedo seguir."
+      - speakerName:
+        text: "Estoy cansado."
+      - speakerName:
+        text: "Pero no logro entender por qu\xE9 t\xFA."
+      - speakerName:
+        text: "C\xF3mo es que t\xFA eres mejor que yo."
+      - speakerName:
+        text: "Si yo me esforc\xE9 tanto."
+      - speakerName:
+        text: "No es justo."
+    npcLeadInLines: []
+    options:
+    - optionText: "Has llegado muy lejos, esto ya es un gran logro del que debes estar orgulloso."
+      relationshipDelta: 1
+      npcResponseLines:
+      - speakerName:
+        text: "He logrado otros retos antes."
+      - speakerName:
+        text: "Pero no entiendo por qu\xE9 esto no es igual."
+      - speakerName:
+        text: "Yo cre\xEDa que era bueno."
+    - optionText: "No siempre lograremos todo en esta vida, a veces hay que aceptar las cosas como son."
+      relationshipDelta: -1
+      npcResponseLines:
+      - speakerName:
+        text: "\xBFCrees que no lo s\xE9?"
+      - speakerName:
+        text: "Me he preparado incansablemente para esto."
+      - speakerName:
+        text: "\xBFC\xF3mo podr\xEDa dejar que un ni\xF1o cualquiera me gane?"
+      - speakerName:
+        text: "Si yo lo hice todo bien..."
+      - speakerName:
+        text: "Yo lo hice todo..."
+    - optionText: "No tienes que demostrarle nada a nadie. Ya hiciste bastante, debes volver."
+      relationshipDelta: 0
+      npcResponseLines:
+      - speakerName:
+        text: "Para ti es f\xE1cil decirlo. No has dedicado los mismos a\xF1os de tu vida a esto."
+      - speakerName:
+        text: "Y aun as\xED, no est\xE1s cansado, ni siquiera pareciera que te cost\xF3 llegar hasta aqu\xED."
+      - speakerName:
+        text: "Mientras que yo... yo no estoy a la altura."
+    sharedFollowUpLines: []
+  - conditionalOpenings: []
+    npcLeadInLines:
+    - speakerName:
+      text: "\xBFC\xF3mo lo lograste, chico?"
+    - speakerName:
+      text: "En serio no lo entiendo."
+    - speakerName:
+      text: "Me hace sentir tan... impotente."
+    options:
+    - optionText: "Tuve mucha ayuda en el camino, amigo."
+      relationshipDelta: 1
+      npcResponseLines:
+      - speakerName:
+        text: "Conque ese es tu secreto."
+      - speakerName:
+        text: "Amigo..."
+      - speakerName:
+        text: "Lo siento por lo que dije antes."
+      - speakerName:
+        text: "Se nota que eres un buen chico."
+      - speakerName:
+        text: "Cuando llegues a la cima, no te olvides de m\xED, amigo."
+      - speakerName:
+        text: "Capaz podamos seguir compitiendo en otra ocasi\xF3n."
+      - speakerName:
+        text: "Mucha suerte, amigo."
+    - optionText: "No fue nada en especial, solo las circunstancias me ayudaron."
+      relationshipDelta: -1
+      npcResponseLines:
+      - speakerName:
+        text: "Esto s\xED era especial para m\xED, chico."
+      - speakerName:
+        text: "Creo que nunca lo entender\xE9."
+      - speakerName:
+        text: "Porque no soy suficiente."
+      - speakerName:
+        text: "Vete de una vez."
+      - speakerName:
+        text: "Llega a la cima."
+      - speakerName:
+        text: "Uno de los dos debe hacerlo."
+    - optionText: "Fue solo suerte poder llegar hasta aqu\xED."
+      relationshipDelta: 0
+      npcResponseLines:
+      - speakerName:
+        text: "Conque suerte nom\xE1s, chico."
+      - speakerName:
+        text: "Eres muy gracioso, jeje."
+      - speakerName:
+        text: "Creo que eso es todo, me ganaste."
+      - speakerName:
+        text: "La pr\xF3xima vez que nos veamos no tendr\xE1s tanta suerte, chico."
+      - speakerName:
+        text: "Ve de una vez, y llega a la cima."
+      - speakerName:
+        text: "Hazlo por m\xED."
+      - speakerName:
+        text: "Por favor."
+    sharedFollowUpLines: []
+  givesManzanaOnEnd: 0
+  manzanaTutorialLines: []
+  manzanaGivenWhenBad: []
+  manzanaGivenWhenNeutral: []
+  manzanaGivenWhenGood: []

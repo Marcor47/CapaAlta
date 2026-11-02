@@ -89,7 +89,7 @@ MonoBehaviour:
       - speakerName: 
         text: "\xBFQui\xE9nes ser\xE1n estas personas?"
     - optionText: Trato de no distraerme en el camino hacia la cima, la verdad.
-      relationshipDelta: 0
+      relationshipDelta: -1
       npcResponseLines:
       - speakerName: 
         text: Ya veo...

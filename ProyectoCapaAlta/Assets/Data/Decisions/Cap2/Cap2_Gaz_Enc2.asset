@@ -43,21 +43,6 @@ MonoBehaviour:
         text: "Estoy solo tom\xE1ndome un peque\xF1o respiro. No te preocupes."
     npcLeadInLines: []
     options:
-    - optionText: "S\xED ha estado dif\xEDcil. Creo que terminar\xE9 descansando
-        por aqu\xED tambi\xE9n."
-      relationshipDelta: 0
-      npcResponseLines:
-      - speakerName: 
-        text: Gracias, chico. Pero no me esperes.
-      - speakerName: 
-        text: "Ahorita tomo el ritmo y seguro nos vemos m\xE1s adelante."
-    - optionText: "Vamos, \xBFno me vas a dejar esperando? Jeje"
-      relationshipDelta: -1
-      npcResponseLines:
-      - speakerName: 
-        text: Muy gracioso, chico.
-      - speakerName: 
-        text: "Termino este descanso y veremos qui\xE9n llega antes."
     - optionText: Ya vamos a mitad de camino, seguro llegamos a la par.
       relationshipDelta: 1
       npcResponseLines:
@@ -67,6 +52,21 @@ MonoBehaviour:
         text: "S\xED, capaz y tengas raz\xF3n."
       - speakerName: 
         text: "Solo dame un momento y contin\xFAo despu\xE9s de ti."
+    - optionText: "Vamos, \xBFno me vas a dejar esperando? Jeje"
+      relationshipDelta: -1
+      npcResponseLines:
+      - speakerName: 
+        text: Muy gracioso, chico.
+      - speakerName: 
+        text: "Termino este descanso y veremos qui\xE9n llega antes."
+    - optionText: "S\xED ha estado dif\xEDcil. Creo que terminar\xE9 descansando
+        por aqu\xED tambi\xE9n."
+      relationshipDelta: 0
+      npcResponseLines:
+      - speakerName: 
+        text: Gracias, chico. Pero no me esperes.
+      - speakerName: 
+        text: "Ahorita tomo el ritmo y seguro nos vemos m\xE1s adelante."
     sharedFollowUpLines: []
   givesManzanaOnEnd: 0
   manzanaTutorialLines: []

@@ -163,6 +163,8 @@ public class DialogueManager : MonoBehaviour
             DialogueLine line = currentLines[currentLineIndex];
 
             string speaker;
+            bool isTheoLine = false;
+
             if (simpleMode)
             {
                 speaker = string.IsNullOrEmpty(line.speakerName) ? simpleSpeakerName : line.speakerName;
@@ -172,9 +174,15 @@ public class DialogueManager : MonoBehaviour
                 speaker = currentNode.isSingleSpeaker
                     ? currentNode.npcName
                     : (string.IsNullOrEmpty(line.speakerName) ? currentNode.npcName : line.speakerName);
+                isTheoLine = !currentNode.isSingleSpeaker && speaker == "Theo";
             }
 
-            npcNameText.text = speaker;
+            npcNameText.gameObject.SetActive(!isTheoLine);
+            theoNameText.gameObject.SetActive(isTheoLine);
+            dialogueText.gameObject.SetActive(true);
+
+            if (!isTheoLine) npcNameText.text = speaker;
+
             dialogueText.text = line.text;
             waitingInput = true;
         }
@@ -203,50 +211,56 @@ public class DialogueManager : MonoBehaviour
         switch (state)
         {
             case DialogueState.Opening:
-                ShowOptions();
+                if (CurrentRound.options != null && CurrentRound.options.Length > 0)
+                    ShowOptions();
+                else
+                    GoToNextRoundOrEnd();   // ronda sin opciones (ej. el padre en el Cap4)
                 break;
 
             case DialogueState.Responding:
-                // AdvanceState() — dentro del case Responding, cuando pasa a la siguiente ronda:
-                if (currentRoundIndex < currentNode.rounds.Length - 1)
-                {
-                    currentRoundIndex++;
-                    state = DialogueState.Opening;
-                    currentLineIndex = 0;
-                    currentLines.Clear();
-
-                    DialogueLine[] opening = CurrentRound.GetOpeningLines(entryRelationship);
-                    if (opening != null)
-                        currentLines.AddRange(opening);
-
-                    SetNPCSpeaking(true);
-                    ShowCurrentLine();
-                }
-                else
-                {
-                    if (DecisionRecord.Instance != null)
-                    {
-                        int finalDelta = Mathf.Clamp(pendingRelationshipDelta, -1, 1);
-                        DecisionRecord.Instance.SetRelationship(currentNode.npcID, finalDelta);
-                    }
-
-                    if (currentNode.givesManzanaOnEnd &&
-                        currentNode.manzanaTutorialLines != null &&
-                        currentNode.manzanaTutorialLines.Length > 0)
-                    {
-                        state = DialogueState.Manzana;
-                        currentLineIndex = 0;
-                        currentLines.Clear();
-                        currentLines.AddRange(currentNode.manzanaTutorialLines);
-                        ShowCurrentLine();
-                    }
-                    else EndDialogue();
-                }
+                GoToNextRoundOrEnd();
                 break;
 
             case DialogueState.Manzana:
                 EndDialogue();
                 break;
+        }
+    }
+
+    void GoToNextRoundOrEnd()
+    {
+        if (currentRoundIndex < currentNode.rounds.Length - 1)
+        {
+            currentRoundIndex++;
+            state = DialogueState.Opening;
+            currentLineIndex = 0;
+            currentLines.Clear();
+
+            DialogueLine[] opening = CurrentRound.GetOpeningLines(entryRelationship);
+            if (opening != null) currentLines.AddRange(opening);
+
+            SetNPCSpeaking(true);
+            ShowCurrentLine();
+        }
+        else
+        {
+            if (DecisionRecord.Instance != null)
+            {
+                int finalDelta = Mathf.Clamp(pendingRelationshipDelta, -1, 1);
+                DecisionRecord.Instance.SetRelationship(currentNode.npcID, finalDelta);
+            }
+
+            if (currentNode.givesManzanaOnEnd &&
+                currentNode.manzanaTutorialLines != null &&
+                currentNode.manzanaTutorialLines.Length > 0)
+            {
+                state = DialogueState.Manzana;
+                currentLineIndex = 0;
+                currentLines.Clear();
+                currentLines.AddRange(currentNode.manzanaTutorialLines);
+                ShowCurrentLine();
+            }
+            else EndDialogue();
         }
     }
 
