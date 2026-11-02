@@ -48,6 +48,27 @@ public class LoginSceneController : MonoBehaviour
     public TextMeshProUGUI teacherStatusText;
 
 
+    [Header("Lista de alumnos — controles")]
+    public TextMeshProUGUI studentCountText;       // "40 ALUMNOS"
+    public TMP_InputField studentSearchInput;
+    public Button[] filterButtons;                 // 3: TODOS, PEND, AL DÍA
+    public TextMeshProUGUI[] filterLabels;         // 3, el texto de cada filtro
+    public Sprite filterOnSprite;
+    public Sprite filterOffSprite;
+    public Button sortByNameButton;
+    public Image sortArrow;
+    public Button groupButton;
+    public Button openAddStudentButton;
+    public GameObject addStudentPanel;
+    public GameObject groupDashboardPanel;         // se conecta en la Parte 3
+    public TextMeshProUGUI addStudentErrorText;
+
+    enum StudentFilter { All, Pending, UpToDate }
+    StudentFilter currentFilter = StudentFilter.All;
+    bool sortAscending = true;
+    static readonly Color FilterOffText = new Color32(0x96, 0x42, 0x53, 255);
+
+
     [Header("Vista — Dashboard de un alumno")]
     public TextMeshProUGUI dashboardStudentName;
     public TextMeshProUGUI dashboardChapters;
@@ -126,8 +147,28 @@ public class LoginSceneController : MonoBehaviour
         {
             NavigateTo(teacherStudentsPanel);
             teacherStatusText.text = "";
+            studentSearchInput.SetTextWithoutNotify("");
+            sortAscending = true;
+            sortArrow.rectTransform.localRotation = Quaternion.identity;
+            SetFilter(StudentFilter.All);   // también refresca la lista
+        });
+
+        studentSearchInput.onValueChanged.AddListener(_ => RefreshStudentList());
+        for (int i = 0; i < filterButtons.Length; i++)
+        {
+            int idx = i;
+            filterButtons[idx].onClick.AddListener(() => SetFilter((StudentFilter)idx));
+        }
+        sortByNameButton.onClick.AddListener(() =>
+        {
+            sortAscending = !sortAscending;
+            sortArrow.rectTransform.localRotation = Quaternion.Euler(0f, 0f, sortAscending ? 0f : 180f);
             RefreshStudentList();
         });
+        groupButton.onClick.AddListener(() => { if (groupDashboardPanel != null) NavigateTo(groupDashboardPanel); });
+        openAddStudentButton.onClick.AddListener(() => { addStudentErrorText.text = ""; NavigateTo(addStudentPanel); });
+
+
         teacherChaptersButton.onClick.AddListener(() =>
         {
             NavigateTo(teacherChaptersPanel);
@@ -208,6 +249,9 @@ public class LoginSceneController : MonoBehaviour
         teacherStudentsPanel.SetActive(false);
         teacherChaptersPanel.SetActive(false);
         compendiumCharactersPanel.SetActive(false);
+
+        addStudentPanel.SetActive(false);
+        if (groupDashboardPanel != null) groupDashboardPanel.SetActive(false);
     }
 
     void NavigateTo(GameObject panel, bool pushCurrent = true)
@@ -294,33 +338,62 @@ public class LoginSceneController : MonoBehaviour
 
         if (!added)
         {
-            teacherStatusText.text = "No se pudo agregar (¿usuario vacío o ya existe?).";
+            addStudentErrorText.text = "No se pudo agregar (¿usuario vacío o ya existe?).";
             return;
         }
 
         teacherStatusText.text = $"Alumno \"{newName}\" agregado.";
         newStudentUsernameInput.text = "";
         newStudentPasswordInput.text = "";
+        addStudentErrorText.text = "";
+        HandleBackOrExit();      // vuelve a la lista
+        RefreshStudentList();
+    }
+
+    void SetFilter(StudentFilter f)
+    {
+        currentFilter = f;
+        for (int i = 0; i < filterButtons.Length; i++)
+        {
+            bool on = i == (int)f;
+            filterButtons[i].image.sprite = on ? filterOnSprite : filterOffSprite;
+            filterLabels[i].color = on ? Color.white : FilterOffText;
+        }
         RefreshStudentList();
     }
 
     void RefreshStudentList()
     {
-        foreach (Transform child in studentListContainer) Destroy(child.gameObject);
+        for (int i = studentListContainer.childCount - 1; i >= 0; i--)
+        {
+            var child = studentListContainer.GetChild(i);
+            child.SetParent(null);
+            Destroy(child.gameObject);
+        }
 
-        foreach (var student in AccountManager.Instance.GetAllStudents())
+        var all = AccountManager.Instance.GetAllStudents();
+        string q = studentSearchInput.text.Trim().ToLowerInvariant();
+
+        var students = all
+            .Where(s => q.Length == 0 || s.username.ToLowerInvariant().Contains(q))
+            .Where(s => currentFilter == StudentFilter.All
+                     || (currentFilter == StudentFilter.UpToDate) == StudentStatus.IsAlDia(s.progress))
+            .OrderBy(s => s.username, System.StringComparer.CurrentCultureIgnoreCase)
+            .ToList();
+        if (!sortAscending) students.Reverse();
+
+        studentCountText.text = students.Count == all.Count
+            ? $"{all.Count} ALUMNOS"
+            : $"{students.Count} DE {all.Count} ALUMNOS";
+
+        foreach (var student in students)
         {
             GameObject go = Instantiate(studentListItemPrefab, studentListContainer);
-
-            var texts = go.GetComponentsInChildren<TextMeshProUGUI>();
-            if (texts.Length > 0) texts[0].text = student.username;
-
-            var buttons = go.GetComponentsInChildren<Button>();
-            string capturedUsername = student.username; // evita el bug de closures en loops
-
-            // Se asume: buttons[0] = "Ver progreso", buttons[1] = "Eliminar"
-            if (buttons.Length > 0) buttons[0].onClick.AddListener(() => OpenStudentDashboard(capturedUsername));
-            if (buttons.Length > 1) buttons[1].onClick.AddListener(() => { AccountManager.Instance.DeleteStudent(capturedUsername); RefreshStudentList(); });
+            string captured = student.username;     // evita el bug de closures en loops
+            go.GetComponent<StudentRowUI>().Setup(
+                student,
+                () => OpenStudentDashboard(captured),
+                () => { AccountManager.Instance.DeleteStudent(captured); RefreshStudentList(); });
         }
     }
 
