@@ -5565,7 +5565,7 @@ GameObject:
   - component: {fileID: 484617172}
   - component: {fileID: 484617173}
   m_Layer: 5
-  m_Name: GlosarioHSEPanel
+  m_Name: InformativePanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -20515,7 +20515,7 @@ GameObject:
   - component: {fileID: 1904781023}
   - component: {fileID: 1904781022}
   m_Layer: 5
-  m_Name: GlosarioHSEButton
+  m_Name: InformativeButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
