@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5e16c938d65f62a48af1087186cef73c, type: 3}
+  m_Name: HelpSkin
+  m_EditorClassIdentifier: Assembly-CSharp::HelpSkin
+  keyA: {fileID: 21300000, guid: a5913ca0148437e439a4a7ac2fe8052d, type: 3}
+  keyD: {fileID: 21300000, guid: c54953ba93f58af4bab1abcf81f5fced, type: 3}
+  keyW: {fileID: 21300000, guid: e4a3583a44ff26f499c67323e0c41f79, type: 3}
+  keyS: {fileID: 21300000, guid: b06ccb30c4a63b84f8451c58a82ca4a4, type: 3}
+  keyQ: {fileID: 21300000, guid: f6648a49d552f2d4f952c0aa138a5917, type: 3}
+  keyE: {fileID: 21300000, guid: 006aaf00bd0f33b43ac949833e0412c0, type: 3}
+  keyEnter: {fileID: 21300000, guid: a135cff1c98ad544397622d88ad66525, type: 3}
+  keyEsc: {fileID: 21300000, guid: f80c261f426decf44a18143c9a445383, type: 3}
+  keyShift: {fileID: 21300000, guid: ff320f4064a9f484e90c0f243a4208fb, type: 3}
+  keySpace: {fileID: 21300000, guid: f25db8b9a068e5e4e8b62b8fc4a1b9b8, type: 3}
+  keyUp: {fileID: 21300000, guid: 9aabed633f00f6843aeb6fd9f44ee60b, type: 3}
+  keyDown: {fileID: 21300000, guid: 1153d8ef3aa3e214e8c2c64bd2f5f693, type: 3}
+  keyLeft: {fileID: 21300000, guid: 77330ac299021904aa373c996071aad8, type: 3}
+  keyRight: {fileID: 21300000, guid: f6f95df48a0ab834e8fa04f854f511cf, type: 3}
+  mouseLeft: {fileID: 21300000, guid: d4d730ef0016e364884de33d9521f6b5, type: 3}
+  mouseRight: {fileID: 21300000, guid: cd3cdc1b183ded446b5d3b450df1c0e8, type: 3}
+  iconManzana: {fileID: 21300000, guid: 7483768d0d237624cb41600144bfe975, type: 3}
+  iconTelefono: {fileID: 21300000, guid: d835bebcf31a205438085ebd66fbe74d, type: 3}
+  iconOnda: {fileID: 21300000, guid: b8ad0851c2b569440916cf729b36197b, type: 3}
+  iconGancho: {fileID: 21300000, guid: 2e5d476ea68bc6f429cd8de1b0c8c3ab, type: 3}
+  iconPinchos: {fileID: 21300000, guid: 83aeef0edabed1942b0d3b4ec4656f17, type: 3}
+  iconMotivacion: {fileID: 21300000, guid: a55cf8d064f5b3048ab93b09e1d3c248, type: 3}
+  iconRegulacion: {fileID: 21300000, guid: 4427ade449115dc478f099ee48a729e2, type: 3}

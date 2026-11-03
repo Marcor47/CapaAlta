@@ -1,0 +1,115 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 29b72c40dd90c2240957ffe23f81d98c, type: 3}
+  m_Name: HSEGlossary
+  m_EditorClassIdentifier: Assembly-CSharp::HSEGlossary
+  intro: "Las HSE son capacidades que nos ayudan a entender lo que sentimos, cuidarnos
+    y llevarnos bien con los dem\xE1s. En las cartas puedes relacionarlas con lo
+    que cuenta cada personaje."
+  source: "Definiciones: Ministerio de Educaci\xF3n (2022). Orientaciones para el
+    desarrollo del Programa de Habilidades Socioemocionales \u2013 V ciclo, cap.
+    I (1.3), que retoma las definiciones de MINEDU (2021)."
+  entries:
+  - name: Autoconcepto
+    simple: "Saber c\xF3mo eres: lo que se te da bien, lo que te gusta y c\xF3mo
+      eres con los dem\xE1s."
+    minedu: "Es reconocer las propias caracter\xEDsticas y fortalezas (f\xEDsicas,
+      intelectuales, emocionales y sociales) de acuerdo con las diferentes dimensiones
+      de la identidad y los distintos roles que cumple la persona. Se nutre de dos
+      fuentes: la propia experiencia y la informaci\xF3n o feedback que recibe del
+      entorno social."
+  - name: Autoestima
+    simple: "Quererte y valorarte tal como eres, con tus fortalezas y tambi\xE9n
+      con lo que a\xFAn est\xE1s aprendiendo."
+    minedu: "Es la valoraci\xF3n de las propias caracter\xEDsticas y fortalezas que
+      nos atribuimos. Desarrollar esta habilidad implica el desarrollo de la autoaceptaci\xF3n
+      y de la autoexpresi\xF3n. La autoaceptaci\xF3n es aceptar nuestras caracter\xEDsticas
+      en los distintos aspectos (f\xEDsicos, intelectuales, emocionales, sociales
+      y nuestros valores personales) sin que estos nos generen inseguridad. La autoexpresi\xF3n
+      es manifestar, sin verg\xFCenza o temor, las ideas que tenemos sobre nosotras/os
+      mismas/os."
+  - name: Conciencia emocional
+    simple: "Darte cuenta de lo que sientes, ponerle nombre a esa emoci\xF3n y notar
+      tambi\xE9n c\xF3mo se sienten los dem\xE1s."
+    minedu: "Es el reconocimiento de las propias emociones, darles nombre (vocabulario
+      emocional), comprender las emociones de los dem\xE1s y tomar conciencia de
+      la interacci\xF3n entre emoci\xF3n, cognici\xF3n y comportamiento, as\xED como
+      su influencia."
+  - name: "Regulaci\xF3n emocional"
+    simple: "Manejar lo que sientes para calmarte y actuar bien, sin hacerte da\xF1o
+      ni lastimar a otros."
+    minedu: "Gestionar las emociones propias para generar mayor bienestar, o enfrentar
+      situaciones de forma pac\xEDfica y evitar el da\xF1o f\xEDsico y emocional
+      a uno mismo y a los dem\xE1s. Se trata de gestionar las emociones y validarlas,
+      sin suprimir o evitar ninguna de ellas, haciendo uso de los recursos y herramientas
+      para regular su intensidad y su duraci\xF3n para no convertirlas en conductas
+      no saludables."
+  - name: Autocuidado
+    simple: "Cuidarte todos los d\xEDas: dormir bien, comer sano, descansar y alejarte
+      de lo que te pone en peligro."
+    minedu: "Es incorporar conductas y h\xE1bitos saludables a la vida diaria. Es
+      una forma de reconectar con uno mismo, lo cual favorece el bienestar emocional,
+      f\xEDsico y mental, as\xED como el alejarse de situaciones de riesgo."
+  - name: Toma de decisiones responsables
+    simple: "Pensar en lo que puede pasar antes de actuar y elegir lo mejor para
+      ti y para los dem\xE1s."
+    minedu: "Desarrollar mecanismos personales (evaluaci\xF3n de riesgos potenciales
+      y consecuencias, regulaci\xF3n emocional y juicio objetivo de la realidad,
+      entre otros) para tomar decisiones eficientes en situaciones personales, familiares,
+      acad\xE9micas, profesionales, sociales y de tiempo libre, que acontecen en
+      la vida diaria. Supone asumir la responsabilidad por las propias decisiones,
+      tomando en consideraci\xF3n aspectos \xE9ticos, sociales y de seguridad."
+  - name: "Comunicaci\xF3n asertiva"
+    simple: Decir lo que piensas o sientes con claridad y respeto, sin gritar y sin
+      callarte.
+    minedu: "Expresar lo que uno siente o piensa sin agredir a la otra persona y
+      defendiendo sus puntos de vista. Se trata de una expresi\xF3n fluida, segura
+      y respetuosa, aun cuando esto implique decir que no."
+  - name: Trabajo en equipo
+    simple: Colaborar con otras personas, aunque sean distintas a ti, para lograr
+      algo juntos.
+    minedu: "Supone la colaboraci\xF3n eficaz, equitativa e interdependiente de una
+      serie de personas, que pueden tener caracter\xEDsticas muy diferentes, y que
+      combinan sus recursos personales y se esfuerzan para llevar a cabo una meta
+      com\xFAn."
+  - name: "Empat\xEDa"
+    simple: Ponerte en el lugar del otro para entender lo que siente y necesita,
+      sin juzgarlo.
+    minedu: "Reconocer y comprender las necesidades y puntos de vista de otras personas,
+      aunque sean contrarios a los propios (empat\xEDa cognitiva), as\xED como comprender
+      sus emociones, sin juzgarlo y sentirlo en uno mismo, lo que motiva al deseo
+      por ayudar (disposici\xF3n emp\xE1tica)."
+  - name: "Resoluci\xF3n de conflictos"
+    simple: "Enfrentar un problema con otra persona buscando una soluci\xF3n buena
+      para los dos, sin pelear."
+    minedu: "Identificar y afrontar adaptativamente los conflictos o el problema,
+      tomando acci\xF3n para encontrar una soluci\xF3n. Surge de la eventual oposici\xF3n
+      entre puntos de vista e intereses. Para ello, se deben analizar los recursos
+      y limitaciones que se tiene para afrontar esa oposici\xF3n, buscando una soluci\xF3n
+      que sea satisfactoria para ambas partes. La negociaci\xF3n y mediaci\xF3n son
+      vitales para una resoluci\xF3n pac\xEDfica del conflicto."
+  - name: Conciencia social
+    simple: "Entender que las personas viven y piensan distinto seg\xFAn su lugar
+      y su cultura, y respetarlo."
+    minedu: "Comprensi\xF3n de las perspectivas de personas que provienen de nuestro
+      entorno u otros contextos, culturas u or\xEDgenes para establecer relaciones
+      saludables y actuar motivadas/os por el bien com\xFAn."
+  - name: Comportamiento prosocial
+    simple: Ayudar a otros porque quieres, sin que nadie te lo pida.
+    minedu: "Realizar acciones en beneficio de las/os dem\xE1s, sin que nos lo soliciten,
+      que contribuyan al bien com\xFAn o que tengan consecuencias sociales positivas."
+  - name: Creatividad
+    simple: Mirar las cosas de otra manera e inventar ideas nuevas que sirvan, solo
+      o en grupo.
+    minedu: "Mirar las cosas de manera diferente y producir ideas, t\xE9cnicas y
+      perspectivas tanto novedosas como apropiadas y \xFAtiles, ya sea que se desarrolle
+      de forma individual o colaborativa y adaptado a las restricciones de la tarea."

@@ -79,6 +79,11 @@ public class LoginSceneController : MonoBehaviour
     public Button settingsButton;
     public Button exitButton;
 
+    [Header("Ayuda (botón i)")]
+    public GameObject helpPanel;
+    public Button helpButton;
+    public HelpPanelUI helpUI;
+
     [Header("Notificación fin de capítulo")]
     public GameObject notificationPanel;
     public TextMeshProUGUI notificationText;
@@ -114,6 +119,14 @@ public class LoginSceneController : MonoBehaviour
         addStudentButton.onClick.AddListener(TryAddStudent);
         
         settingsButton.onClick.AddListener(() => NavigateTo(settingsPanel));
+
+        helpButton.onClick.AddListener(() =>
+        {
+            if (currentPanel == helpPanel) return;
+            NavigateTo(helpPanel);
+            helpUI.Open();
+        });
+
         exitButton.onClick.AddListener(HandleBackOrExit);
         notificationCloseButton.onClick.AddListener(() => notificationPanel.SetActive(false));
         
@@ -242,6 +255,7 @@ public class LoginSceneController : MonoBehaviour
         teacherChaptersPanel.SetActive(false);
         compendiumCharactersPanel.SetActive(false);
 
+        if (helpPanel != null) helpPanel.SetActive(false);
         addStudentPanel.SetActive(false);
         if (groupDashboardPanel != null) groupDashboardPanel.SetActive(false);
     }
