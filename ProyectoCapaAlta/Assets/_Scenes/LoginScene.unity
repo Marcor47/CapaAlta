@@ -2755,10 +2755,10 @@ MonoBehaviour:
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
   m_Interactable: 1
-  m_TargetGraphic: {fileID: 2012426968}
-  m_TextViewport: {fileID: 1260141557}
-  m_TextComponent: {fileID: 66375092}
-  m_Placeholder: {fileID: 244490256}
+  m_TargetGraphic: {fileID: 160471886}
+  m_TextViewport: {fileID: 531506740}
+  m_TextComponent: {fileID: 1524042545}
+  m_Placeholder: {fileID: 1045441886}
   m_VerticalScrollbar: {fileID: 0}
   m_VerticalScrollbarEventHandler: {fileID: 0}
   m_LayoutGroup: {fileID: 0}
@@ -3459,7 +3459,7 @@ MonoBehaviour:
   m_Interactable: 1
   m_TargetGraphic: {fileID: 2102046036}
   toggleTransition: 0
-  graphic: {fileID: 656105627}
+  graphic: {fileID: 752145846}
   m_Group: {fileID: 0}
   onValueChanged:
     m_PersistentCalls:
@@ -3938,7 +3938,7 @@ MonoBehaviour:
   m_Interactable: 1
   m_TargetGraphic: {fileID: 2102046036}
   toggleTransition: 0
-  graphic: {fileID: 656105627}
+  graphic: {fileID: 1246079460}
   m_Group: {fileID: 0}
   onValueChanged:
     m_PersistentCalls:
@@ -4574,7 +4574,7 @@ MonoBehaviour:
   m_Interactable: 1
   m_TargetGraphic: {fileID: 2102046036}
   toggleTransition: 0
-  graphic: {fileID: 656105627}
+  graphic: {fileID: 19831472}
   m_Group: {fileID: 0}
   onValueChanged:
     m_PersistentCalls:
@@ -5455,19 +5455,25 @@ MonoBehaviour:
   teacherStudentsButton: {fileID: 1026917504}
   teacherChaptersButton: {fileID: 1051493451}
   teacherStatusText: {fileID: 930427292}
-  studentCountText: {fileID: 0}
-  studentSearchInput: {fileID: 0}
-  filterButtons: []
-  filterLabels: []
-  filterOnSprite: {fileID: 0}
-  filterOffSprite: {fileID: 0}
-  sortByNameButton: {fileID: 0}
-  sortArrow: {fileID: 0}
-  groupButton: {fileID: 0}
-  openAddStudentButton: {fileID: 0}
-  addStudentPanel: {fileID: 0}
+  studentCountText: {fileID: 1848294180}
+  studentSearchInput: {fileID: 160471885}
+  filterButtons:
+  - {fileID: 852095798}
+  - {fileID: 961077627}
+  - {fileID: 510680620}
+  filterLabels:
+  - {fileID: 1370228086}
+  - {fileID: 1828690088}
+  - {fileID: 2033330141}
+  filterOnSprite: {fileID: 21300000, guid: e8a7d5590986125429630caada4dbf89, type: 3}
+  filterOffSprite: {fileID: 21300000, guid: 16b09bdbc0be3024fbe3fc9023a3c954, type: 3}
+  sortByNameButton: {fileID: 1347462744}
+  sortArrow: {fileID: 538781560}
+  groupButton: {fileID: 1148731210}
+  openAddStudentButton: {fileID: 1930836851}
+  addStudentPanel: {fileID: 1995447941}
   groupDashboardPanel: {fileID: 0}
-  addStudentErrorText: {fileID: 0}
+  addStudentErrorText: {fileID: 106429754}
   dashboardStudentName: {fileID: 1146587705}
   dashboardChapters: {fileID: 1932912629}
   dashboardCards: {fileID: 1795402363}
@@ -9115,10 +9121,10 @@ MonoBehaviour:
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
   m_Interactable: 1
-  m_TargetGraphic: {fileID: 1653332756}
-  m_TextViewport: {fileID: 1640272363}
-  m_TextComponent: {fileID: 674833640}
-  m_Placeholder: {fileID: 1612558042}
+  m_TargetGraphic: {fileID: 635077764}
+  m_TextViewport: {fileID: 443496638}
+  m_TextComponent: {fileID: 464985206}
+  m_Placeholder: {fileID: 139250212}
   m_VerticalScrollbar: {fileID: 0}
   m_VerticalScrollbarEventHandler: {fileID: 0}
   m_LayoutGroup: {fileID: 0}
@@ -9835,10 +9841,10 @@ MonoBehaviour:
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
   m_Interactable: 1
-  m_TargetGraphic: {fileID: 2012426968}
-  m_TextViewport: {fileID: 1260141557}
-  m_TextComponent: {fileID: 66375092}
-  m_Placeholder: {fileID: 244490256}
+  m_TargetGraphic: {fileID: 691452037}
+  m_TextViewport: {fileID: 1090802896}
+  m_TextComponent: {fileID: 404732713}
+  m_Placeholder: {fileID: 2003094245}
   m_VerticalScrollbar: {fileID: 0}
   m_VerticalScrollbarEventHandler: {fileID: 0}
   m_LayoutGroup: {fileID: 0}
@@ -16635,7 +16641,7 @@ GameObject:
   - component: {fileID: 1370228087}
   - component: {fileID: 1370228086}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: FilterAllText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -21417,10 +21423,10 @@ MonoBehaviour:
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
   m_Interactable: 1
-  m_TargetGraphic: {fileID: 2012426968}
-  m_TextViewport: {fileID: 1260141557}
-  m_TextComponent: {fileID: 66375092}
-  m_Placeholder: {fileID: 244490256}
+  m_TargetGraphic: {fileID: 1658372126}
+  m_TextViewport: {fileID: 2117502456}
+  m_TextComponent: {fileID: 1284892674}
+  m_Placeholder: {fileID: 502732973}
   m_VerticalScrollbar: {fileID: 0}
   m_VerticalScrollbarEventHandler: {fileID: 0}
   m_LayoutGroup: {fileID: 0}
@@ -23191,7 +23197,7 @@ GameObject:
   - component: {fileID: 1828690089}
   - component: {fileID: 1828690088}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: FilterPendingText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -25515,7 +25521,7 @@ GameObject:
   - component: {fileID: 2033330142}
   - component: {fileID: 2033330141}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: FilterUpToDateText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

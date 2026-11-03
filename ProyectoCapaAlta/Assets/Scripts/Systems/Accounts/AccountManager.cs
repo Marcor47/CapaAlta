@@ -11,7 +11,7 @@ public class AccountManager : MonoBehaviour
     public static AccountManager Instance { get; private set; }
 
     private const string SaveKey = "CapaAlta_Accounts";
-    private const string TeacherUsername = "Profesor Martin";
+    private const string TeacherUsername = "Profesor";
     private const string TeacherPassword = "12345";
 
 
