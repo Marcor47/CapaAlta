@@ -262,7 +262,15 @@ public class LoginSceneController : MonoBehaviour
 
     void NavigateTo(GameObject panel, bool pushCurrent = true)
     {
-        if (panel == currentPanel) return;   // evita apilar el mismo panel
+        if (panel == currentPanel) return;
+
+        // Si el panel ya está en el historial, volvemos a él en vez de apilar otro
+        int idx = navStack.LastIndexOf(panel);
+        if (idx >= 0)
+        {
+            navStack.RemoveRange(idx, navStack.Count - idx);
+            pushCurrent = false;
+        }
 
         if (pushCurrent && currentPanel != null)
             navStack.Add(currentPanel);
