@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b51b864b14d8e344abab5ce45759eef5, type: 3}
   m_Name: DashboardSkin
   m_EditorClassIdentifier: Assembly-CSharp::DashboardSkin
-  font: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  font: {fileID: 11400000, guid: 4ea225157a4edf447941d5e4a8265a8a, type: 2}
   row: {fileID: 21300000, guid: e5795f6687389b74a8fcb3ec3b67506b, type: 3}
   reflection: {fileID: 21300000, guid: 344430fa0d75b9c4dbc2e0e3b02d726f, type: 3}
   chip: {fileID: 21300000, guid: ed8ae7c739f1eb246b24725c9216ecad, type: 3}
