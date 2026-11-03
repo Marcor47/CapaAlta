@@ -1,0 +1,42 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b51b864b14d8e344abab5ce45759eef5, type: 3}
+  m_Name: DashboardSkin
+  m_EditorClassIdentifier: Assembly-CSharp::DashboardSkin
+  font: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  row: {fileID: 21300000, guid: e5795f6687389b74a8fcb3ec3b67506b, type: 3}
+  reflection: {fileID: 21300000, guid: 344430fa0d75b9c4dbc2e0e3b02d726f, type: 3}
+  chip: {fileID: 21300000, guid: ed8ae7c739f1eb246b24725c9216ecad, type: 3}
+  tabOn: {fileID: 21300000, guid: 5c76177cf54470546903ecc6a5713d8b, type: 3}
+  tabOff: {fileID: 21300000, guid: 5a10b6b03c0897349ab551b8224dd1ca, type: 3}
+  barTrack: {fileID: 21300000, guid: 050f361d18ffe3b47938faf097dcee93, type: 3}
+  barFill: {fileID: 21300000, guid: 37d123e657c384c41a6fde3c13522575, type: 3}
+  tagGreen: {fileID: 21300000, guid: 562c5110a38508146acff3cb733334cf, type: 3}
+  tagOrange: {fileID: 21300000, guid: 7c17a09375c6ad845965a6a01e5f4a81, type: 3}
+  tagYellow: {fileID: 21300000, guid: 6a6c4996ec831d94aa5a4f5bba669e84, type: 3}
+  tagRed: {fileID: 21300000, guid: bd532de786faa6a4d94c1c073337cf8f, type: 3}
+  tagCream: {fileID: 21300000, guid: bfb5acac2f3310d4da9590264288b0ad, type: 3}
+  dotLocked: {fileID: 21300000, guid: a8f07095851e0b44cbcb4275fbb34927, type: 3}
+  dotPending: {fileID: 21300000, guid: bd7f8e0f6e77a694e9a76821082b7882, type: 3}
+  dotInProgress: {fileID: 21300000, guid: d93493bbeff5d7f478f7af1275bf9ded, type: 3}
+  dotDone: {fileID: 21300000, guid: 6bb935d8633b74e46ab326d285a30892, type: 3}
+  faceGood: {fileID: 21300000, guid: 4245b615d193aa64ba7faea884dbb191, type: 3}
+  faceNeutral: {fileID: 21300000, guid: 322dd5d432fb37c4f8808718151ac177, type: 3}
+  faceBad: {fileID: 21300000, guid: 728361bf3d9760e46a8e315ae6d9e521, type: 3}
+  faceNone: {fileID: 21300000, guid: 3aed37b072733e44ea04f6591b109c0c, type: 3}
+  cardFull: {fileID: 21300000, guid: c5e881d95304b644f83cd68d8a78cbb5, type: 3}
+  cardEmpty: {fileID: 21300000, guid: 6770a85b73d99b9469805487c45ed733, type: 3}
+  donutBase: {fileID: 21300000, guid: d2d27863d332aea46bb9a85a3036b5d1, type: 3}
+  donutCap: {fileID: 21300000, guid: cc0548784a20e924c93d947b11659830, type: 3}
+  donutGood: {fileID: 21300000, guid: 8ed0b455e3be0204891002924577e4e7, type: 3}
+  donutNeutral: {fileID: 21300000, guid: bc8b91d80bce35b409176229fe52703b, type: 3}
+  donutBad: {fileID: 21300000, guid: 447f47ff77551db4e8b5ee73191d773a, type: 3}

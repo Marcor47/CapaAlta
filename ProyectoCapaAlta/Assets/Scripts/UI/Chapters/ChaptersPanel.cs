@@ -28,7 +28,7 @@ public class ChaptersPanel : MonoBehaviour
             bool unlocked = CourseSettings.Instance != null && CourseSettings.Instance.IsChapterUnlocked(chapter);
             bool started = AccountManager.Instance.HasStartedChapter(chapter);
 
-            card.titleText.text = $"Capítulo {chapter}";
+            card.titleText.text = $"CAP. {chapter}";
 
 
 
@@ -41,11 +41,18 @@ public class ChaptersPanel : MonoBehaviour
 
 
 
-            
+
+            bool hasCheckpoint = AccountManager.Instance.TryGetCheckpoint(chapter, out _);
+            bool replay = unlocked && completed && !hasCheckpoint;   // terminado, nada en curso
+            bool inProgress = unlocked && started && !replay;
+
             card.buttonsGroup.SetActive(unlocked);
-            card.startButton.gameObject.SetActive(unlocked && !started);
-            card.continueButton.gameObject.SetActive(unlocked && started);
-            card.restartButton.gameObject.SetActive(unlocked && started);
+            card.startButton.gameObject.SetActive(unlocked && (!started || replay));
+            card.continueButton.gameObject.SetActive(inProgress);
+            card.restartButton.gameObject.SetActive(inProgress);
+
+            var startLabel = card.startButton.GetComponentInChildren<TextMeshProUGUI>();
+            if (startLabel != null) startLabel.text = replay ? "Rejugar" : "Iniciar";
 
             card.startButton.onClick.RemoveAllListeners();
             card.continueButton.onClick.RemoveAllListeners();
@@ -71,6 +78,7 @@ public class ChaptersPanel : MonoBehaviour
         if (fresh) AccountManager.Instance.StartChapterFresh(chapter);
         else AccountManager.Instance.PrepareContinue();
 
+        AccountManager.Instance.returnToChapters = true;
         SceneManager.LoadScene(sceneName);
     }
 }

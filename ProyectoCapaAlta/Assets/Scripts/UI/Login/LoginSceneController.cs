@@ -61,6 +61,7 @@ public class LoginSceneController : MonoBehaviour
     public Button openAddStudentButton;
     public GameObject addStudentPanel;
     public GameObject groupDashboardPanel;         // se conecta en la Parte 3
+    public GroupDashboardUI groupDashboardUI;
     public TextMeshProUGUI addStudentErrorText;
 
     enum StudentFilter { All, Pending, UpToDate }
@@ -70,29 +71,7 @@ public class LoginSceneController : MonoBehaviour
 
 
     [Header("Vista — Dashboard de un alumno")]
-    public TextMeshProUGUI dashboardStudentName;
-    public TextMeshProUGUI dashboardChapters;
-    public TextMeshProUGUI dashboardCards;
-    public TextMeshProUGUI dashboardDecisions;
-
-    public Transform dashboardResponsesContainer; // Content de un Scroll View, con Grid o Vertical Layout + Content Size Fitter
-    public GameObject dashboardResponsePrefab;    // 3 TextMeshProUGUI: carta/autor, reflexión, HSE vinculadas
-    public TextMeshProUGUI dashboardNoResponsesText; // "Sin respuestas registradas todavía" — opcional
-
-    public DashboardHSEChart hseChart;
-    public ScrollRect dashboardScroll; // arrastra DashboardScrollView
-
-    [Header("Dashboard — métricas ampliadas")]
-    public DashboardDonutChart decisionsDonut;
-    public TextMeshProUGUI dashboardRelationsText;
-    public TextMeshProUGUI dashboardChapterStatusText;
-    public TextMeshProUGUI dashboardResponseRateText;
-
-    private static readonly string[,] npcDisplay =
-    {
-    { "gaz", "Gaz" }, { "haru", "Haru" }, { "lee_wilber", "Lee y Wilber" },
-    { "ryland_astro", "Ryland y Astro" }, { "padre", "Jason" }
-};
+    public StudentDashboardUI studentDashboardUI;
 
 
     [Header("Persistentes (engranaje / salir)")]
@@ -129,6 +108,7 @@ public class LoginSceneController : MonoBehaviour
 
     void Start()
     {
+        errorText.text = "";
         startButton.onClick.AddListener(() => NavigateTo(loginFormPanel));
         loginButton.onClick.AddListener(TryLogin);
         addStudentButton.onClick.AddListener(TryAddStudent);
@@ -165,7 +145,12 @@ public class LoginSceneController : MonoBehaviour
             sortArrow.rectTransform.localRotation = Quaternion.Euler(0f, 0f, sortAscending ? 0f : 180f);
             RefreshStudentList();
         });
-        groupButton.onClick.AddListener(() => { if (groupDashboardPanel != null) NavigateTo(groupDashboardPanel); });
+        groupButton.onClick.AddListener(() =>
+        {
+            if (groupDashboardPanel == null) return;
+            NavigateTo(groupDashboardPanel);
+            groupDashboardUI.Open(AccountManager.Instance.GetAllStudents());
+        });
         openAddStudentButton.onClick.AddListener(() => { addStudentErrorText.text = ""; NavigateTo(addStudentPanel); });
 
 
@@ -185,6 +170,11 @@ public class LoginSceneController : MonoBehaviour
             {
                 GoHomeAfterLogin(studentHomePanel);
                 UpdatePendingBadge();
+                if (AccountManager.Instance.returnToChapters)
+                {
+                    AccountManager.Instance.returnToChapters = false;
+                    NavigateTo(chaptersPanel);   // Home queda en la pila: Exit vuelve a Home
+                }
                 if (AccountManager.Instance.justFinishedChapter)
                 {
                     ShowChapterEndNotification();
@@ -229,8 +219,10 @@ public class LoginSceneController : MonoBehaviour
         if (InventorySystem.Instance != null) InventorySystem.Instance.ResetState();
         usernameInput.text = "";
         passwordInput.text = "";
+        errorText.text = "";
         navStack.Clear();
-        NavigateTo(loginFormPanel, pushCurrent: false); // antes: startPanel
+        navStack.Add(startPanel);                    // Salir desde el login vuelve al inicio
+        NavigateTo(loginFormPanel, pushCurrent: false);
     }
 
     // ─── NAVEGACIÓN ENTRE VISTAS ─────────────────────────────────
@@ -256,6 +248,8 @@ public class LoginSceneController : MonoBehaviour
 
     void NavigateTo(GameObject panel, bool pushCurrent = true)
     {
+        if (panel == currentPanel) return;   // evita apilar el mismo panel
+
         if (pushCurrent && currentPanel != null)
             navStack.Add(currentPanel);
 
@@ -382,9 +376,11 @@ public class LoginSceneController : MonoBehaviour
             .ToList();
         if (!sortAscending) students.Reverse();
 
+        string Alumnos(int n) => n == 1 ? "ALUMNO" : "ALUMNOS";
+
         studentCountText.text = students.Count == all.Count
-            ? $"{all.Count} ALUMNOS"
-            : $"{students.Count} DE {all.Count} ALUMNOS";
+            ? $"{all.Count} {Alumnos(all.Count)}"
+            : $"{students.Count} DE {all.Count} {Alumnos(all.Count)}";
 
         foreach (var student in students)
         {
@@ -403,43 +399,11 @@ public class LoginSceneController : MonoBehaviour
         var student = AccountManager.Instance.GetStudent(username);
         if (student == null) return;
 
-        dashboardStudentName.text = student.username;
-        dashboardChapters.text = $"Capítulos completados: {student.progress.chaptersCompleted.Count} / 4";
-        dashboardCards.text = $"Cartas recolectadas: {student.progress.allTimeCollectedCards.Count}";
-        dashboardDecisions.text = $"Decisiones registradas: {student.progress.decisionsCount}";
-
-        PopulateDashboardResponses(student);
-        if (hseChart != null) hseChart.Populate(student);
-
-        PopulateDashboardExtras(student);
         NavigateTo(studentDashboardPanel);
-
-        Canvas.ForceUpdateCanvases();
-        if (dashboardScroll != null) dashboardScroll.verticalNormalizedPosition = 1f;
+        studentDashboardUI.Open(student);
     }
 
-    void PopulateDashboardResponses(UserAccount student)
-    {
-        foreach (Transform child in dashboardResponsesContainer) Destroy(child.gameObject);
-        Canvas.ForceUpdateCanvases();
-
-        var responses = student.progress.epistolaryResponses;
-
-        if (dashboardNoResponsesText != null)
-            dashboardNoResponsesText.gameObject.SetActive(responses.Count == 0);
-
-        foreach (var response in responses)
-        {
-            var cardData = CardDatabase.Instance?.GetByID(response.cardID);
-            GameObject go = Instantiate(dashboardResponsePrefab, dashboardResponsesContainer);
-
-            var texts = go.GetComponentsInChildren<TextMeshProUGUI>();
-            // Se asume: texts[0] = carta/autor, texts[1] = reflexión, texts[2] = HSE vinculadas
-            if (texts.Length > 0) texts[0].text = cardData != null ? $"Carta de {cardData.authorName}" : response.cardID;
-            if (texts.Length > 1) texts[1].text = response.reflectionText;
-            if (texts.Length > 2) texts[2].text = response.linkedHSE.Count > 0 ? string.Join(", ", response.linkedHSE) : "(sin HSE vinculada)";
-        }
-    }
+    
 
     void ShowTeacherHome()
     {
@@ -461,41 +425,4 @@ public class LoginSceneController : MonoBehaviour
     }
 
 
-    void PopulateDashboardExtras(UserAccount student)
-    {
-        var p = student.progress;
-
-        // Dona de decisiones
-        int pos = p.choices.Count(c => c.relationshipDelta > 0);
-        int neu = p.choices.Count(c => c.relationshipDelta == 0);
-        int neg = p.choices.Count(c => c.relationshipDelta < 0);
-        if (decisionsDonut != null) decisionsDonut.SetValues(pos, neu, neg);
-
-        // Relación actual con cada personaje
-        var rel = new System.Text.StringBuilder();
-        for (int i = 0; i < npcDisplay.GetLength(0); i++)
-        {
-            int idx = p.npcRelationshipKeys.IndexOf(npcDisplay[i, 0]);
-            string state = idx < 0 ? "Sin encuentro"
-                : p.npcRelationshipValues[idx] > 0 ? "Buena"
-                : p.npcRelationshipValues[idx] < 0 ? "Mala" : "Neutral";
-            rel.AppendLine($"{npcDisplay[i, 1]}: {state}");
-        }
-        dashboardRelationsText.text = rel.ToString();
-
-        // Estado por capítulo
-        var ch = new System.Text.StringBuilder();
-        for (int c = 1; c <= 4; c++)
-        {
-            string st = p.chaptersCompleted.Contains(c) ? "Completado"
-                : p.chaptersStarted.Contains(c) ? "En curso" : "Sin iniciar";
-            ch.AppendLine($"Capítulo {c}: {st}");
-        }
-        dashboardChapterStatusText.text = ch.ToString();
-
-        // Tasa de respuesta epistolar
-        int collected = p.allTimeCollectedCards.Count;
-        int answered = p.allTimeCollectedCards.Count(card => p.epistolaryResponses.Exists(r => r.cardID == card.cardID));
-        dashboardResponseRateText.text = $"Cartas respondidas: {answered} / {collected}";
-    }
 }

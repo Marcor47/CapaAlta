@@ -20,7 +20,8 @@ public class ChapterEndTrigger : MonoBehaviour
         bool canFinish = DialogueManager.Instance == null || !DialogueManager.Instance.IsOpen;
         promptUI.SetActive(canFinish);
 
-        if (canFinish && Keyboard.current.eKey.wasPressedThisFrame)
+        var kb = Keyboard.current;
+        if (canFinish && (kb.enterKey.wasPressedThisFrame || kb.numpadEnterKey.wasPressedThisFrame))
             CompleteChapter();
     }
 

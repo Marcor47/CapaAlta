@@ -81,12 +81,14 @@ public class DecisionRecord : MonoBehaviour
         npcRelationships[npcID] = newValue;
 
         Debug.Log($"[DecisionRecord] {npcID}: {current} → {newValue}");
+        SaveToAccount();
     }
 
     public void ForceRelationship(string npcID, int value)
     {
         npcRelationships[npcID] = Mathf.Clamp(value, -1, 1);
         Debug.Log($"[DecisionRecord] {npcID} fijado en {npcRelationships[npcID]}");
+        SaveToAccount();
     }
 
     // ─── ENCUENTROS ────────────────────────────────────────────
@@ -99,6 +101,7 @@ public class DecisionRecord : MonoBehaviour
     {
         completedNodes.Add(nodeID);
         Debug.Log($"[DecisionRecord] Encuentro completado: {nodeID}");
+        SaveToAccount();
     }
 
     public bool CanAppear(string nodeID)
@@ -115,6 +118,7 @@ public class DecisionRecord : MonoBehaviour
         if (InventorySystem.Instance != null)
             InventorySystem.Instance.UnlockItem(InventorySystem.ItemType.Manzana); // NUEVO
         Debug.Log($"[DecisionRecord] Manzanas disponibles: {manzanasAvailable}");
+        SaveToAccount();
     }
 
     public bool TryUseManzana(string npcID, string completedNodeID)
@@ -151,6 +155,7 @@ public class DecisionRecord : MonoBehaviour
         }
 
         Debug.Log($"[DecisionRecord] Manzana usada con {npcID}. Manzanas restantes: {manzanasAvailable}");
+        SaveToAccount();
         return true;
     }
 

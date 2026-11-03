@@ -207,6 +207,9 @@ public class TheoController : MonoBehaviour
         HandleSitInput();
         
         HandleAnimations();
+
+        if (!canMove && Keyboard.current.aKey.wasPressedThisFrame)
+            Debug.Log($"[Theo] bloqueado -> respawn={IsRespawning} locked={movementLocked} sentado={isSitting} mochila={isBackpackOpen && isGrounded} dialogo={isInDialogue} mama={isCallingMom} timeScale={Time.timeScale}");
     }
 
     void FixedUpdate()

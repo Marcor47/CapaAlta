@@ -41,6 +41,8 @@ public class AccountManager : MonoBehaviour
         var account = accounts.Find(a => a.username == username && a.password == password);
         if (account == null) return false;
         CurrentUser = account;
+        if (DecisionRecord.Instance != null) DecisionRecord.Instance.LoadFromAccount();
+        if (InventorySystem.Instance != null) InventorySystem.Instance.RefreshFromAccount();
         return true;
     }
 
@@ -110,6 +112,7 @@ public class AccountManager : MonoBehaviour
     }
 
     [HideInInspector] public bool resumeFromCheckpoint = false;
+    [HideInInspector] public bool returnToChapters = false;
 
     public bool HasStartedChapter(int chapter)
         => CurrentUser != null && CurrentUser.progress.chaptersStarted.Contains(chapter);

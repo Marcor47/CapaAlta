@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 1085894886697657232}
   - component: {fileID: 201580485398347359}
   m_Layer: 0
-  m_Name: PromptE
+  m_Name: PromptEnter
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -27,7 +27,7 @@ Transform:
   m_GameObject: {fileID: 6825100144568762346}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.12, y: 0.8, z: 0}
+  m_LocalPosition: {x: -0.1, y: 0.7, z: 0}
   m_LocalScale: {x: 0.5, y: 0.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -82,7 +82,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 10
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 21300000, guid: 006aaf00bd0f33b43ac949833e0412c0, type: 3}
+  m_Sprite: {fileID: 21300000, guid: a135cff1c98ad544397622d88ad66525, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -104,8 +104,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eacbf2cdedb82a440babdd784a30f20b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::KeyPromptAnimator
-  normal: {fileID: 21300000, guid: 006aaf00bd0f33b43ac949833e0412c0, type: 3}
-  pressed: {fileID: 21300000, guid: 657ef6dfc05c4f441819c71ee70ce93b, type: 3}
+  normal: {fileID: 21300000, guid: a135cff1c98ad544397622d88ad66525, type: 3}
+  pressed: {fileID: 21300000, guid: 27269154c4dd59d4d83be2f58648e031, type: 3}
   interval: 0.5
 --- !u!1 &8437404749923627468
 GameObject:
@@ -235,7 +235,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: -0.09861565, y: 0.6849344}
+  m_Offset: {x: 0, y: 0.5}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0}
@@ -245,7 +245,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 2.6856117, y: 1.5635161}
+  m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
 --- !u!114 &4084671928373341963
 MonoBehaviour:
