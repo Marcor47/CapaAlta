@@ -254,8 +254,8 @@ public class GroupDashboardUI : MonoBehaviour
         {
             int count = withResp.Count(s => s.progress.epistolaryResponses.Any(r => r.linkedHSE.Contains(h)));
             var row = DashUI.Row(content, "HSE", 30);
-            DashUI.Text(skin, row, DashUI.HseLabel(h), 12, 0, 250, 30, 13, DashUI.Ink);
-            DashUI.Meter(skin, row, 266, 7.5f, 250, k > 0 ? (float)count / k : 0f);
+            DashUI.Text(skin, row, h, 12, 0, 280, 30, 13, DashUI.Ink);
+            DashUI.Meter(skin, row, 296, 7.5f, 220, k > 0 ? (float)count / k : 0f);
             DashUI.Text(skin, row, $"{count}/{k}", 524, 0, 60, 30, 14, DashUI.Ink,
                         TextAlignmentOptions.MidlineRight, FontStyles.Bold);
         }

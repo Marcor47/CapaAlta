@@ -39,6 +39,7 @@ public class EpistolaryResponsePanel : MonoBehaviour
     LoginSceneController loginController;
     bool showingFront = true;
     bool initialized = false;
+    TMP_Text saveHint;
 
     public static EpistolaryResponsePanel Instance { get; private set; }
 
@@ -90,6 +91,7 @@ public class EpistolaryResponsePanel : MonoBehaviour
 
         flipButton.onClick.AddListener(() => SetSide(!showingFront));
         saveButton.onClick.AddListener(SaveResponse);
+        reflectionInput.onValueChanged.AddListener(_ => RefreshSaveState());
         loginController = FindAnyObjectByType<LoginSceneController>();
 
         ApplyLayout();
@@ -131,12 +133,13 @@ public class EpistolaryResponsePanel : MonoBehaviour
         hint.name = "HintText";
 
         // --- Reverso ---
-        var l1 = DashUI.Text(skin, backSide.transform, "TU REFLEXIÓN", 42, 36, 300, 24, 16, DashUI.Ink);
-        var l2 = DashUI.Text(skin, backSide.transform, "HSE RELACIONADAS", 354, 36, 330, 24, 16, DashUI.Ink);
+        var l1 = DashUI.Text(skin, backSide.transform, "TU REFLEXIÓN", 42, 36, 250, 24, 16, DashUI.Ink);
+        var l2 = DashUI.Text(skin, backSide.transform, "HSE RELACIONADAS", 306, 36, 380, 24, 16, DashUI.Ink);
+
 
 
         var inputRT = (RectTransform)reflectionInput.transform;
-        Put(inputRT, 42, 64, 300, 298);
+        Put(inputRT, 42, 64, 250, 298);
         var inputImg = reflectionInput.GetComponent<Image>();
         if (inputImg != null && comp != null && comp.inputField != null)
         { inputImg.sprite = comp.inputField; inputImg.type = Image.Type.Sliced; }
@@ -151,11 +154,15 @@ public class EpistolaryResponsePanel : MonoBehaviour
         var cont = (RectTransform)hseTogglesContainer;
         foreach (var b in cont.GetComponents<Behaviour>())
             if (b is LayoutGroup || b is ContentSizeFitter) b.enabled = false;
-        Put(cont, 354, 66, 330, 290);
+        Put(cont, 306, 66, 380, 290);
 
         // Botones
-        Put((RectTransform)saveButton.transform, 198, 372, 144, 40);
+        Put((RectTransform)saveButton.transform, 170, 372, 122, 40);
         SetLabel(saveButton, "GUARDAR");
+        saveHint = DashUI.Text(skin, backSide.transform,
+        "ESCRIBE TU REFLEXIÓN Y MARCA AL MENOS UNA HSE PARA GUARDAR.",
+        306, 372, 380, 40, 8, DashUI.Ink, TextAlignmentOptions.TopLeft, FontStyles.Normal, true);
+            saveHint.name = "SaveHint";
     }
 
     // ─── API ───
@@ -170,7 +177,7 @@ public class EpistolaryResponsePanel : MonoBehaviour
         var existing = FindExistingResponse();
         reflectionInput.text = existing != null ? existing.reflectionText : "";
         SetTogglesFrom(existing);
-
+        RefreshSaveState();
         SetSide(true);
         gameObject.SetActive(true);
     }
@@ -184,7 +191,7 @@ public class EpistolaryResponsePanel : MonoBehaviour
 
         var rt = (RectTransform)flipButton.transform;
         if (showFront) { Put(rt, 400, 150, 230, 52); SetLabel(flipButton, "VOLTEAR"); }
-        else { Put(rt, 42, 372, 144, 40); SetLabel(flipButton, "VER CARTA"); }
+        else { Put(rt, 42, 372, 122, 40); SetLabel(flipButton, "VER CARTA"); }
     }
 
     void BuildHSEToggles()
@@ -203,21 +210,25 @@ public class EpistolaryResponsePanel : MonoBehaviour
             var go = new GameObject("HSE_" + i, typeof(RectTransform), typeof(Image), typeof(Toggle));
             var rt = (RectTransform)go.transform;
             rt.SetParent(cont, false);
-            Put(rt, 0, i * 22f, 330, 20);
+            Put(rt, 0, i * 22f, 380, 20);
 
             var bg = go.GetComponent<Image>();
             bg.color = new Color(0, 0, 0, 0);
 
             var box = DashUI.Img(go.transform, comp.checkOff, 0, 1, 18, 18);
             box.type = Image.Type.Simple;
-            DashUI.Text(skin, go.transform, hseNames[i], 26, 0, 304, 20, 16, DashUI.Ink);
+            DashUI.Text(skin, go.transform, hseNames[i], 26, 0, 354, 20, 16, DashUI.Ink);
 
             var tg = go.GetComponent<Toggle>();
             tg.transition = Selectable.Transition.None;
             tg.targetGraphic = bg;
             tg.isOn = false;
             var capturedBox = box;
-            tg.onValueChanged.AddListener(on => capturedBox.sprite = on ? comp.checkOn : comp.checkOff);
+            tg.onValueChanged.AddListener(on =>
+            {
+                capturedBox.sprite = on ? comp.checkOn : comp.checkOff;
+                RefreshSaveState();
+            });
 
             hseToggles.Add(tg);
             hseBoxes.Add(box);
@@ -240,8 +251,24 @@ public class EpistolaryResponsePanel : MonoBehaviour
         return progress.epistolaryResponses.Find(r => r.cardID == currentCardID);
     }
 
+    bool CanSave()
+    {
+        if (string.IsNullOrWhiteSpace(reflectionInput.text)) return false;
+        for (int i = 0; i < hseToggles.Count; i++)
+            if (hseToggles[i].isOn) return true;
+        return false;
+    }
+
+    void RefreshSaveState()
+    {
+        bool ok = CanSave();
+        saveButton.interactable = ok;
+        if (saveHint != null) saveHint.gameObject.SetActive(!ok);
+    }
+
     void SaveResponse()
     {
+        if (!CanSave()) return;
         var progress = AccountManager.Instance.CurrentUser.progress;
         var existing = FindExistingResponse();
 

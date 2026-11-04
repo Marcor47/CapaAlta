@@ -310,8 +310,8 @@ public class StudentDashboardUI : MonoBehaviour
 
         DashUI.Title(skin, content, "HSE QUE EL ALUMNO RELACIONÓ CON SUS CARTAS", 22);
         var sub = DashUI.Block(content, "Subtitle", 18);
-        
-        DashUI.Text(skin, sub, $"{total} REFLEXIONES ESCRITAS", 0, 0, DashUI.W, 18, 12, DashUI.Ink);
+
+        DashUI.Text(skin, sub, $"{total} {(total == 1 ? "REFLEXIÓN ESCRITA" : "REFLEXIONES ESCRITAS")}", 0, 0, DashUI.W, 18, 12, DashUI.Ink);
 
         foreach (var hse in names)
         {
@@ -319,9 +319,9 @@ public class StudentDashboardUI : MonoBehaviour
             float frac = total > 0 ? (float)count / total : 0f;
 
             var row = DashUI.Row(content, "HSE", 30);
-            DashUI.Text(skin, row, DashUI.HseLabel(hse), 12, 0, 250, 30, 13, DashUI.Ink);
-            DashUI.Img(row, skin.barTrack, 266, 7.5f, 270, 15);
-            if (frac > 0f) DashUI.Img(row, skin.barFill, 269, 10.5f, Mathf.Max(3f, 264f * frac), 9);
+            DashUI.Text(skin, row, hse, 12, 0, 280, 30, 13, DashUI.Ink);
+            DashUI.Img(row, skin.barTrack, 296, 7.5f, 240, 15);
+            if (frac > 0f) DashUI.Img(row, skin.barFill, 299, 10.5f, Mathf.Max(3f, 234f * frac), 9);
             DashUI.Text(skin, row, count.ToString(), 544, 0, 38, 30, 14, DashUI.Ink,
                         TextAlignmentOptions.MidlineRight, FontStyles.Bold);
         }
