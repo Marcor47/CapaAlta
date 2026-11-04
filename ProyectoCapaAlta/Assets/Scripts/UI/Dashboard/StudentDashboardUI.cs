@@ -78,7 +78,7 @@ public class StudentDashboardUI : MonoBehaviour
             bool on = i == tab;
             tabButtons[i].image.sprite = on ? skin.tabOn : skin.tabOff;
             tabLabels[i].color = DashUI.Ink;
-            tabLabels[i].fontStyle = on ? FontStyles.Bold : FontStyles.Normal;
+            tabLabels[i].fontStyle = FontStyles.Normal;
         }
 
         for (int i = content.childCount - 1; i >= 0; i--)
@@ -128,7 +128,7 @@ public class StudentDashboardUI : MonoBehaviour
             float x = 12 + (c - 1) * 146;
             var st = StudentStatus.GetChapterState(p, c);
             DashUI.Img(ch, DotFor(st), x, 7.5f, 21, 21);
-            DashUI.Text(skin, ch, $"CAP.{c} {StateName(st)}", x + 27, 0, 115, 36, 11, DashUI.Ink);
+            DashUI.Text(skin, ch, $"CAP.{c} {StateName(st)}", x + 27, 0, 115, 36, 8, DashUI.Ink);
         }
 
         var cards = AllCards();
@@ -156,7 +156,7 @@ public class StudentDashboardUI : MonoBehaviour
             var row = DashUI.Row(content, "Relation", 36);
             Sprite face = rel == 2 ? skin.faceNone : rel > 0 ? skin.faceGood : rel < 0 ? skin.faceBad : skin.faceNeutral;
             DashUI.Img(row, face, 12, 7.5f, 21, 21);
-            DashUI.Text(skin, row, npcDisplay[i, 1], 45, 0, 300, 36, 14, DashUI.Ink);
+            DashUI.Text(skin, row, npcDisplay[i, 1], 45, 0, 300, 36, 16, DashUI.Ink);
             if (rel == 2) DashUI.Tag(skin, row, TagKind.Cream, "SIN ENCUENTRO");
             else if (rel > 0) DashUI.Tag(skin, row, TagKind.Green, "BUENA");
             else if (rel < 0) DashUI.Tag(skin, row, TagKind.Red, "MALA");
@@ -172,8 +172,7 @@ public class StudentDashboardUI : MonoBehaviour
 
         var hdr = DashUI.Row(content, "ChapterStatus", 36);
         DashUI.Img(hdr, DotFor(st), 12, 7.5f, 21, 21);
-        DashUI.Text(skin, hdr, $"CAPÍTULO {c} - {StateName(st)}", 45, 0, 450, 36, 14, DashUI.Ink,
-                    TextAlignmentOptions.MidlineLeft, FontStyles.Bold);
+        DashUI.Text(skin, hdr, $"CAPÍTULO {c} - {StateName(st)}", 45, 0, 450, 36, 16, DashUI.Ink);
 
         DashUI.Title(skin, content, "PERSONAJES");
         DashUI.Note(skin, content, "Cada cuadrito = una decisión: verde buena · amarillo neutral · rojo mala.", 18);
@@ -184,8 +183,8 @@ public class StudentDashboardUI : MonoBehaviour
                 .Select(g => g.Last().relationshipDelta).ToList();
 
             var row = DashUI.Row(content, "Encounter", 36);
-            DashUI.Text(skin, row, $"{e.npcName} - ENCUENTRO {e.num}", 12, 0, 250, 36, 13, DashUI.Ink);
-            float sx = 456f - Mathf.Min(rounds.Count, 6) * 17f;
+            DashUI.Text(skin, row, $"{e.npcName} - ENCUENTRO {e.num}", 12, 0, 300, 36, 16, DashUI.Ink);
+            float sx = 420f - Mathf.Min(rounds.Count, 6) * 17f;
             for (int k = 0; k < rounds.Count && k < 6; k++)
                 DashUI.Swatch(row, sx + k * 17, 11, 12, DashUI.DeltaColor(rounds[k]));
 
@@ -230,11 +229,11 @@ public class StudentDashboardUI : MonoBehaviour
         v.spacing = 0;
 
         var head = DashUI.Row(holder.transform, "Head", 36);
-        DashUI.Text(skin, head, $"{card.authorName.ToUpperInvariant()} - CARTA {n}", 12, 0, 280, 36, 13, DashUI.Ink);
+        DashUI.Text(skin, head, $"{card.authorName.ToUpperInvariant()} - CARTA {n}", 12, 0, 280, 36, 16, DashUI.Ink);
 
         if (resp != null)
         {
-            DashUI.Text(skin, head, "ver respuesta", 300, 0, 140, 36, 11, DashUI.Ink);
+            DashUI.Text(skin, head, "VER RESPUESTA", 270, 0, 160, 36, 16, DashUI.Ink);
             DashUI.Tag(skin, head, TagKind.Green, "RESPONDIDA");
 
             var detail = BuildDetail(holder.transform, resp);
@@ -261,19 +260,19 @@ public class StudentDashboardUI : MonoBehaviour
         float inner = DashUI.W - x0 - 18f;
         var d = DashUI.Block(parent, "Detail", 100, skin.reflection);
 
-        DashUI.Text(skin, d, "REFLEXIÓN", x0, 10, inner, 18, 11, DashUI.Ink, TextAlignmentOptions.MidlineLeft, FontStyles.Bold);
+        DashUI.Text(skin, d, "REFLEXIÓN", x0, 10, inner, 18, 16, DashUI.Ink);
         string txt = string.IsNullOrWhiteSpace(r.reflectionText) ? "(sin texto)" : r.reflectionText;
-        var t = DashUI.Text(skin, d, txt, x0, 30, inner, 20, 13, DashUI.Black, TextAlignmentOptions.TopLeft, FontStyles.Normal, true);
+        var t = DashUI.Text(skin, d, txt, x0, 32, inner, 20, 16, DashUI.Black, TextAlignmentOptions.TopLeft, FontStyles.Normal, true);
         float th = t.GetPreferredValues(txt, inner, 0f).y;
         t.rectTransform.sizeDelta = new Vector2(inner, th);
 
-        float y = 30 + th + 12;
-        DashUI.Text(skin, d, "HSE RELACIONADAS", x0, y, inner, 18, 11, DashUI.Ink, TextAlignmentOptions.MidlineLeft, FontStyles.Bold);
-        y += 24;
+        float y = 32 + th + 12;
+        DashUI.Text(skin, d, "HSE RELACIONADAS", x0, y, inner, 18, 16, DashUI.Ink);
+        y += 26;
 
         if (r.linkedHSE.Count == 0)
         {
-            DashUI.Text(skin, d, "Sin HSE relacionadas", x0, y, inner, 20, 12, DashUI.Ink);
+            DashUI.Text(skin, d, "Sin HSE relacionadas", x0, y, inner, 20, 16, DashUI.Ink);
             y += 24;
         }
         else
@@ -283,7 +282,7 @@ public class StudentDashboardUI : MonoBehaviour
             foreach (var h in r.linkedHSE)
             {
                 var chip = DashUI.Img(d, skin.chip, x, y, 60, rowH);
-                var tt = DashUI.Text(skin, chip.transform, h, 0, 0, 300, rowH, 12, DashUI.Ink, TextAlignmentOptions.Center);
+                var tt = DashUI.Text(skin, chip.transform, h, 0, 0, 400, rowH, 16, DashUI.Ink, TextAlignmentOptions.Center);
                 float cw = tt.GetPreferredValues(h).x + 24f;
                 if (x + cw > x0 + inner) { x = x0; y += rowH + gap; }
                 chip.rectTransform.anchoredPosition = new Vector2(x, -y);
@@ -311,7 +310,7 @@ public class StudentDashboardUI : MonoBehaviour
         DashUI.Title(skin, content, "HSE QUE EL ALUMNO RELACIONÓ CON SUS CARTAS", 22);
         var sub = DashUI.Block(content, "Subtitle", 18);
 
-        DashUI.Text(skin, sub, $"{total} {(total == 1 ? "REFLEXIÓN ESCRITA" : "REFLEXIONES ESCRITAS")}", 0, 0, DashUI.W, 18, 12, DashUI.Ink);
+        DashUI.Text(skin, sub, $"{total} {(total == 1 ? "REFLEXIÓN ESCRITA" : "REFLEXIONES ESCRITAS")}", 0, 0, DashUI.W, 18, 16, DashUI.Ink);
 
         foreach (var hse in names)
         {
@@ -319,11 +318,11 @@ public class StudentDashboardUI : MonoBehaviour
             float frac = total > 0 ? (float)count / total : 0f;
 
             var row = DashUI.Row(content, "HSE", 30);
-            DashUI.Text(skin, row, hse, 12, 0, 280, 30, 13, DashUI.Ink);
-            DashUI.Img(row, skin.barTrack, 296, 7.5f, 240, 15);
-            if (frac > 0f) DashUI.Img(row, skin.barFill, 299, 10.5f, Mathf.Max(3f, 234f * frac), 9);
-            DashUI.Text(skin, row, count.ToString(), 544, 0, 38, 30, 14, DashUI.Ink,
-                        TextAlignmentOptions.MidlineRight, FontStyles.Bold);
+            DashUI.Text(skin, row, hse, 12, 0, 355, 30, 16, DashUI.Ink);
+            DashUI.Img(row, skin.barTrack, 372, 7.5f, 150, 15);
+            if (frac > 0f) DashUI.Img(row, skin.barFill, 375, 10.5f, Mathf.Max(3f, 144f * frac), 9);
+            DashUI.Text(skin, row, count.ToString(), 544, 0, 38, 30, 16, DashUI.Ink,
+                        TextAlignmentOptions.MidlineRight);
         }
 
         DashUI.Note(skin, content,

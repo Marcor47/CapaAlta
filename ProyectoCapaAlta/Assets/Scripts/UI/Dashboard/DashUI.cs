@@ -83,6 +83,9 @@ public static class DashUI
         return im;
     }
 
+    // Silkscreen solo se dibuja limpia en múltiplos de 8
+    public static float Snap(float size) => size < 12f ? 8f : size < 18f ? 16f : 24f;
+
     public static TextMeshProUGUI Text(DashboardSkin s, Transform parent, string txt,
         float x, float y, float w, float h, float size, Color color,
         TextAlignmentOptions align = TextAlignmentOptions.MidlineLeft,
@@ -92,8 +95,8 @@ public static class DashUI
         Place(rt, x, y, w, h);
         var t = rt.gameObject.AddComponent<TextMeshProUGUI>();
         if (s != null && s.font != null) t.font = s.font;
-        t.text = txt; t.fontSize = size; t.color = color;
-        t.alignment = align; t.fontStyle = style;
+        t.text = txt; t.fontSize = Snap(size); t.color = color;
+        t.alignment = align; t.fontStyle = FontStyles.Normal;
         t.textWrappingMode = wrap ? TextWrappingModes.Normal : TextWrappingModes.NoWrap;
         t.overflowMode = TextOverflowModes.Overflow;
         t.raycastTarget = false;
@@ -111,21 +114,19 @@ public static class DashUI
     // ─── bloques de contenido ─────────────────────────────────
     public static void Spacer(Transform parent, float h) => Block(parent, "Spacer", h);
 
-    public static string HseLabel(string h) => h;
-
     public static void Title(DashboardSkin s, Transform parent, string text, float h = 24f)
     {
         var b = Block(parent, "Title", h);
-        Text(s, b, text, 0, 0, W, h, 14, Ink, TextAlignmentOptions.BottomLeft, FontStyles.Bold);
+        Text(s, b, text, 0, 0, W, h, 16, Ink, TextAlignmentOptions.BottomLeft);
     }
 
     public static void Note(DashboardSkin s, Transform parent, string text, float h = 30f)
     {
         var b = Block(parent, "Note", h);
-        Text(s, b, text, 0, 0, W, h, 11, Ink, TextAlignmentOptions.TopLeft, FontStyles.Normal, true);
+        Text(s, b, text, 0, 0, W, h, 8, Ink, TextAlignmentOptions.TopLeft, FontStyles.Normal, true);
     }
 
-    public static void Tag(DashboardSkin s, Transform parent, TagKind k, string text, float w = 120f, float y = 4.5f)
+    public static void Tag(DashboardSkin s, Transform parent, TagKind k, string text, float w = 150f, float y = 4.5f)
     {
         Sprite sp; Color c;
         switch (k)
@@ -137,7 +138,7 @@ public static class DashUI
             default: sp = s.tagCream; c = Ink; break;
         }
         var im = ImgRight(parent, sp, 9, y, w, 27);
-        Text(s, im.transform, text, 0, 0, w, 27, 11, c, TextAlignmentOptions.Center, FontStyles.Bold);
+        Text(s, im.transform, text, 0, 0, w, 27, 16, c, TextAlignmentOptions.Center);
     }
 
     // Tira de cartas: un segmento por carta, con un hueco al cambiar de grupo (capítulo)
@@ -168,11 +169,11 @@ public static class DashUI
             Seg(s.donutBad, b, g + n, m);
         }
         Img(b, s.donutCap, 12, 6, 120, 120);
-        Text(s, b, total.ToString(), 12, 6, 120, 120, 18, Ink, TextAlignmentOptions.Center, FontStyles.Bold);
+        Text(s, b, total.ToString(), 12, 6, 120, 120, 24, Ink, TextAlignmentOptions.Center);
 
         if (total == 0)
         {
-            Text(s, b, "SIN DECISIONES REGISTRADAS", 150, 48, 400, 24, 14, Ink);
+            Text(s, b, "SIN DECISIONES REGISTRADAS", 150, 48, 400, 24, 16, Ink);
             return;
         }
         string[] names = { "BUENAS", "NEUTRAS", "MALAS" };
@@ -183,7 +184,7 @@ public static class DashUI
             float y = 22 + i * 32;
             Swatch(b, 150, y + 5, 12, cols[i]);
             Text(s, b, $"{names[i]}   {vals[i]} ({Mathf.RoundToInt(100f * vals[i] / total)}%)",
-                 176, y, 360, 24, 14, Ink);
+                 176, y, 360, 24, 16, Ink);
         }
     }
 
@@ -222,9 +223,9 @@ public static class DashUI
             float sw = innerW * vals[i] / total;
             var seg = Img(parent, null, cx, y + 2, sw, h - 4);
             seg.color = cols[i];
-            if (sw >= 18f)
-                Text(s, seg.transform, vals[i].ToString(), 0, 0, sw, h - 4, 12,
-                     cols[i] == Red ? Color.white : Black, TextAlignmentOptions.Center, FontStyles.Bold);
+            if (sw >= 24f)
+                Text(s, seg.transform, vals[i].ToString(), 0, 0, sw, h - 4, 16,
+                     cols[i] == Red ? Color.white : Black, TextAlignmentOptions.Center);
             cx += sw;
         }
     }

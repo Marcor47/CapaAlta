@@ -50,7 +50,7 @@ public class GroupDashboardUI : MonoBehaviour
             bool on = i == tab;
             tabButtons[i].image.sprite = on ? skin.tabOn : skin.tabOff;
             tabLabels[i].color = DashUI.Ink;
-            tabLabels[i].fontStyle = on ? FontStyles.Bold : FontStyles.Normal;
+            tabLabels[i].fontStyle = FontStyles.Normal;
         }
 
         for (int i = content.childCount - 1; i >= 0; i--)
@@ -90,10 +90,10 @@ public class GroupDashboardUI : MonoBehaviour
     void CountRow(string label, int count, int total, float labelW = 140f)
     {
         var row = DashUI.Row(content, "CountRow", 30);
-        DashUI.Text(skin, row, label, 12, 0, labelW, 30, 13, DashUI.Ink);
+        DashUI.Text(skin, row, label, 12, 0, labelW, 30, 16, DashUI.Ink);
         DashUI.Meter(skin, row, 12 + labelW, 7.5f, 340, total > 0 ? (float)count / total : 0f);
-        DashUI.Text(skin, row, $"{count}/{total}", 500, 0, 84, 30, 14, DashUI.Ink,
-                    TextAlignmentOptions.MidlineRight, FontStyles.Bold);
+        DashUI.Text(skin, row, $"{count}/{total}", 500, 0, 84, 30, 16, DashUI.Ink,
+                    TextAlignmentOptions.MidlineRight);
     }
 
     // ─── RESUMEN ──────────────────────────────────────────────
@@ -104,8 +104,8 @@ public class GroupDashboardUI : MonoBehaviour
         DashUI.Title(skin, content, "ESTADO DE LOS ALUMNOS");
         int alDia = students.Count(s => StudentStatus.IsAlDia(s.progress));
         var st = DashUI.Row(content, "State", 36);
-        DashUI.Text(skin, st, "AL DÍA / PEND.", 12, 0, 150, 36, 13, DashUI.Ink);
-        DashUI.StackedBar(skin, st, 170, 7, 410, 22, new[] { alDia, n - alDia },
+        DashUI.Text(skin, st, "AL DÍA / PEND.", 12, 0, 160, 36, 16, DashUI.Ink);
+        DashUI.StackedBar(skin, st, 176, 7, 404, 22, new[] { alDia, n - alDia },
                           new[] { DashUI.Green, DashUI.Orange });
         DashUI.Note(skin, content, "Verde = al día · Naranja = pendientes", 18);
 
@@ -116,7 +116,7 @@ public class GroupDashboardUI : MonoBehaviour
             if (!ChapterUnlocked(c) && done == 0)
             {
                 var row = DashUI.Row(content, "ChLocked", 30);
-                DashUI.Text(skin, row, $"CAPÍTULO {c}", 12, 0, 140, 30, 13, DashUI.Ink);
+                DashUI.Text(skin, row, $"CAPÍTULO {c}", 12, 0, 140, 30, 16, DashUI.Ink);
                 DashUI.Tag(skin, row, TagKind.Cream, "BLOQUEADO", 120, 1.5f);
             }
             else CountRow($"CAPÍTULO {c}", done, n);
@@ -149,11 +149,11 @@ public class GroupDashboardUI : MonoBehaviour
                 if (v > 0) good++; else if (v < 0) bad++; else neu++;
             }
             var row = DashUI.Row(content, "Relation", 36);
-            DashUI.Text(skin, row, StudentDashboardUI.npcDisplay[i, 1], 12, 0, 150, 36, 13, DashUI.Ink);
-            DashUI.StackedBar(skin, row, 170, 7, 410, 22, new[] { good, neu, bad },
+            DashUI.Text(skin, row, StudentDashboardUI.npcDisplay[i, 1], 12, 0, 160, 36, 16, DashUI.Ink);
+            DashUI.StackedBar(skin, row, 176, 7, 404, 22, new[] { good, neu, bad },
                               new[] { DashUI.Green, DashUI.Yellow, DashUI.Red });
             if (good + neu + bad == 0)
-                DashUI.Text(skin, row, "SIN ENCUENTROS", 180, 7, 300, 22, 11, DashUI.Ink);
+                DashUI.Text(skin, row, "SIN ENCUENTROS", 186, 7, 300, 22, 8, DashUI.Ink);
         }
         DashUI.Note(skin, content,
             "Cuenta solo a los alumnos que ya tuvieron el encuentro. Verde = buena · Amarillo = neutral · Rojo = mala.", 30);
@@ -177,13 +177,12 @@ public class GroupDashboardUI : MonoBehaviour
         if (!ChapterUnlocked(c) && done == 0 && prog == 0)
         {
             DashUI.Img(hdr, skin.dotLocked, 12, 7.5f, 21, 21);
-            DashUI.Text(skin, hdr, $"CAPÍTULO {c} - BLOQUEADO PARA EL GRUPO", 45, 0, 500, 36, 14, DashUI.Ink,
-                        TextAlignmentOptions.MidlineLeft, FontStyles.Bold);
+            DashUI.Text(skin, hdr, $"CAPÍTULO {c} - BLOQUEADO PARA EL GRUPO", 45, 0, 520, 36, 16, DashUI.Ink);
         }
         else
         {
-            DashUI.Text(skin, hdr, $"CAPÍTULO {c}", 12, 0, 150, 36, 13, DashUI.Ink);
-            DashUI.StackedBar(skin, hdr, 170, 7, 410, 22, new[] { done, prog, pend },
+            DashUI.Text(skin, hdr, $"CAPÍTULO {c}", 12, 0, 160, 36, 16, DashUI.Ink);
+            DashUI.StackedBar(skin, hdr, 176, 7, 404, 22, new[] { done, prog, pend },
                               new[] { DashUI.Green, DashUI.Yellow, DashUI.Orange });
             DashUI.Note(skin, content, "Verde = completado · Amarillo = en curso · Naranja = pendiente", 18);
         }
@@ -200,11 +199,11 @@ public class GroupDashboardUI : MonoBehaviour
                 if (sum > 0) good++; else if (sum < 0) bad++; else neu++;
             }
             var row = DashUI.Row(content, "Encounter", 36);
-            DashUI.Text(skin, row, $"{e.npcName} - ENCUENTRO {e.num}", 12, 0, 240, 36, 13, DashUI.Ink);
-            DashUI.StackedBar(skin, row, 260, 7, 320, 22, new[] { good, neu, bad },
+            DashUI.Text(skin, row, $"{e.npcName} - ENCUENTRO {e.num}", 12, 0, 310, 36, 16, DashUI.Ink);
+            DashUI.StackedBar(skin, row, 330, 7, 250, 22, new[] { good, neu, bad },
                               new[] { DashUI.Green, DashUI.Yellow, DashUI.Red });
             if (good + neu + bad == 0)
-                DashUI.Text(skin, row, "SIN ENCUENTROS", 270, 7, 300, 22, 11, DashUI.Ink);
+                DashUI.Text(skin, row, "SIN ENCUENTROS", 340, 7, 230, 22, 8, DashUI.Ink);
         }
 
         DashUI.Title(skin, content, "CARTAS");
@@ -229,13 +228,13 @@ public class GroupDashboardUI : MonoBehaviour
                          .Where(t => t.count > 0).OrderByDescending(t => t.count).Take(2).ToList();
 
             var row = DashUI.Row(content, "Card", resp.Count > 0 ? 60 : 36);
-            DashUI.Text(skin, row, $"{card.authorName.ToUpperInvariant()} - CARTA {num}", 12, 0, 260, 36, 13, DashUI.Ink);
+            DashUI.Text(skin, row, $"{card.authorName.ToUpperInvariant()} - CARTA {num}", 12, 0, 260, 36, 16, DashUI.Ink);
             string right = collectedBy == 0 ? "NINGUNO LA RECOGIÓ" : $"RESPONDIERON {resp.Count} DE {collectedBy}";
-            DashUI.Text(skin, row, right, 280, 0, 300, 36, 11, DashUI.Ink, TextAlignmentOptions.MidlineRight);
+            DashUI.Text(skin, row, right, 280, 0, 300, 36, 8, DashUI.Ink, TextAlignmentOptions.MidlineRight);
 
             float x = 12f;
             foreach (var t in top)
-                x += DashUI.Chip(skin, row, $"{t.name} ({t.count})", x, 34, 22, 11) + 6f;
+                x += DashUI.Chip(skin, row, $"{t.name} ({t.count})", x, 34, 22, 8) + 6f;
         }
         DashUI.Note(skin, content, "Bajo cada carta: las 2 HSE que más alumnos relacionaron con ella (entre paréntesis, cuántos).", 30);
     }
@@ -248,16 +247,16 @@ public class GroupDashboardUI : MonoBehaviour
 
         DashUI.Title(skin, content, "ALUMNOS QUE RELACIONARON CADA HSE CON SUS CARTAS", 22);
         var sub = DashUI.Block(content, "Subtitle", 18);
-        DashUI.Text(skin, sub, $"{k} {(k == 1 ? "ALUMNO CON RESPUESTAS" : "ALUMNOS CON RESPUESTAS")}", 0, 0, DashUI.W, 18, 12, DashUI.Ink);
+        DashUI.Text(skin, sub, $"{k} {(k == 1 ? "ALUMNO CON RESPUESTAS" : "ALUMNOS CON RESPUESTAS")}", 0, 0, DashUI.W, 18, 16, DashUI.Ink);
 
         foreach (var h in HseNames())
         {
             int count = withResp.Count(s => s.progress.epistolaryResponses.Any(r => r.linkedHSE.Contains(h)));
             var row = DashUI.Row(content, "HSE", 30);
-            DashUI.Text(skin, row, h, 12, 0, 280, 30, 13, DashUI.Ink);
-            DashUI.Meter(skin, row, 296, 7.5f, 220, k > 0 ? (float)count / k : 0f);
-            DashUI.Text(skin, row, $"{count}/{k}", 524, 0, 60, 30, 14, DashUI.Ink,
-                        TextAlignmentOptions.MidlineRight, FontStyles.Bold);
+            DashUI.Text(skin, row, h, 12, 0, 355, 30, 16, DashUI.Ink);
+            DashUI.Meter(skin, row, 372, 7.5f, 150, k > 0 ? (float)count / k : 0f);
+            DashUI.Text(skin, row, $"{count}/{k}", 524, 0, 60, 30, 16, DashUI.Ink,
+                        TextAlignmentOptions.MidlineRight);
         }
 
         DashUI.Note(skin, content,
