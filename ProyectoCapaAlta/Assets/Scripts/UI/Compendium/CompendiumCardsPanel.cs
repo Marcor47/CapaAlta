@@ -6,38 +6,50 @@ using UnityEngine.UI;
 
 public class CompendiumCardsPanel : MonoBehaviour
 {
+    [Header("Estilo")]
+    public DashboardSkin skin;
+    public CompendiumSkin comp;
+
     [Header("Referencias")]
-    public Transform groupsContainer;   // Content del Scroll View
-    public GameObject groupPrefab;      // CardGroup: hijos "Header" (TMP) y "CardsRow"
-    public GameObject cardSlotPrefab;   // Button + "Icon" + "QuestionMarkText" + "PendingBadge"
+    public TextMeshProUGUI headerText;
+    public ScrollRect scroll;
+    public RectTransform content;
     public EpistolaryResponsePanel responsePanel;
 
-    private LoginSceneController loginController;
+    const float ColX = 300f, PairH = 106f;
+    const float SlotW = 48f, SlotH = 69f, SlotPitch = 60f, SlotY = 30f;
 
-    void Start()
-    {
-        loginController = FindAnyObjectByType<LoginSceneController>();
-    }
+    LoginSceneController loginController;
 
-    void OnEnable()
-    {
-        Populate();
-    }
+    class Group { public string name; public int total; public List<CardData> cards; }
+
+    void Start() { loginController = FindAnyObjectByType<LoginSceneController>(); }
+    void OnEnable() { Populate(); }
 
     void Populate()
     {
-        ClearChildren(groupsContainer);
-
+        if (headerText != null) headerText.text = "CARTAS";
+        ClearChildren(content);
         if (AccountManager.Instance == null || AccountManager.Instance.CurrentUser == null) return;
         var progress = AccountManager.Instance.CurrentUser.progress;
 
+        var groups = new List<Group>();
         foreach (var author in CardGroupData.SecondaryGroupsInOrder)
-            BuildGroup(author, CardGroupData.SecondaryGroupTotals[author], CardsOfGroup(author, false), progress);
+            groups.Add(new Group { name = author, total = CardGroupData.SecondaryGroupTotals[author], cards = CardsOfGroup(author, false) });
+        groups.Add(new Group { name = CardGroupData.FatherDisplayName, total = CardGroupData.FatherTotalCards, cards = CardsOfGroup(null, true) });
 
-        BuildGroup(CardGroupData.FatherDisplayName, CardGroupData.FatherTotalCards, CardsOfGroup(null, true), progress);
+        for (int i = 0; i < groups.Count; i += 2)
+        {
+            var pair = DashUI.Block(content, "Pair", PairH);
+            BuildGroup(pair, 0f, groups[i], progress);
+            if (i + 1 < groups.Count) BuildGroup(pair, ColX, groups[i + 1], progress);
+        }
+
+        Canvas.ForceUpdateCanvases();
+        LayoutRebuilder.ForceRebuildLayoutImmediate(content);
+        if (scroll != null) scroll.verticalNormalizedPosition = 1f;
     }
 
-    // Separa el hijo antes de destruirlo, para que el layout no vea objetos "fantasma"
     void ClearChildren(Transform parent)
     {
         for (int i = parent.childCount - 1; i >= 0; i--)
@@ -51,7 +63,6 @@ public class CompendiumCardsPanel : MonoBehaviour
     List<CardData> CardsOfGroup(string author, bool father)
     {
         if (CardDatabase.Instance == null) return new List<CardData>();
-
         return CardDatabase.Instance.allCards
             .Where(c => c != null && (father
                 ? c.cardType == CardData.CardType.Father
@@ -60,44 +71,42 @@ public class CompendiumCardsPanel : MonoBehaviour
             .ToList();
     }
 
-    void BuildGroup(string authorName, int expectedTotal, List<CardData> groupCards, StudentProgress progress)
+    void BuildGroup(RectTransform pair, float x, Group g, StudentProgress progress)
     {
-        int slotCount = Mathf.Max(expectedTotal, groupCards.Count);
-        int collectedCount = groupCards.Count(c => progress.allTimeCollectedCards.Exists(r => r.cardID == c.cardID));
+        int slotCount = Mathf.Max(g.total, g.cards.Count);
+        int collectedCount = g.cards.Count(c => progress.allTimeCollectedCards.Exists(r => r.cardID == c.cardID));
 
-        GameObject group = Instantiate(groupPrefab, groupsContainer);
-        var header = group.transform.Find("Header")?.GetComponent<TextMeshProUGUI>();
-        var row = group.transform.Find("CardsRow");
-        if (row == null) return;
+        string displayName = collectedCount > 0 ? g.name : "?";
+        DashUI.Text(skin, pair, $"{displayName} ({collectedCount}/{slotCount})", x, 0, 290, 24, 16, DashUI.Ink);
 
-        string displayName = collectedCount > 0 ? authorName : "?";
-        if (header != null) header.text = $"{displayName}  ({collectedCount}/{slotCount})";
+        Sprite fullSprite = g.cards.Count > 0 && g.cards[0].cardType == CardData.CardType.Father ? comp.slotFather : comp.slotSecondary;
 
         for (int i = 0; i < slotCount; i++)
         {
-            GameObject slot = Instantiate(cardSlotPrefab, row);
-            var icon = slot.transform.Find("Icon")?.GetComponent<Image>();
-            var questionMark = slot.transform.Find("QuestionMarkText")?.gameObject;
-            var badge = slot.transform.Find("PendingBadge")?.gameObject;
-            var button = slot.GetComponent<Button>();
-
-            CardData card = i < groupCards.Count ? groupCards[i] : null;
+            CardData card = i < g.cards.Count ? g.cards[i] : null;
             bool collected = card != null && progress.allTimeCollectedCards.Exists(r => r.cardID == card.cardID);
             bool answered = collected && progress.epistolaryResponses.Exists(r => r.cardID == card.cardID);
 
-            if (icon != null) { icon.enabled = collected; if (collected) icon.sprite = card.cardSprite; }
-            if (questionMark != null) questionMark.SetActive(!collected);
-            if (badge != null) badge.SetActive(collected && !answered);
+            var img = DashUI.Img(pair, collected ? fullSprite : comp.slotEmpty, x + i * SlotPitch, SlotY, SlotW, SlotH);
+            img.type = Image.Type.Simple;
 
-            if (button != null)
+            if (!collected) continue;
+
+            img.raycastTarget = true;
+            var button = img.gameObject.AddComponent<Button>();
+            button.targetGraphic = img;
+            var cb = button.colors;
+            cb.highlightedColor = new Color(1f, 1f, 0.82f, 1f);
+            cb.pressedColor = new Color(0.8f, 0.8f, 0.8f, 1f);
+            button.colors = cb;
+            string id = card.cardID;
+            button.onClick.AddListener(() => OpenCard(id));
+
+            if (!answered && comp.pendingBadge != null)
             {
-                button.onClick.RemoveAllListeners();
-                button.interactable = collected;
-                if (collected)
-                {
-                    string capturedID = card.cardID;
-                    button.onClick.AddListener(() => OpenCard(capturedID));
-                }
+                float bw = comp.pendingBadge.rect.width, bh = comp.pendingBadge.rect.height;
+                var badge = DashUI.Img(img.transform, comp.pendingBadge, SlotW - bw + 8f, -4f, bw, bh);
+                badge.type = Image.Type.Simple;
             }
         }
     }
@@ -106,7 +115,6 @@ public class CompendiumCardsPanel : MonoBehaviour
     {
         var cardData = CardDatabase.Instance?.GetByID(cardID);
         if (cardData == null || responsePanel == null) return;
-
         if (loginController != null) loginController.OpenPanel(responsePanel.gameObject);
         responsePanel.OpenFor(cardID, cardData.authorName, cardData.cardText, cardData.cardSprite);
     }

@@ -325,7 +325,8 @@ public class LoginSceneController : MonoBehaviour
         int pending = CountPendingCards();
         if (pending <= 0) return;
 
-        notificationText.text = $"Recolectaste {pending} carta(s) en el Capítulo {AccountManager.Instance.justFinishedChapterNumber}. ¡Respóndelas en el Compendio!";
+        string plural = pending == 1 ? "carta" : "cartas";
+        notificationText.text = $"Recolectaste {pending} {plural} en el Capítulo {AccountManager.Instance.justFinishedChapterNumber}.\n¡Respóndelas en el Compendio!";
         notificationPanel.SetActive(true);
     }
 

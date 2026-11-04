@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b8d31d420e2cf6f4e9bf4cac01019388, type: 3}
+  m_Name: CompendiumSkin
+  m_EditorClassIdentifier: Assembly-CSharp::CompendiumSkin
+  slotFather: {fileID: 21300000, guid: 4e2dada1fafd6b047a5d79364f99c4c8, type: 3}
+  slotSecondary: {fileID: 21300000, guid: 75f0ef1a815cee147ba946653747ff49, type: 3}
+  slotEmpty: {fileID: 21300000, guid: ad90947cd92b00b4ba3749bf8f6c67ea, type: 3}
+  pendingBadge: {fileID: 21300000, guid: 4f5ad551bd8c8644d9e2293055aace66, type: 3}
+  checkOff: {fileID: 21300000, guid: 83f00cfac9cfd7348ba1ec17609c170a, type: 3}
+  checkOn: {fileID: 21300000, guid: 8c31b1ac9eaf2a14f9d1a513d3079bc8, type: 3}
+  inputField: {fileID: 21300000, guid: cb3fd4417befc1d4f8488400e8e9895a, type: 3}
