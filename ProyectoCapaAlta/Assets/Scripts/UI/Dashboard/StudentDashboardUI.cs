@@ -114,12 +114,7 @@ public class StudentDashboardUI : MonoBehaviour
         : st == ChapterState.Pendiente ? "PENDIENTE"
         : st == ChapterState.EnCurso ? "EN CURSO" : "COMPLETO";
 
-    int RelationOf(string npcKey)   // 2 = sin encuentro, si no -1/0/1
-    {
-        var p = student.progress;
-        int idx = p.npcRelationshipKeys.IndexOf(npcKey);
-        return idx < 0 ? 2 : p.npcRelationshipValues[idx];
-    }
+    int RelationOf(string npcKey) => StudentStatus.RelationOf(student.progress, npcKey);
 
     // ─── RESUMEN ──────────────────────────────────────────────
     void BuildSummary()
@@ -148,10 +143,11 @@ public class StudentDashboardUI : MonoBehaviour
         DashUI.Strip(skin, content, cards.Select(c => answered.Contains(c.cardID)).ToList(), groups);
 
         DashUI.Title(skin, content, "RESPUESTAS EN LOS DIÁLOGOS");
+        var eff = StudentStatus.EffectiveChoices(p);
         DashUI.Donut(skin, content,
-            p.choices.Count(c => c.relationshipDelta > 0),
-            p.choices.Count(c => c.relationshipDelta == 0),
-            p.choices.Count(c => c.relationshipDelta < 0));
+            eff.Count(c => c.relationshipDelta > 0),
+            eff.Count(c => c.relationshipDelta == 0),
+            eff.Count(c => c.relationshipDelta < 0));
 
         DashUI.Title(skin, content, "RELACIÓN CON PERSONAJES");
         for (int i = 0; i < npcDisplay.GetLength(0); i++)
@@ -180,6 +176,7 @@ public class StudentDashboardUI : MonoBehaviour
                     TextAlignmentOptions.MidlineLeft, FontStyles.Bold);
 
         DashUI.Title(skin, content, "PERSONAJES");
+        DashUI.Note(skin, content, "Cada cuadrito = una decisión: verde buena · amarillo neutral · rojo mala.", 18);
         foreach (var e in Encounters.Where(x => x.chapter == c))
         {
             var rounds = p.choices.Where(x => x.nodeID == e.nodeID)
@@ -188,8 +185,9 @@ public class StudentDashboardUI : MonoBehaviour
 
             var row = DashUI.Row(content, "Encounter", 36);
             DashUI.Text(skin, row, $"{e.npcName} - ENCUENTRO {e.num}", 12, 0, 250, 36, 13, DashUI.Ink);
+            float sx = 456f - Mathf.Min(rounds.Count, 6) * 17f;
             for (int k = 0; k < rounds.Count && k < 6; k++)
-                DashUI.Swatch(row, 270 + k * 17, 11, 12, DashUI.DeltaColor(rounds[k]));
+                DashUI.Swatch(row, sx + k * 17, 11, 12, DashUI.DeltaColor(rounds[k]));
 
             if (rounds.Count == 0) DashUI.Tag(skin, row, TagKind.Cream, "SIN ENCUENTRO");
             else
@@ -321,7 +319,7 @@ public class StudentDashboardUI : MonoBehaviour
             float frac = total > 0 ? (float)count / total : 0f;
 
             var row = DashUI.Row(content, "HSE", 30);
-            DashUI.Text(skin, row, hse, 12, 0, 250, 30, 13, DashUI.Ink);
+            DashUI.Text(skin, row, DashUI.HseLabel(hse), 12, 0, 250, 30, 13, DashUI.Ink);
             DashUI.Img(row, skin.barTrack, 266, 7.5f, 270, 15);
             if (frac > 0f) DashUI.Img(row, skin.barFill, 269, 10.5f, Mathf.Max(3f, 264f * frac), 9);
             DashUI.Text(skin, row, count.ToString(), 544, 0, 38, 30, 14, DashUI.Ink,

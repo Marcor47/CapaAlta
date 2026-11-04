@@ -131,7 +131,7 @@ public class GroupDashboardUI : MonoBehaviour
         CountRow("RESPONDIDAS", answered, possible);
 
         DashUI.Title(skin, content, "RESPUESTAS EN LOS DIÁLOGOS");
-        var all = students.SelectMany(s => s.progress.choices).ToList();
+        var all = students.SelectMany(s => StudentStatus.EffectiveChoices(s.progress)).ToList();
         DashUI.Donut(skin, content,
             all.Count(x => x.relationshipDelta > 0),
             all.Count(x => x.relationshipDelta == 0),
@@ -144,9 +144,8 @@ public class GroupDashboardUI : MonoBehaviour
             int good = 0, neu = 0, bad = 0;
             foreach (var s in students)
             {
-                int idx = s.progress.npcRelationshipKeys.IndexOf(key);
-                if (idx < 0) continue;
-                int v = s.progress.npcRelationshipValues[idx];
+                int v = StudentStatus.RelationOf(s.progress, key);
+                if (v == StudentStatus.NoEncounter) continue;
                 if (v > 0) good++; else if (v < 0) bad++; else neu++;
             }
             var row = DashUI.Row(content, "Relation", 36);
@@ -255,7 +254,7 @@ public class GroupDashboardUI : MonoBehaviour
         {
             int count = withResp.Count(s => s.progress.epistolaryResponses.Any(r => r.linkedHSE.Contains(h)));
             var row = DashUI.Row(content, "HSE", 30);
-            DashUI.Text(skin, row, h, 12, 0, 250, 30, 13, DashUI.Ink);
+            DashUI.Text(skin, row, DashUI.HseLabel(h), 12, 0, 250, 30, 13, DashUI.Ink);
             DashUI.Meter(skin, row, 266, 7.5f, 250, k > 0 ? (float)count / k : 0f);
             DashUI.Text(skin, row, $"{count}/{k}", 524, 0, 60, 30, 14, DashUI.Ink,
                         TextAlignmentOptions.MidlineRight, FontStyles.Bold);

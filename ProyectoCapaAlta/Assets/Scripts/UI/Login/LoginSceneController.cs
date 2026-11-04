@@ -91,6 +91,7 @@ public class LoginSceneController : MonoBehaviour
 
     [Header("Compendio — indicador pendiente")]
     public GameObject compendiumPendingBadge;
+    public GameObject cardsPendingBadge;   // badge del botón "Cartas" dentro del Compendio
 
 
     [Header("Compendio")]
@@ -341,8 +342,9 @@ public class LoginSceneController : MonoBehaviour
 
     public void UpdatePendingBadge()
     {
-        if (compendiumPendingBadge != null)
-            compendiumPendingBadge.SetActive(CountPendingCards() > 0);
+        bool any = CountPendingCards() > 0;
+        if (compendiumPendingBadge != null) compendiumPendingBadge.SetActive(any);
+        if (cardsPendingBadge != null) cardsPendingBadge.SetActive(any);
     }
 
 

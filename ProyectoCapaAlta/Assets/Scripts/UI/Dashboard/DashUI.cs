@@ -111,6 +111,10 @@ public static class DashUI
     // ─── bloques de contenido ─────────────────────────────────
     public static void Spacer(Transform parent, float h) => Block(parent, "Spacer", h);
 
+    public static string HseLabel(string h)
+    => h != null && h.StartsWith("Toma de decisiones", System.StringComparison.OrdinalIgnoreCase)
+        ? "Decisiones responsables" : h;
+
     public static void Title(DashboardSkin s, Transform parent, string text, float h = 24f)
     {
         var b = Block(parent, "Title", h);
