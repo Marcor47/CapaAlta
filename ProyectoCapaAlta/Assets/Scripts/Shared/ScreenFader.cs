@@ -17,6 +17,8 @@ public class ScreenFader : MonoBehaviour
 
     private CanvasGroup group;
 
+    public void SetAlpha(float a) { group.alpha = a; }
+
     void Awake()
     {
         if (instance != null && instance != this) { Destroy(gameObject); return; }

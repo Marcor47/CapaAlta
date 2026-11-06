@@ -19,6 +19,7 @@ public class TheoController : MonoBehaviour
     public float maxFallSpeed = 18f;   // velocidad máxima de caída (unidades/seg)
     public float coyoteTime = 0.12f;
     public float jumpBufferTime = 0.10f;
+    
 
     // ─── DASH ──────────────────────────────────────────────────
     [Header("Dash")]
@@ -58,6 +59,14 @@ public class TheoController : MonoBehaviour
     public float MaxRegulacion => maxRegulacion;
     public float RegulacionPercent01 => maxRegulacion > 0f ? currentRegulacion / maxRegulacion : 0f;
     public bool IsCallingMom => isCallingMom;
+
+
+    // ─── CAMINATA AUTOMÁTICA (entrada y salida de nivel) ───────
+    [Header("Caminata automática")]
+    public float autoWalkSpeed = 3f;
+    private bool isAutoWalking;
+    private float autoWalkDir;
+    public bool IsAutoWalking => isAutoWalking;
 
 
     // ─── TELÉFONO SATELITAL (temporal, hasta Bloque 6) ─────────
@@ -214,6 +223,12 @@ public class TheoController : MonoBehaviour
 
     void FixedUpdate()
     {
+        if (isAutoWalking)
+        {
+            rb.linearVelocity = new Vector2(autoWalkDir * autoWalkSpeed, 0f);
+            return;
+        }
+
         if (isDashing)
         {
             HandleDash();
@@ -427,6 +442,7 @@ public class TheoController : MonoBehaviour
     // ─── MOCHILA (E) ───────────────────────────────────────────
     void HandleBackpackInput()
     {
+        if (isAutoWalking) return;
         if (IsRespawning) { isBackpackOpen = false; anim.SetBool("IsBackpack", false); return; }
         if (isSitting || isInDialogue)
         {
@@ -441,6 +457,7 @@ public class TheoController : MonoBehaviour
     // ─── SENTARSE / LIBRETA ────────────────────────────────────
     void HandleSitInput()
     {
+        if (isAutoWalking) return;
         if (isClimbing) { sitHoldCounter = 0f; return; }
         if (!isGrounded || isBackpackOpen || isInDialogue || IsRespawning) return;
 
@@ -536,6 +553,28 @@ public class TheoController : MonoBehaviour
     {
         maxStamina += amount;
     }
+
+
+    // Camina sin colisiones ni gravedad (solo para entrar/salir del nivel)
+    public void BeginAutoWalk(float dir)
+    {
+        isAutoWalking = true;
+        autoWalkDir = Mathf.Sign(dir);
+        isGrounded = true;                        // pose de caminar, no de caída
+        facingLeft = autoWalkDir < 0f;
+        sr.flipX = facingLeft;
+        rb.bodyType = RigidbodyType2D.Kinematic;
+        rb.linearVelocity = new Vector2(autoWalkDir * autoWalkSpeed, 0f);
+    }
+
+    public void EndAutoWalk()
+    {
+        isAutoWalking = false;
+        rb.bodyType = RigidbodyType2D.Dynamic;
+        rb.gravityScale = originalGravityScale;
+        rb.linearVelocity = Vector2.zero;
+    }
+
 
     // ─── RESPAWN ───────────────────────────────────────────────
     public bool IsRespawning { get; private set; }

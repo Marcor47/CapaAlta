@@ -20,24 +20,68 @@ public class FallRespawn : MonoBehaviour
 
     public bool IsRespawning => respawning;
 
-    void Start()
+    [Header("Entrada al nivel")]
+    public float introFadeIn = 0.6f;
+    public float introMargin = 1f;   // cuánto fuera de pantalla empieza Theo
+
+    IEnumerator Start()
     {
         theo = GetComponent<TheoController>();
         rb = GetComponent<Rigidbody2D>();
-        if (CheckpointManager.Instance == null) return;
+        if (CheckpointManager.Instance == null) yield break;
 
         Vector3 spawn = transform.position;
+        bool fromCheckpoint = false;
         var account = AccountManager.Instance;
 
         if (account != null && account.resumeFromCheckpoint)
         {
             if (account.TryGetCheckpoint(CheckpointManager.Instance.chapter, out Vector2 saved))
+            {
                 spawn = new Vector3(saved.x, saved.y, transform.position.z);
+                fromCheckpoint = true;
+            }
             account.resumeFromCheckpoint = false;
         }
 
         transform.position = spawn;
         CheckpointManager.Instance.SetCheckpoint(spawn, persist: false);
+
+        if (theo == null) yield break;
+        yield return fromCheckpoint ? AppearAtCheckpoint() : WalkInFromLeft(spawn);
+    }
+
+    IEnumerator AppearAtCheckpoint()
+    {
+        theo.SetMovementLocked(true);
+        var fader = ScreenFader.Instance;
+        fader.SetAlpha(1f);
+        yield return new WaitForSecondsRealtime(0.3f);   // la cámara se acomoda
+        yield return fader.FadeTo(0f, introFadeIn);
+        theo.SetMovementLocked(false);
+    }
+
+    IEnumerator WalkInFromLeft(Vector3 spawn)
+    {
+        theo.SetMovementLocked(true);
+        var fader = ScreenFader.Instance;
+        fader.SetAlpha(1f);
+
+        yield return null;   // Cinemachine encuadra el punto de partida
+        yield return null;
+
+        var cam = Camera.main;
+        float leftEdge = cam.transform.position.x - cam.orthographicSize * cam.aspect;
+        transform.position = new Vector3(leftEdge - introMargin, spawn.y, spawn.z);
+
+        theo.BeginAutoWalk(1f);
+        StartCoroutine(fader.FadeTo(0f, introFadeIn));   // el fundido corre mientras entra
+        while (spawn.x - transform.position.x > theo.autoWalkSpeed * Time.fixedDeltaTime)
+            yield return null;
+
+        theo.EndAutoWalk();
+        transform.position = spawn;
+        theo.SetMovementLocked(false);
     }
 
     void Update()
