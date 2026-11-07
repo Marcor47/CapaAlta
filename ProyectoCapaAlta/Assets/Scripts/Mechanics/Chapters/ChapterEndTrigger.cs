@@ -13,8 +13,8 @@ public class ChapterEndTrigger : MonoBehaviour
     public GameObject promptUI; // ej. "Presiona Enter para terminar el capítulo"
 
     [Header("Salida")]
-    public float maxWalkTime = 3f;     // tope por si la cámara sigue a Theo y no sale de pantalla
-    public float fadeOutTime = 0.5f;
+    public float maxWalkTime = 1.5f;     // antes 3
+    public float fadeOutTime = 0.35f;    // antes 0.5
 
     private bool playerInRange = false;
     private bool finishing;
@@ -69,7 +69,7 @@ public class ChapterEndTrigger : MonoBehaviour
             {
                 t += Time.unscaledDeltaTime;
                 float rightEdge = cam.transform.position.x + cam.orthographicSize * cam.aspect;
-                if (theo.transform.position.x > rightEdge + 0.8f) break;
+                if (theo.transform.position.x > rightEdge + 0.2f) break;   // antes + 0.8f
                 yield return null;
             }
         }

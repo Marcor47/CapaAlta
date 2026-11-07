@@ -134,8 +134,20 @@ public class PauseMenuManager : MonoBehaviour
     }
 
     // ─── MENÚ PRINCIPAL (sin cerrar sesión) ─────────────────────
+    // ─── MENÚ PRINCIPAL (sin cerrar sesión) ─────────────────────
+    private bool leaving;
+
     void GoToMainMenu()
     {
+        if (leaving) return;
+        leaving = true;
+        StartCoroutine(LeaveRoutine());
+    }
+
+    System.Collections.IEnumerator LeaveRoutine()
+    {
+        // timeScale sigue en 0 aquí: ScreenFader usa unscaledDeltaTime, así que el fundido avanza igual
+        yield return ScreenFader.Instance.FadeTo(1f, 0.35f);
         Time.timeScale = 1f; // importante: restaurar antes de cambiar de escena
         SceneManager.LoadScene(mainMenuSceneName);
     }

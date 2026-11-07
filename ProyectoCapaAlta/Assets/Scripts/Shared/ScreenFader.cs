@@ -43,12 +43,12 @@ public class ScreenFader : MonoBehaviour
         rt.offsetMin = rt.offsetMax = Vector2.zero;
     }
 
-    public IEnumerator FadeTo(float target, float duration)
+        public IEnumerator FadeTo(float target, float duration)
     {
         float start = group.alpha, t = 0f;
         while (t < duration)
         {
-            t += Time.unscaledDeltaTime;
+            t += Mathf.Min(Time.unscaledDeltaTime, 0.05f);   // un hipo de carga no se come el fundido
             group.alpha = Mathf.Lerp(start, target, t / duration);
             yield return null;
         }

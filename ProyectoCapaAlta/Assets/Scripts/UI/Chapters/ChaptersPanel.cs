@@ -79,6 +79,15 @@ public class ChaptersPanel : MonoBehaviour
         else AccountManager.Instance.PrepareContinue();
 
         AccountManager.Instance.returnToChapters = true;
+        if (!launching) StartCoroutine(LaunchRoutine(sceneName));
+    }
+
+    private bool launching;
+
+    System.Collections.IEnumerator LaunchRoutine(string sceneName)
+    {
+        launching = true;
+        yield return ScreenFader.Instance.FadeTo(1f, 0.4f);
         SceneManager.LoadScene(sceneName);
     }
 }

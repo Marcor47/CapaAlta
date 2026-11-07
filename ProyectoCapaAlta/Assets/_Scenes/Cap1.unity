@@ -2007,7 +2007,7 @@ Camera:
   far clip plane: 1000
   field of view: 34
   orthographic: 1
-  orthographic size: 2.109375
+  orthographic size: 1.90625
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -4268,13 +4268,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::FallRespawn
   fallThresholdY: -10
   regulacionPenaltyOnFall: 20
-  fadeOutTime: 0.5
-  blackHold: 0.5
-  fadeInTime: 0.5
+  fadeOutTime: 0.7
+  blackHold: 0.3
+  fadeInTime: 0.7
   restoreStaminaOnRespawn: 1
-  totalRespawnTime: 4
-  introFadeIn: 0.6
-  introMargin: 1
+  totalRespawnTime: 2.5
+  introFadeIn: 1
+  introMargin: 1.5
 --- !u!1 &1022385214
 GameObject:
   m_ObjectHideFlags: 0

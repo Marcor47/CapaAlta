@@ -262,3 +262,5 @@ MonoBehaviour:
   chapter: 1
   mainMenuSceneName: LoginScene
   promptUI: {fileID: 6825100144568762346}
+  maxWalkTime: 1.5
+  fadeOutTime: 0.35
