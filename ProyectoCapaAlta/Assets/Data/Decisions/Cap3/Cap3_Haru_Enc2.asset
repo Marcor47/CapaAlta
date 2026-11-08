@@ -124,6 +124,22 @@ MonoBehaviour:
       text: "Cu\xEDdate mucho, Azul."
   givesManzanaOnEnd: 0
   manzanaTutorialLines: []
-  manzanaGivenWhenBad: []
-  manzanaGivenWhenNeutral: []
-  manzanaGivenWhenGood: []
+  manzanaGivenWhenBad:
+  - speakerName: 
+    text: "Oh... gracias, Azul."
+  - speakerName: 
+    text: "No ten\xEDas que hacerlo, pero me alegra que lo hicieras."
+  manzanaGivenWhenNeutral:
+  - speakerName: 
+    text: "Gracias, Azul."
+  - speakerName: 
+    text: "Qu\xE9 bonito detalle justo antes de despedirnos."
+  - speakerName: 
+    text: "La guardar\xE9 como recuerdo de este tramo."
+  manzanaGivenWhenGood:
+  - speakerName: 
+    text: "Azuuul."
+  - speakerName: 
+    text: "Me llevo un recuerdo m\xE1s del camino, adem\xE1s de las fotos."
+  - speakerName: 
+    text: "Gracias, de verdad. Cu\xEDdate mucho."

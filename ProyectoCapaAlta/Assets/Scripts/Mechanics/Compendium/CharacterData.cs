@@ -14,16 +14,16 @@ public static class CharacterData
     public static readonly List<Entry> Entries = new List<Entry>
     {
         new Entry { npcID = "gaz", displayName = "Gaz",
-            description = "Alpinista competitivo. Quiere subir la montaña en tiempo récord y me llama \"chico\"." },
+            description = "Es otro alpinista, algo muy competitivo. Dice que quiere subir la montaña en tiempo récord para cumplir una meta que tiene. Por alguna razón no deja de llamarme \"chico\"." },
         new Entry { npcID = "haru", displayName = "Haru",
-            description = "Chica de mi edad que fotografía el camino. Le gusta apreciar los pequeños momentos y me puso de apodo \"Azul\"." },
+            description = "Parece de mi edad, fotógrafa. Le gusta apreciar lo que tiene al frente, disfrutar el presente. Me empezó a llamar \"Azul\", debería empezar a vestirme diferente creo." },
         new Entry { npcID = "lee_wilber", displayName = "Lee y Wilber",
-            description = "Dos ingenieros, socios de negocio. Perdieron todo cuando una avalancha se llevó su mina. Acampan donde ocurrió para recordar, y preparan hamburguesas." },
+            description = "Mejores amigos, socios de un negocio fallido. Perdieron todo cuando una avalancha se llevó su proyecto de vida. Acampan donde ocurrió para recordar, y preparan hamburguesas." },
         new Entry { npcID = "ryland_astro", displayName = "Ryland y Astro",
-            description = "Pareja de adultos mayores que pasea en bicicleta doble. Dicen que me parezco a su hijo, Arthur. Astro me dio mi primera manzana." },
+            description = "Pareja de adultos mayores que pasea en una curiosa bicicleta doble. Dicen que me parezco a su hijo. La señora me regaló una manzana especial que solo crece por la montaña." },
         new Entry { npcID = "padre", displayName = "Jason",
-            description = "Mi padre, al que llaman \"El Viajero\". Es el guía espiritual de su pueblo. En sus cartas dice que nos extraña." },
+            description = "Mi padre, originario de un pueblo en las montañas remotas. Es un hombre muy complejo, quizá me parezco a él más de lo que creía. Necesito entenderlo mejor." },
         new Entry { npcID = "mely", displayName = "Mely", alwaysKnown = true,
-            description = "Mi mamá. Antropóloga y exalpinista, nunca se queda quieta en un solo lugar. Me dejó al inicio del sendero y me dio el teléfono satelital." }
+            description = "Mi mamá, antropóloga y exalpinista. No le gusta quedarse quieta en un solo lugar. Me preparó toda mi vida para este viaje, pero hay mucho en mí de lo que falta aprender." }
     };
 }

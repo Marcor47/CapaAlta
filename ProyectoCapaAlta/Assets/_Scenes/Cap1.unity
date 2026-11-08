@@ -2007,7 +2007,7 @@ Camera:
   far clip plane: 1000
   field of view: 34
   orthographic: 1
-  orthographic size: 1.90625
+  orthographic size: 2.109375
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -4079,7 +4079,7 @@ MonoBehaviour:
   dashSpeed: 15
   dashDuration: 0.33
   dashStaminaCost: 33
-  dashCooldown: 0.6
+  dashCooldown: 1
   maxStamina: 100
   staminaRegenRate: 8
   staminaRegenRateSitting: 25
@@ -4635,7 +4635,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0.7075243, y: 0}
+  m_Offset: {x: 0, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -4645,7 +4645,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 2.4150486, y: 1}
+  m_Size: {x: 2, y: 1}
   m_EdgeRadius: 0
 --- !u!4 &1035437256
 Transform:
@@ -4656,7 +4656,7 @@ Transform:
   m_GameObject: {fileID: 1035437253}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 14.796, y: -7.979, z: 0}
+  m_LocalPosition: {x: -15.6, y: -7.92, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -5187,7 +5187,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "SIN SE\xD1AL POR AHORA.."
+  m_text: RING! RING!
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 4ea225157a4edf447941d5e4a8265a8a, type: 2}
   m_sharedMaterial: {fileID: 7079560661429024427, guid: 4ea225157a4edf447941d5e4a8265a8a, type: 2}

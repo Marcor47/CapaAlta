@@ -9,7 +9,7 @@ public class InventorySystem : MonoBehaviour
 {
     public static InventorySystem Instance { get; private set; }
 
-    public enum ItemType { None, Manzana, Telefono, Onda, Gancho, Pinchos }
+    public enum ItemType { None, Manzana, Telefono, Onda, Gancho, Pinchos, Dash }
 
     [Header("Ítems desbloqueados al inicio")]
     public bool telefonoDesbloqueadoDesdeElInicio = true;
@@ -134,8 +134,9 @@ public class InventorySystem : MonoBehaviour
     }
 
     // ─── EQUIPAR ───────────────────────────────────────────────
-    public void TryEquip(ItemType item)
+     public void TryEquip(ItemType item)
     {
+        if (item == ItemType.Dash) return;   // el dash se desbloquea pero no se equipa
         if (!IsUnlocked(item) || item == equippedItem) return;
 
         equippedItem = item;
@@ -164,5 +165,6 @@ public class InventorySystem : MonoBehaviour
         UnlockItem(ItemType.Onda);
         UnlockItem(ItemType.Gancho);
         UnlockItem(ItemType.Pinchos);
+        UnlockItem(ItemType.Dash);
     }
 }

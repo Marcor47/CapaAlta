@@ -70,6 +70,18 @@ MonoBehaviour:
     sharedFollowUpLines: []
   givesManzanaOnEnd: 0
   manzanaTutorialLines: []
-  manzanaGivenWhenBad: []
-  manzanaGivenWhenNeutral: []
-  manzanaGivenWhenGood: []
+  manzanaGivenWhenBad:
+  - speakerName: 
+    text: "Oye, \xBFy esto? Bueno, no la voy a rechazar."
+  - speakerName: 
+    text: "Gracias, chico."
+  manzanaGivenWhenNeutral:
+  - speakerName: 
+    text: "Justo lo que necesitaba para recuperar energ\xEDas."
+  - speakerName: 
+    text: "Gracias, chico. \xBFDe d\xF3nde la sacaste?"
+  manzanaGivenWhenGood:
+  - speakerName: 
+    text: "\xA1Vaya! Esto me cae perfecto, chico."
+  - speakerName: 
+    text: "La guardo para el siguiente tramo. Gracias."

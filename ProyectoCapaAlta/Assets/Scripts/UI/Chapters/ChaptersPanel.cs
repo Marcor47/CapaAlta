@@ -25,7 +25,10 @@ public class ChaptersPanel : MonoBehaviour
         foreach (var card in cards)
         {
             int chapter = card.chapter;
-            bool unlocked = CourseSettings.Instance != null && CourseSettings.Instance.IsChapterUnlocked(chapter);
+            bool teacherOpen = CourseSettings.Instance != null && CourseSettings.Instance.IsChapterUnlocked(chapter);
+            bool prevDone = chapter == 1 ||
+                AccountManager.Instance.CurrentUser.progress.chaptersCompleted.Contains(chapter - 1);
+            bool unlocked = teacherOpen && prevDone;
             bool started = AccountManager.Instance.HasStartedChapter(chapter);
 
             card.titleText.text = $"CAP. {chapter}";

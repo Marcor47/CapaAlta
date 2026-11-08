@@ -158,6 +158,24 @@ MonoBehaviour:
     sharedFollowUpLines: []
   givesManzanaOnEnd: 0
   manzanaTutorialLines: []
-  manzanaGivenWhenBad: []
-  manzanaGivenWhenNeutral: []
-  manzanaGivenWhenGood: []
+  manzanaGivenWhenBad:
+  - speakerName: 
+    text: "...Una manzana."
+  - speakerName: 
+    text: "Bueno, no estoy para rechazar nada ahora."
+  - speakerName: 
+    text: "Gracias, chico."
+  manzanaGivenWhenNeutral:
+  - speakerName: 
+    text: "...\xBFUna manzana?"
+  - speakerName: 
+    text: "La verdad, no me vendr\xEDa mal."
+  - speakerName: 
+    text: "Gracias, chico."
+  manzanaGivenWhenGood:
+  - speakerName: 
+    text: "Vaya, gracias, chico."
+  - speakerName: 
+    text: "Esto s\xED me viene bien."
+  - speakerName: 
+    text: "Te debo una."

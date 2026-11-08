@@ -15,6 +15,12 @@ public class ToolUnlockCall : MonoBehaviour
     public string speakerName = "Mamá";
     public DialogueLine[] callLines;
 
+    [Header("Si el capítulo ya se jugó")]
+    public bool ringAgainIfAlreadyUnlocked = true;
+    public DialogueLine[] replayCallLines;   // opcional; vacío = usa callLines
+
+    private bool alreadyUnlocked;
+
     [Header("UI y sonido")]
     public GameObject ringingPromptUI;  // "Mamá te está llamando: equipa el teléfono (mantén E) y haz click"
     public GameObject unlockedToastUI;  // opcional: "Herramienta desbloqueada"
@@ -34,8 +40,8 @@ public class ToolUnlockCall : MonoBehaviour
     {
         if (done || ringing || !other.CompareTag("Player")) return;
 
-        // Si ya tiene la herramienta (progreso guardado), no vuelve a sonar
-        if (InventorySystem.Instance != null && InventorySystem.Instance.IsUnlocked(toolToUnlock))
+        alreadyUnlocked = InventorySystem.Instance != null && InventorySystem.Instance.IsUnlocked(toolToUnlock);
+        if (alreadyUnlocked && !ringAgainIfAlreadyUnlocked)
         {
             done = true;
             return;
@@ -88,20 +94,26 @@ public class ToolUnlockCall : MonoBehaviour
     {
         done = true;
 
-        if (DialogueManager.Instance != null && callLines != null && callLines.Length > 0)
+        var lines = (alreadyUnlocked && replayCallLines != null && replayCallLines.Length > 0)
+            ? replayCallLines : callLines;
+
+        if (DialogueManager.Instance != null && lines != null && lines.Length > 0)
         {
-            DialogueManager.Instance.ShowSimpleLines(speakerName, callLines);
+            DialogueManager.Instance.ShowSimpleLines(speakerName, lines);
             yield return null;
             yield return new WaitWhile(() => DialogueManager.Instance.IsOpen);
         }
 
-        InventorySystem.Instance.UnlockItem(toolToUnlock);
-
-        if (unlockedToastUI != null)
+        if (!alreadyUnlocked)
         {
-            unlockedToastUI.SetActive(true);
-            yield return new WaitForSeconds(toastSeconds);
-            unlockedToastUI.SetActive(false);
+            InventorySystem.Instance.UnlockItem(toolToUnlock);
+
+            if (unlockedToastUI != null)
+            {
+                unlockedToastUI.SetActive(true);
+                yield return new WaitForSeconds(toastSeconds);
+                unlockedToastUI.SetActive(false);
+            }
         }
     }
 

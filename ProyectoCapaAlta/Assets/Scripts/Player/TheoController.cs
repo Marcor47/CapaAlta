@@ -383,6 +383,8 @@ public class TheoController : MonoBehaviour
     {
         if (isHooked || isClimbing) return;
         if (!dashEnabled || !canMove) return;
+        if (InventorySystem.Instance != null &&
+            !InventorySystem.Instance.IsUnlocked(InventorySystem.ItemType.Dash)) return;
         if (currentStamina < dashStaminaCost) return;
         if (dashCooldownCounter > 0f) return;
 
