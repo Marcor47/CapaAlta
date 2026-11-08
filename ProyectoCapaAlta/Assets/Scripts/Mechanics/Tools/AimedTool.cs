@@ -40,6 +40,7 @@ public abstract class AimedTool : ToolBehaviour
                 bool charged = Charge01 >= 1f;
                 Vector2 from = OriginPosition;
                 Vector2 target = MouseWorldPosition();
+                if (theo != null) theo.EndToolCharge(charged);   // NUEVO: Throw si cargó, CancelCharge si no
                 CancelAim();
                 if (!charged) return;              // soltó antes de tiempo: no pasa nada
                 nextAllowedTime = Time.time + cooldown;
@@ -55,6 +56,7 @@ public abstract class AimedTool : ToolBehaviour
             aiming = true;
             aimStartTime = Time.time;
             CursorManager.Instance?.SetAim();
+            if (theo != null) theo.BeginToolCharge((int)Type);   // NUEVO
         }
     }
 
@@ -84,6 +86,7 @@ public abstract class AimedTool : ToolBehaviour
 
     protected void CancelAim()
     {
+        if (aiming && theo != null) theo.EndToolCharge(false);   // NUEVO
         aiming = false;
         if (controller != null && controller.aimLine != null) controller.aimLine.enabled = false;
         CursorManager.Instance?.SetDefault();

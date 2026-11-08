@@ -3,8 +3,8 @@ guid: 2b7708d141c28044997944a5243c2ba7
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 1873720502663974095
-    second: manzana_0
+      213: -2830690417876745868
+    second: manzana_mundo_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -48,7 +48,7 @@ TextureImporter:
   compressionQuality: 50
   spriteMode: 1
   spriteExtrude: 1
-  spriteMeshType: 1
+  spriteMeshType: 0
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
   spritePixelsToUnits: 32
@@ -113,13 +113,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: manzana_0
+      name: manzana_mundo_0
       rect:
         serializedVersion: 2
-        x: 1
+        x: 0
         y: 0
-        width: 14
-        height: 15
+        width: 8
+        height: 8
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: fcc07a9aedac00a10800000000000000
-      internalID: 1873720502663974095
+      spriteID: 471ca55001e57b8d0800000000000000
+      internalID: -2830690417876745868
       vertices: []
       indices: 
       edges: []
@@ -148,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      manzana_0: 1873720502663974095
+      manzana_mundo_0: -2830690417876745868
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

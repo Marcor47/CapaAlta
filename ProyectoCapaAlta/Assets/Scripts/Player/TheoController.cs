@@ -87,6 +87,33 @@ public class TheoController : MonoBehaviour
     private bool isHooked;
     private bool isClimbing;
 
+    // ─── CARGA DE HERRAMIENTA (apuntar con click sostenido) ────
+    [Header("Carga de herramienta")]
+    [Tooltip("Qué tanto resbala en el suelo mientras apunta (más bajo = resbala más)")]
+    public float toolChargeGroundDeceleration = 25f;
+    private bool isToolCharging;
+    public bool IsToolCharging => isToolCharging;
+
+    public void BeginToolCharge(int toolId)
+    {
+        if (anim == null) return;
+        isToolCharging = true;
+        anim.ResetTrigger("Throw");
+        anim.ResetTrigger("CancelCharge");
+        anim.SetInteger("ToolId", toolId);
+        anim.SetTrigger("Charge");
+    }
+
+    // released = true: suelta y dispara; false: cancelado
+    public void EndToolCharge(bool released)
+    {
+        if (!isToolCharging) return;
+        isToolCharging = false;
+        if (anim == null) return;
+        anim.ResetTrigger("Charge");
+        anim.SetTrigger(released ? "Throw" : "CancelCharge");
+    }
+
     // ─── SENTARSE / LIBRETA ────────────────────────────────────
     [Header("Sentarse / Libreta")]
     public float sitHoldTime = 1.0f;
@@ -176,6 +203,7 @@ public class TheoController : MonoBehaviour
             if (isBackpackOpen && isGrounded) return false;
             if (isInDialogue) return false;
             if (isCallingMom) return false; // NUEVO
+            if (isToolCharging) return false;
             return true;
         }
     }
@@ -252,10 +280,21 @@ public class TheoController : MonoBehaviour
 
         if (canMove)
             ApplyMovement();
+        else if (isToolCharging)
+            ApplyToolChargeInertia();
         else
             rb.linearVelocity = new Vector2(0f, rb.linearVelocity.y);
 
         ApplyBetterGravity();
+    }
+
+    // Apuntando: no controla, pero conserva la inercia (resbala en suelo, sigue en el aire)
+    void ApplyToolChargeInertia()
+    {
+        float decel = isGrounded ? toolChargeGroundDeceleration : airDeceleration;
+        rb.linearVelocity = new Vector2(
+            Mathf.MoveTowards(rb.linearVelocity.x, 0f, decel * Time.fixedDeltaTime),
+            rb.linearVelocity.y);
     }
 
     void ApplySwingControl()
@@ -267,7 +306,12 @@ public class TheoController : MonoBehaviour
     // ─── INPUT ─────────────────────────────────────────────────
     void ReadInput()
     {
-        if (!canMove) { moveInput = 0f; return; }
+        if (!canMove)
+        {
+            moveInput = 0f;
+            if (isToolCharging) jumpHeld = false;   // si soltó el salto mientras apuntaba, que no quede "flotando"
+            return;
+        }
 
         moveInput = 0f;
         if (Keyboard.current.aKey.isPressed || Keyboard.current.leftArrowKey.isPressed)
@@ -369,7 +413,21 @@ public class TheoController : MonoBehaviour
     // ─── FLIP ──────────────────────────────────────────────────
     void HandleFlip()
     {
-        if (!canMove || isDashing) return;
+        if (isDashing) return;
+
+        if (isToolCharging)
+        {
+            var cam = Camera.main;
+            if (cam != null && Mouse.current != null)
+            {
+                float dx = cam.ScreenToWorldPoint(Mouse.current.position.ReadValue()).x - transform.position.x;
+                if (dx > 0.05f) { sr.flipX = false; facingLeft = false; }
+                else if (dx < -0.05f) { sr.flipX = true; facingLeft = true; }
+            }
+            return;
+        }
+
+        if (!canMove) return;
 
         var state = anim.GetCurrentAnimatorStateInfo(0);
         if (state.IsName("TheoDash")) return;
