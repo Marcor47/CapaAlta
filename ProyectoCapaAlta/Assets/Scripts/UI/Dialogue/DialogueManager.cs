@@ -17,6 +17,7 @@ public class DialogueManager : MonoBehaviour
     public TextMeshProUGUI npcNameText;
     public TextMeshProUGUI theoNameText;
     public TextMeshProUGUI dialogueText;
+    public GameObject continueArrow;
 
     [Header("Opciones")]
     public GameObject optionsPanel;
@@ -49,6 +50,8 @@ public class DialogueManager : MonoBehaviour
     private float inputCooldown = 0f;
 
     private TheoController theo;
+    [HideInInspector] public NpcTalkAnimator currentNpcTalk;
+
 
     private enum DialogueState
     {
@@ -180,11 +183,13 @@ public class DialogueManager : MonoBehaviour
             npcNameText.gameObject.SetActive(!isTheoLine);
             theoNameText.gameObject.SetActive(isTheoLine);
             dialogueText.gameObject.SetActive(true);
+            if (currentNpcTalk != null) currentNpcTalk.SetTalking(!isTheoLine);
 
             if (!isTheoLine) npcNameText.text = speaker;
 
             dialogueText.text = line.text;
             waitingInput = true;
+            SetArrow(true);
         }
         else
         {
@@ -195,6 +200,7 @@ public class DialogueManager : MonoBehaviour
     // ─── AVANZAR LÍNEA ─────────────────────────────────────────
     void AdvanceLine()
     {
+        SetArrow(false);
         currentLineIndex++;
         ShowCurrentLine();
     }
@@ -267,7 +273,10 @@ public class DialogueManager : MonoBehaviour
     // ─── MOSTRAR OPCIONES ──────────────────────────────────────
     void ShowOptions()
     {
+        
         SetNPCSpeaking(false);
+        SetArrow(false);
+        if (currentNpcTalk != null) currentNpcTalk.SetTalking(false);
         state = DialogueState.Choosing;
         choosingOption = true;
         waitingInput = false;
@@ -328,9 +337,13 @@ public class DialogueManager : MonoBehaviour
     // ─── CERRAR DIÁLOGO ────────────────────────────────────────
     void EndDialogue()
     {
+        
         state = DialogueState.Done;
         isOpen = false;
         simpleMode = false;
+        SetArrow(false);
+        if (currentNpcTalk != null) currentNpcTalk.SetTalking(false);
+        currentNpcTalk = null;
 
         dialoguePanel.SetActive(false);
         optionsPanel.SetActive(false);
@@ -346,6 +359,10 @@ public class DialogueManager : MonoBehaviour
         npcNameText.gameObject.SetActive(npcTalking);
         theoNameText.gameObject.SetActive(!npcTalking);
         dialogueText.gameObject.SetActive(npcTalking);
+    }
+    void SetArrow(bool on)
+    {
+        if (continueArrow != null) continueArrow.SetActive(on);
     }
 
     // ─── PROPIEDADES PÚBLICAS ──────────────────────────────────

@@ -19,8 +19,12 @@ public class DialogueTrigger : MonoBehaviour
     private bool playerInRange = false;
     private bool isCompleted = false;
     private bool canInteract = true;
+    private NpcTalkAnimator npcTalk;
 
     // ──────────────────────────────────────────────────────────
+
+
+    void Awake() { npcTalk = GetComponent<NpcTalkAnimator>(); }
     void Start()
     {
         if (requiredPreviousNode != null)
@@ -84,6 +88,7 @@ public class DialogueTrigger : MonoBehaviour
 
         canInteract = false;
         if (promptUI != null) promptUI.SetActive(false);
+        DialogueManager.Instance.currentNpcTalk = npcTalk;
         DialogueManager.Instance.StartDialogue(dialogueNode, OnDialogueComplete);
     }
 

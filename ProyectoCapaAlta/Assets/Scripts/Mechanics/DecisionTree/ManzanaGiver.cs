@@ -10,10 +10,12 @@ public class ManzanaGiver : MonoBehaviour
 
     private DialogueTrigger trigger;
     private bool playerInRange = false;
+    private NpcTalkAnimator npcTalk;
 
     void Awake()
     {
         trigger = GetComponent<DialogueTrigger>();
+        npcTalk = GetComponent<NpcTalkAnimator>();
     }
 
     void Update()
@@ -45,6 +47,7 @@ public class ManzanaGiver : MonoBehaviour
         if (!used) return;
 
         DialogueLine[] response = node.GetManzanaGivenResponse(before);
+        DialogueManager.Instance.currentNpcTalk = npcTalk;
         DialogueManager.Instance.ShowSimpleLines(node.npcName, response);
     }
 
