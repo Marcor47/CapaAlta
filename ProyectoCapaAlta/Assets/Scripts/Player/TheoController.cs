@@ -573,6 +573,11 @@ public class TheoController : MonoBehaviour
 
     public void SetCallingMom(bool value)
     {
+        if (value && !isCallingMom && anim != null)
+        {
+            anim.ResetTrigger("CallStart");
+            anim.SetTrigger("CallStart");
+        }
         isCallingMom = value;
         if (!value) momConnected = false;
         if (value) rb.linearVelocity = new Vector2(0f, rb.linearVelocity.y);
@@ -757,6 +762,7 @@ public class TheoController : MonoBehaviour
         anim.SetBool("IsSitting", isSitting);
         anim.SetBool("IsClimbing", isClimbing);
         anim.SetBool("IsClimbMoving", isClimbMoving);
+        anim.SetBool("IsCalling", isCallingMom);
     }
 
     // ─── PROPIEDADES PÚBLICAS ──────────────────────────────────

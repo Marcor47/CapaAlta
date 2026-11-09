@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 5140530176232402390}
   - component: {fileID: 5943023141749693571}
   m_Layer: 0
-  m_Name: Card_Secondary_01
+  m_Name: Carta_Secundaria
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -143,7 +143,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0082d9f1f0d7edc40be5637c25ee8de6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CardCollector
-  cardData: {fileID: 11400000, guid: 149e2875d6c659542a835046f89d8e28, type: 2}
+  cardData: {fileID: 0}
   promptUI: {fileID: 6328642039472335128}
 --- !u!95 &5943023141749693571
 Animator:

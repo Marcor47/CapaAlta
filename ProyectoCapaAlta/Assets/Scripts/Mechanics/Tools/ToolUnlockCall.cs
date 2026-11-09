@@ -32,6 +32,7 @@ public class ToolUnlockCall : MonoBehaviour
     private bool done;
 
     private bool lockedMovement;
+    private bool calling;   // Theo con el teléfono en la oreja durante esta llamada
 
 
     void Start() => theo = FindAnyObjectByType<TheoController>();
@@ -88,6 +89,7 @@ public class ToolUnlockCall : MonoBehaviour
     {
         if (ringing) AnyRinging = false;
         UnlockMovement();
+        EndCallPose();
     }
 
     IEnumerator AnswerRoutine()
@@ -99,9 +101,11 @@ public class ToolUnlockCall : MonoBehaviour
 
         if (DialogueManager.Instance != null && lines != null && lines.Length > 0)
         {
+            StartCallPose();
             DialogueManager.Instance.ShowSimpleLines(speakerName, lines);
             yield return null;
             yield return new WaitWhile(() => DialogueManager.Instance.IsOpen);
+            EndCallPose();
         }
 
         if (!alreadyUnlocked)
@@ -115,6 +119,19 @@ public class ToolUnlockCall : MonoBehaviour
                 unlockedToastUI.SetActive(false);
             }
         }
+    }
+
+    void StartCallPose()
+    {
+        if (theo == null || !theo.IsGrounded) return;   // en el aire no tiene sentido la pose
+        theo.SetCallingMom(true);                        // dispara TakeOut y luego el loop
+        calling = true;
+    }
+
+    void EndCallPose()
+    {
+        if (calling && theo != null) theo.SetCallingMom(false);
+        calling = false;
     }
 
 }
