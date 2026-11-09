@@ -188,7 +188,7 @@ public class DialogueManager : MonoBehaviour
             if (!isTheoLine) npcNameText.text = speaker;
 
             dialogueText.text = line.text;
-            AudioManager.PlayBabble(line.text.Length, isTheoLine ? 0.3f : 0f);
+            AudioManager.PlayBabble(line.text);
             waitingInput = true;
             SetArrow(true);
         }

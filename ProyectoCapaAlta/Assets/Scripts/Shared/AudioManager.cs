@@ -24,7 +24,8 @@ public class AudioManager : MonoBehaviour
     [Header("Música")]
     public AudioClip loginMusic;
     public AudioClip chapterMusic;  // una sola para los 4 capítulos
-    [Range(0f, 1f)] public float musicVolume = 0.4f;
+    [Range(0f, 1f)] public float loginMusicVolume = 0.6f;
+    [Range(0f, 1f)] public float chapterMusicVolume = 0.4f;
     public string loginSceneName = "LoginScene";
     public string chapterScenePrefix = "Cap";
 
@@ -32,10 +33,12 @@ public class AudioManager : MonoBehaviour
     public AudioClip babbleBlip;                       // sonido MUY corto (0.05–0.12 s)
     [Range(0f, 1f)] public float babbleVolume = 0.6f;
     public float babbleInterval = 0.07f;               // segundos entre blips
-    public float babbleSecondsPerCharacter = 0.04f;    // duración según largo del texto
+    public float lettersPerBlip = 3f;       // 1 blip por cada ~3 letras de la palabra
+    public float wordGap = 0.04f;           // pausa entre palabras
+    public float commaPause = 0.15f;        // tras , ; :
+    public float sentencePause = 0.3f;      // tras . ! ? …
     public float babbleMaxSeconds = 3f;                // tope por línea o carta
-    public float babblePitchMin = 0.9f;
-    public float babblePitchMax = 1.2f;
+    
     private Coroutine babbleRoutine;
 
     public AudioSource babbleSource;
@@ -51,7 +54,7 @@ public class AudioManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
 
         if (sfxSource != null) { sfxSource.playOnAwake = false; sfxSource.loop = false; }
-        if (musicSource != null) { musicSource.playOnAwake = false; musicSource.loop = true; musicSource.volume = musicVolume; }
+        if (musicSource != null) { musicSource.playOnAwake = false; musicSource.loop = true; }
         if (babbleSource != null) { babbleSource.playOnAwake = false; babbleSource.loop = false; }
         SceneManager.sceneLoaded += OnSceneLoaded;
         // la escena inicial ya cargó antes de suscribirnos
@@ -110,7 +113,7 @@ public class AudioManager : MonoBehaviour
     void StartMusic(AudioClip clip)
     {
         musicSource.clip = clip;
-        musicSource.volume = musicVolume;
+        musicSource.volume = clip == loginMusic ? loginMusicVolume : chapterMusicVolume;
         musicSource.Play();
     }
 
@@ -127,36 +130,60 @@ public class AudioManager : MonoBehaviour
     public static void PlayJumpDash() { if (Instance != null) Instance.PlaySfx(Instance.jumpDash, true); }
 
     // ─── BALBUCEO ──────────────────────────────────────────────
-    public static void PlayBabble(int characters, float pitchOffset = 0f)
-    { if (Instance != null) Instance.StartBabble(characters, pitchOffset); }
+    public static void PlayBabble(string text, float maxSeconds = -1f)
+    { if (Instance != null) Instance.StartBabble(text, maxSeconds); }
+
+    void StartBabble(string text, float maxSeconds)
+    {
+        StopBabbleInternal();
+        if (babbleBlip == null || babbleSource == null || string.IsNullOrEmpty(text)) return;
+        babbleRoutine = StartCoroutine(BabbleRoutine(text, maxSeconds > 0f ? maxSeconds : babbleMaxSeconds));
+    }
+
+    IEnumerator BabbleRoutine(string text, float maxSeconds)
+    {
+        babbleSource.pitch = 1f;
+        var blipWait = new WaitForSecondsRealtime(babbleInterval);
+        float elapsed = 0f;
+        int i = 0;
+
+        while (i < text.Length && elapsed < maxSeconds)
+        {
+            while (i < text.Length && char.IsWhiteSpace(text[i])) i++;
+            if (i >= text.Length) break;
+
+            int start = i;
+            while (i < text.Length && !char.IsWhiteSpace(text[i])) i++;
+            string word = text.Substring(start, i - start);
+
+            int blips = Mathf.Max(1, Mathf.RoundToInt(word.Length / lettersPerBlip));
+            for (int b = 0; b < blips && elapsed < maxSeconds; b++)
+            {
+                babbleSource.PlayOneShot(babbleBlip, babbleVolume);
+                yield return blipWait;
+                elapsed += babbleInterval;
+            }
+
+            char last = word[word.Length - 1];
+            float pause = (last == '.' || last == '!' || last == '?' || last == '…') ? sentencePause
+                        : (last == ',' || last == ';') ? commaPause
+                        : wordGap;
+            yield return new WaitForSecondsRealtime(pause);
+            elapsed += pause;
+        }
+        babbleRoutine = null;
+    }
 
     public static void StopBabble()
     { if (Instance != null) Instance.StopBabbleInternal(); }
 
-    void StartBabble(int characters, float pitchOffset)
-    {
-        StopBabbleInternal();
-        if (babbleBlip == null || babbleSource == null || characters <= 0) return;
-        float duration = Mathf.Min(characters * babbleSecondsPerCharacter, babbleMaxSeconds);
-        babbleRoutine = StartCoroutine(BabbleRoutine(duration, pitchOffset));
-    }
+
 
     void StopBabbleInternal()
     {
         if (babbleRoutine != null) { StopCoroutine(babbleRoutine); babbleRoutine = null; }
+        if (babbleSource != null) babbleSource.Stop();
     }
 
-    IEnumerator BabbleRoutine(float duration, float pitchOffset)
-    {
-        var wait = new WaitForSecondsRealtime(babbleInterval);
-        float t = 0f;
-        while (t < duration)
-        {
-            babbleSource.pitch = Random.Range(babblePitchMin, babblePitchMax) + pitchOffset;
-            babbleSource.PlayOneShot(babbleBlip, babbleVolume);
-            yield return wait;
-            t += babbleInterval;
-        }
-        babbleRoutine = null;
-    }
+
 }

@@ -15617,7 +15617,7 @@ RectTransform:
   m_Father: {fileID: 1428581721}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -23696,7 +23696,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 18}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1552711649
 MonoBehaviour:
@@ -29367,23 +29367,25 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::AudioManager
   sfxSource: {fileID: 2087675791}
   musicSource: {fileID: 1015332213}
-  buttonClick: {fileID: 0}
-  footstep: {fileID: 0}
-  jumpDash: {fileID: 0}
-  sfxVolume: 1
+  buttonClick: {fileID: 8300000, guid: 00c61b1570e6e73468517ab26238f483, type: 3}
+  footstep: {fileID: 8300000, guid: 56b124da7421e8d4fba5efde5b548723, type: 3}
+  jumpDash: {fileID: 8300000, guid: 4a67f925ed01c4e4794f8a8a76a82798, type: 3}
+  sfxVolume: 0.2
   pitchVariation: 0.08
-  loginMusic: {fileID: 0}
-  chapterMusic: {fileID: 0}
-  musicVolume: 0.4
+  loginMusic: {fileID: 8300000, guid: 03df3299f6932114f9f2e877a977c295, type: 3}
+  chapterMusic: {fileID: 8300000, guid: 8c5d1dd91d2151941a4c8410c66a83be, type: 3}
+  loginMusicVolume: 1
+  chapterMusicVolume: 0.4
   loginSceneName: LoginScene
   chapterScenePrefix: Cap
-  babbleBlip: {fileID: 0}
-  babbleVolume: 0.6
+  babbleBlip: {fileID: 8300000, guid: 9d69a47427cee8f4a9c7411d6d38cc54, type: 3}
+  babbleVolume: 0.8
   babbleInterval: 0.07
-  babbleSecondsPerCharacter: 0.04
-  babbleMaxSeconds: 3
-  babblePitchMin: 0.9
-  babblePitchMax: 1.2
+  lettersPerBlip: 3
+  wordGap: 0.04
+  commaPause: 0.15
+  sentencePause: 0.3
+  babbleMaxSeconds: 4
   babbleSource: {fileID: 77923275}
 --- !u!1 &2032625118
 GameObject:

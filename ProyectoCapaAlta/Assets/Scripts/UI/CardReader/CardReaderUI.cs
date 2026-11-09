@@ -93,7 +93,7 @@ public class CardReaderUI : MonoBehaviour
         else
             Debug.LogError("[CardReaderUI] cardText es NULL");
 
-        AudioManager.PlayBabble(card.cardText.Length);
+        AudioManager.PlayBabble(card.cardText, 2.5f);
 
         Debug.Log($"[CardReaderUI] Activando panel: {readerPanel?.name}");
         readerPanel.SetActive(true);

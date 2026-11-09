@@ -3,8 +3,8 @@ guid: d1e074bfca74f7f4eb852f9fb0c46f92
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 915629191087116087
-    second: hoja_padre_0
+      213: -843970615919206564
+    second: Card_Father_UI_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -113,7 +113,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: hoja_padre_0
+      name: Card_Father_UI_0
       rect:
         serializedVersion: 2
         x: 0
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 73fc9b8e5e7f4bc00800000000000000
-      internalID: 915629191087116087
+      spriteID: c5f9445423d9944f0800000000000000
+      internalID: -843970615919206564
       vertices: []
       indices: 
       edges: []
@@ -148,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      hoja_padre_0: 915629191087116087
+      Card_Father_UI_0: -843970615919206564
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
