@@ -22,6 +22,7 @@ public class PinchosTool : ToolBehaviour
     private float verticalInput;
     private float savedGravity;
     private bool needRelease = true;   // tras soltarse, hay que soltar el click antes de volver a engancharse
+    private float nextMissTime;
 
     protected override void Awake()
     {
@@ -55,9 +56,17 @@ public class PinchosTool : ToolBehaviour
             if (!mouse.leftButton.isPressed) needRelease = false;   // soltó el click: puede volver a engancharse
 
             float facing = theo.FacingLeft ? -1f : 1f;
-            if (!needRelease && !InputBlocked && !ToolUnlockCall.AnyRinging && mouse.leftButton.isPressed
-                && theo.CurrentStamina > 0f && WallAhead(facing))
+            bool canTry = !needRelease && !InputBlocked && !ToolUnlockCall.AnyRinging;
+
+            if (canTry && mouse.leftButton.isPressed && theo.CurrentStamina > 0f && WallAhead(facing))
+            {
                 StartClimbing(facing);
+            }
+            else if (canTry && mouse.leftButton.wasPressedThisFrame && Time.timeScale > 0f && Time.time >= nextMissTime)
+            {
+                nextMissTime = Time.time + 0.5f;   // evita repetir la animación si hace click muy rápido
+                theo.PlayToolMiss();
+            }
             return;
         }
 
@@ -93,6 +102,7 @@ public class PinchosTool : ToolBehaviour
             if (kb.sKey.isPressed) v -= 1f;
         }
         verticalInput = v;
+        theo.SetClimbMoving(Mathf.Abs(v) > 0f);
 
         float rate = Mathf.Abs(v) > 0f ? climbStaminaPerSecond : hangStaminaPerSecond;
         theo.ConsumeStamina(rate * Time.deltaTime);

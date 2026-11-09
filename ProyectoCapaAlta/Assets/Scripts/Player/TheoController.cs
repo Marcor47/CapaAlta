@@ -161,7 +161,27 @@ public class TheoController : MonoBehaviour
     public bool IsHooked => isHooked;
     public bool IsClimbing => isClimbing;
     public void SetHooked(bool value) { isHooked = value; }
-    public void SetClimbing(bool value) { isClimbing = value; }
+    private bool isClimbMoving;
+
+    public void SetClimbing(bool value)
+    {
+        if (value && !isClimbing && anim != null)
+        {
+            anim.ResetTrigger("ClimbStart");
+            anim.SetTrigger("ClimbStart");
+        }
+        isClimbing = value;
+        if (!value) isClimbMoving = false;
+    }
+
+    public void SetClimbMoving(bool value) { isClimbMoving = value; }
+
+    public void PlayToolMiss()
+    {
+        if (anim == null || isClimbing || isToolCharging) return;
+        anim.ResetTrigger("ClimbMiss");
+        anim.SetTrigger("ClimbMiss");
+    }
     public void ConsumeStamina(float amount) { currentStamina = Mathf.Max(0f, currentStamina - amount); }
     public bool JumpFromTool() => PerformJump();
 
@@ -414,6 +434,7 @@ public class TheoController : MonoBehaviour
     void HandleFlip()
     {
         if (isDashing) return;
+        if (isClimbing) return;   // pegado a la pared: no se voltea ni con A/D ni con el mouse
 
         if (isToolCharging)
         {
@@ -734,6 +755,8 @@ public class TheoController : MonoBehaviour
         anim.SetBool("IsGrounded", isGrounded);
         anim.SetBool("IsDashing", isDashing);
         anim.SetBool("IsSitting", isSitting);
+        anim.SetBool("IsClimbing", isClimbing);
+        anim.SetBool("IsClimbMoving", isClimbMoving);
     }
 
     // ─── PROPIEDADES PÚBLICAS ──────────────────────────────────

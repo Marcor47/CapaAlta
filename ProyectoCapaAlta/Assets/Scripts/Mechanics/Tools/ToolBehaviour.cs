@@ -28,10 +28,19 @@ public abstract class ToolBehaviour : MonoBehaviour
         }
     }
 
-    protected Vector2 OriginPosition =>
-        controller != null && controller.toolOrigin != null
-            ? (Vector2)controller.toolOrigin.position
-            : (Vector2)theo.transform.position;
+    protected Vector2 OriginPosition
+    {
+        get
+        {
+            Vector2 center = theo.transform.position;
+            if (controller == null || controller.toolOrigin == null) return center;
+
+            // el offset del toolOrigin está pensado para mirar a la derecha: se espeja si mira a la izquierda
+            Vector2 offset = (Vector2)controller.toolOrigin.position - center;
+            if (theo.FacingLeft) offset.x = -offset.x;
+            return center + offset;
+        }
+    }
 
     protected static Vector2 MouseWorldPosition()
     {
