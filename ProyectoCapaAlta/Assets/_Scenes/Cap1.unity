@@ -13319,8 +13319,18 @@ MonoBehaviour:
   speakerName: "Mam\xE1"
   momComments:
   - "Si sigues intentando, ning\xFAn obst\xE1culo te detendr\xE1."
-  - "T\xF3mate tu tiempo de apreciar lo que tienes en el camino, Theo."
-  linesPerCall: 2
+  - "T\xF3mate tu tiempo para apreciar lo que tienes en el camino, Theo."
+  - "Respira hondo. Lo est\xE1s haciendo mejor de lo que crees."
+  - "No tienes que apurarte, el camino sigue aqu\xED."
+  - "Me alegra o\xEDrte, Theo. Sigue a tu ritmo."
+  - "Si te cansas, si\xE9ntate un momento. Eso tambi\xE9n es avanzar."
+  - "Estoy orgullosa de ti, \xBFlo sab\xEDas?"
+  - "Cada paso cuenta, aunque sea peque\xF1o."
+  - "Recuerda a d\xF3nde quieres llegar."
+  - Escucha lo que sientes, no hay nada malo en eso.
+  - "Pase lo que pase, aqu\xED estoy para ti."
+  - Un poco de agua y un buen respiro, y sigues.
+  linesPerCall: 1
   babbleSource: {fileID: 0}
   babbleClips: []
   babbleSecondsPerCharacter: 0.05

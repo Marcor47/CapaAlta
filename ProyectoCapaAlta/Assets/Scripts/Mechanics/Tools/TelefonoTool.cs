@@ -44,7 +44,7 @@ public class TelefonoTool : ToolBehaviour
     private string dotsOriginalText;
     private float tempMessageUntil;
     private float babbleStopTime;
-
+    
     public override void ResetOnRespawn() => EndCall();
 
     protected override void Awake()
@@ -172,6 +172,7 @@ public class TelefonoTool : ToolBehaviour
     void OnDisable() => EndCall();
 
     // ─── COMENTARIOS Y BALBUCEO ────────────────────────────────
+    private string lastText;
     DialogueLine[] PickLines()
     {
         if (momComments == null || momComments.Length == 0) return null;
@@ -182,7 +183,10 @@ public class TelefonoTool : ToolBehaviour
         for (int i = 0; i < n; i++)
         {
             int k = Random.Range(0, pool.Count);
+            if (n == 1 && pool.Count > 1 && momComments[k] == lastText)
+                k = (k + 1) % pool.Count;
             lines[i] = new DialogueLine { speakerName = speakerName, text = pool[k] };
+            if (n == 1) lastText = pool[k];
             pool.RemoveAt(k);
         }
         return lines;
