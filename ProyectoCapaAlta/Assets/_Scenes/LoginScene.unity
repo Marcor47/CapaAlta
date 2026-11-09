@@ -29379,7 +29379,7 @@ MonoBehaviour:
   loginSceneName: LoginScene
   chapterScenePrefix: Cap
   babbleBlip: {fileID: 8300000, guid: 9d69a47427cee8f4a9c7411d6d38cc54, type: 3}
-  babbleVolume: 0.8
+  babbleVolume: 1
   babbleInterval: 0.07
   lettersPerBlip: 3
   wordGap: 0.04
