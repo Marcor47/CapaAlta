@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0cc89f5f6e2ef6140828ac636dfc815e, type: 3}
+  m_Name: Cap4_Les_03
+  m_EditorClassIdentifier: Assembly-CSharp::CardData
+  cardID: Les_03
+  authorName: Les
+  cardType: 1
+  chapter: 4
+  cardText: "Habl\u00E9 con el Viajero. Le cont\u00E9 lo que pas\u00F3 con Laila y me dijo algo que no esperaba, que el amor que uno entrega a otro nunca es un error, aunque la otra persona no sienta lo mismo. Y que alguien puede ahogarse con el amor que se guarda adentro. Me dio risa, \u00A1c\u00F3mo se va a ahogar uno de amor! Pero me qued\u00E9 pensando. Ojal\u00E1 alg\u00FAn d\u00EDa lo entienda y sienta paz por haber compartido ese amor."
+  cardSprite: {fileID: 21300000, guid: 0f62e51aff50ddd409c524747f8bb435, type: 3}
+  babbleAudio: {fileID: 0}

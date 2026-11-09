@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0cc89f5f6e2ef6140828ac636dfc815e, type: 3}
+  m_Name: Cap4_Padre_04
+  m_EditorClassIdentifier: Assembly-CSharp::CardData
+  cardID: Padre_04
+  authorName: Jason
+  cardType: 0
+  chapter: 4
+  cardText: "Pienso mucho en c\u00F3mo ser\u00E1s ahora. La \u00FAltima vez que te vi cab\u00EDas en mis brazos, y desde entonces solo me quedan mis recuerdos. Cuando cae nieve me pregunto si alg\u00FAn d\u00EDa podremos jugar juntos en ella. Dej\u00E9 que se fueran porque te quiero y no quer\u00EDa atarte a este legado, mereces vivir la vida que t\u00FA elijas. Perd\u00F3n si no me fui con ustedes. Te pienso todos los d\u00EDas y te extra\u00F1o, mi querido Theo."
+  cardSprite: {fileID: 21300000, guid: d1e074bfca74f7f4eb852f9fb0c46f92, type: 3}
+  babbleAudio: {fileID: 0}

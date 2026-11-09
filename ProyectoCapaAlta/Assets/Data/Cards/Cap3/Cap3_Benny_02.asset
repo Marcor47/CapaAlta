@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0cc89f5f6e2ef6140828ac636dfc815e, type: 3}
+  m_Name: Cap3_Benny_02
+  m_EditorClassIdentifier: Assembly-CSharp::CardData
+  cardID: Benny_02
+  authorName: Benny
+  cardType: 1
+  chapter: 3
+  cardText: "El Viajero me prest\u00F3 una enciclopedia. Es gord\u00EDsima y tiene mucha informaci\u00F3n sobre biolog\u00EDa y f\u00EDsica. Me dijo que no va a resolver todas mis dudas, pero que me va a ayudar a entender un poco mejor c\u00F3mo funciona todo. Igual la curiosidad no me deja tranquilo, quiero saber m\u00E1s y a veces me agobia. \u00BFSer\u00E1 que estoy en este mundo para aprender? Voy a seguir leyendo para averiguarlo."
+  cardSprite: {fileID: 21300000, guid: 0f62e51aff50ddd409c524747f8bb435, type: 3}
+  babbleAudio: {fileID: 0}

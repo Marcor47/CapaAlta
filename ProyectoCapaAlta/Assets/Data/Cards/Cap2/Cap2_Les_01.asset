@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0cc89f5f6e2ef6140828ac636dfc815e, type: 3}
+  m_Name: Cap2_Les_01
+  m_EditorClassIdentifier: Assembly-CSharp::CardData
+  cardID: Les_01
+  authorName: Les
+  cardType: 1
+  chapter: 2
+  cardText: "\u00BFUna amistad de toda la vida, que se construye tan despacio, puede romperse en un segundo? Hay alguien muy especial para m\u00ED. Con esa persona hasta el silencio es c\u00F3modo, y siempre sabe c\u00F3mo hacerme re\u00EDr. \u00DAltimamente siento algo distinto cada vez que la veo, pero me da miedo perderla porque no s\u00E9 si siente lo mismo. \u00BFY si se lo digo y lo arruino todo? \u00BFY si no se lo digo y me lo guardo para siempre?"
+  cardSprite: {fileID: 21300000, guid: 0f62e51aff50ddd409c524747f8bb435, type: 3}
+  babbleAudio: {fileID: 0}

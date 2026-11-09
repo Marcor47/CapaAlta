@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0cc89f5f6e2ef6140828ac636dfc815e, type: 3}
+  m_Name: Cap2_Grace_02
+  m_EditorClassIdentifier: Assembly-CSharp::CardData
+  cardID: Grace_02
+  authorName: Grace
+  cardType: 1
+  chapter: 2
+  cardText: "Hoy el Viajero me regal\u00F3 un telescopio. Lo arm\u00F3 \u00E9l mismo, qued\u00F3 medio chueco, pero funciona. Me explic\u00F3 que algunas estrellas que vemos quiz\u00E1 ya se apagaron, pero su luz sigue viajando hasta llegar a nuestros ojos. Todo lo que miro est\u00E1 ah\u00ED solo un ratito. Creo que lo que pesa no es cu\u00E1nto dura algo, sino que alguien se detenga a mirarlo. Con las personas debe pasar igual."
+  cardSprite: {fileID: 21300000, guid: 0f62e51aff50ddd409c524747f8bb435, type: 3}
+  babbleAudio: {fileID: 0}

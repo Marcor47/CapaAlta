@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0cc89f5f6e2ef6140828ac636dfc815e, type: 3}
+  m_Name: Cap1_Duke_01
+  m_EditorClassIdentifier: Assembly-CSharp::CardData
+  cardID: Duke_01
+  authorName: Duke
+  cardType: 1
+  chapter: 1
+  cardText: "Desde que te fuiste, hermanito, todo en casa se siente m\u00E1s silencioso. No dejo de pensar en qu\u00E9 pude hacer distinto, jugar m\u00E1s a la pelota contigo, contarte m\u00E1s historias antes de dormir. Ya casi no salgo ni converso con nadie del pueblo porque no s\u00E9 qu\u00E9 decirles. Por eso escribo esto, es m\u00E1s f\u00E1cil cont\u00E1rselo al viento, que no me responde. Ojal\u00E1 con el tiempo me cueste menos extra\u00F1arte."
+  cardSprite: {fileID: 21300000, guid: 0f62e51aff50ddd409c524747f8bb435, type: 3}
+  babbleAudio: {fileID: 0}
