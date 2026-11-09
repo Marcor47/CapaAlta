@@ -25,7 +25,12 @@ public class ToolUnlockCall : MonoBehaviour
     public GameObject ringingPromptUI;  // "Mamá te está llamando: equipa el teléfono (mantén E) y haz click"
     public GameObject unlockedToastUI;  // opcional: "Herramienta desbloqueada"
     public float toastSeconds = 3f;
-    public AudioSource ringtone;
+    
+
+    [Header("Timbre (usa el click de botón)")]
+    public float ringGap = 0.2f;          // pausa entre los 2 sonidos
+    public float ringRepeatEvery = 0f;    // 0 = suena solo una vez; >0 = repite el par cada N s mientras suena
+    private Coroutine ringRoutine;
 
     private TheoController theo;
     private bool ringing;
@@ -54,7 +59,7 @@ public class ToolUnlockCall : MonoBehaviour
                  && InventorySystem.Instance.IsUnlocked(InventorySystem.ItemType.Telefono);
         if (lockedMovement) theo.SetMovementLocked(true);
         if (ringingPromptUI != null) ringingPromptUI.SetActive(true);
-        if (ringtone != null) ringtone.Play();
+        ringRoutine = StartCoroutine(RingRoutine());
     }
 
     void Update()
@@ -73,7 +78,7 @@ public class ToolUnlockCall : MonoBehaviour
             AnyRinging = false;
             LastAnswerFrame = Time.frameCount;
             if (ringingPromptUI != null) ringingPromptUI.SetActive(false);
-            if (ringtone != null) ringtone.Stop();
+            StopRing();
             UnlockMovement();
             StartCoroutine(AnswerRoutine());
         }
@@ -87,6 +92,7 @@ public class ToolUnlockCall : MonoBehaviour
 
     void OnDestroy()
     {
+        StopRing();
         if (ringing) AnyRinging = false;
         UnlockMovement();
         EndCallPose();
@@ -119,6 +125,25 @@ public class ToolUnlockCall : MonoBehaviour
                 unlockedToastUI.SetActive(false);
             }
         }
+    }
+
+    IEnumerator RingRoutine()
+    {
+        var gap = new WaitForSeconds(ringGap);
+        while (ringing)
+        {
+            AudioManager.PlayClick();
+            yield return gap;
+            AudioManager.PlayClick();
+            if (ringRepeatEvery <= 0f) break;
+            yield return new WaitForSeconds(ringRepeatEvery);
+        }
+        ringRoutine = null;
+    }
+
+    void StopRing()
+    {
+        if (ringRoutine != null) { StopCoroutine(ringRoutine); ringRoutine = null; }
     }
 
     void StartCallPose()
