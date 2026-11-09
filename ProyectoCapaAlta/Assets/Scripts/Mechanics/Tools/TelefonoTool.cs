@@ -25,10 +25,7 @@ public class TelefonoTool : ToolBehaviour
     [TextArea(1, 3)] public string[] momComments;
     public int linesPerCall = 2;                  // cuántos comentarios dice por llamada
 
-    [Header("Balbuceo (opcional, Bloque 14)")]
-    public AudioSource babbleSource;
-    public AudioClip[] babbleClips;
-    public float babbleSecondsPerCharacter = 0.05f;
+
 
     private enum Phase { Idle, Waiting, Connected }
     private static readonly string[] dotFrames = { "...", "..", "." };
@@ -43,7 +40,7 @@ public class TelefonoTool : ToolBehaviour
     private bool dotsOwned;                       // true mientras RingingPrompt lo usa este script
     private string dotsOriginalText;
     private float tempMessageUntil;
-    private float babbleStopTime;
+
     
     public override void ResetOnRespawn() => EndCall();
 
@@ -136,7 +133,7 @@ public class TelefonoTool : ToolBehaviour
         phase = Phase.Connected;
         theo.SetMomConnected(true);                 // desde aquí regenera Regulación rápido
         DialogueManager.Instance.ShowSimpleLines(speakerName, lines);
-        StartBabble(lines);
+        
     }
 
     void UpdateConnected()
@@ -148,8 +145,6 @@ public class TelefonoTool : ToolBehaviour
             return;
         }
 
-        if (babbleSource != null && babbleSource.isPlaying && Time.time >= babbleStopTime)
-            babbleSource.Stop();
     }
 
     void NoAnswer()
@@ -166,7 +161,7 @@ public class TelefonoTool : ToolBehaviour
 
         ReleaseDots(false);
         if (theo != null) theo.SetCallingMom(false);
-        if (babbleSource != null) babbleSource.Stop();
+       
     }
 
     void OnDisable() => EndCall();
@@ -192,19 +187,7 @@ public class TelefonoTool : ToolBehaviour
         return lines;
     }
 
-    void StartBabble(DialogueLine[] lines)
-    {
-        if (babbleSource == null || babbleClips == null || babbleClips.Length == 0) return;
-
-        int chars = 0;
-        foreach (var l in lines) chars += l.text.Length;
-
-        babbleSource.clip = babbleClips[Random.Range(0, babbleClips.Length)];
-        babbleSource.loop = true;
-        babbleSource.Play();
-        babbleStopTime = Time.time + chars * babbleSecondsPerCharacter;
-    }
-
+    
     // ─── AVISO (RingingPrompt) ─────────────────────────────────
     void ShowDots(string s)
     {

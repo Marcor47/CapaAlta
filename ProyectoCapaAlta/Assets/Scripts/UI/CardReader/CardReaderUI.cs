@@ -93,11 +93,7 @@ public class CardReaderUI : MonoBehaviour
         else
             Debug.LogError("[CardReaderUI] cardText es NULL");
 
-        if (babbleSource != null && card.babbleAudio != null)
-        {
-            babbleSource.clip = card.babbleAudio;
-            babbleSource.Play();
-        }
+        AudioManager.PlayBabble(card.cardText.Length);
 
         Debug.Log($"[CardReaderUI] Activando panel: {readerPanel?.name}");
         readerPanel.SetActive(true);
@@ -111,9 +107,7 @@ public class CardReaderUI : MonoBehaviour
     {
         if (!isOpen) return;
 
-        // Detener audio si sigue sonando
-        if (babbleSource != null && babbleSource.isPlaying)
-            babbleSource.Stop();
+        AudioManager.StopBabble();
 
         readerPanel.SetActive(false);
         Time.timeScale = 1f;

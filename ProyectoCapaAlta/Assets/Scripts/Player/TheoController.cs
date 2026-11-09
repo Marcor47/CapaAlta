@@ -109,6 +109,7 @@ public class TheoController : MonoBehaviour
     {
         if (!isToolCharging) return;
         isToolCharging = false;
+        if (released) AudioManager.PlayClick();
         if (anim == null) return;
         anim.ResetTrigger("Charge");
         anim.SetTrigger(released ? "Throw" : "CancelCharge");
@@ -132,6 +133,16 @@ public class TheoController : MonoBehaviour
 
     // ─── ESTADO INTERNO ────────────────────────────────────────
     private float moveInput;
+
+
+
+    [Header("Audio")]
+    public float footstepInterval = 0.35f;
+    public float footstepMinSpeed = 0.5f;
+    private float footstepTimer;
+
+
+
     private bool isGrounded;
     private bool wasGrounded;
 
@@ -263,7 +274,9 @@ public class TheoController : MonoBehaviour
         HandleBackpackInput();
         HandleSitInput();
         
+
         HandleAnimations();
+        HandleFootsteps();
 
         if (!canMove && Keyboard.current.aKey.wasPressedThisFrame)
             Debug.Log($"[Theo] bloqueado -> respawn={IsRespawning} locked={movementLocked} sentado={isSitting} mochila={isBackpackOpen && isGrounded} dialogo={isInDialogue} mama={isCallingMom} timeScale={Time.timeScale}");
@@ -399,7 +412,11 @@ public class TheoController : MonoBehaviour
         rb.linearVelocity = new Vector2(rb.linearVelocity.x, effectiveJumpForce);
         coyoteTimeCounter = 0f;
         jumpBufferCounter = 0f;
+
+
         currentStamina = Mathf.Max(0f, currentStamina - jumpStaminaCost);
+        AudioManager.PlayJumpDash();
+
         return true;
     }
 
@@ -476,6 +493,8 @@ public class TheoController : MonoBehaviour
             rb.gravityScale = 0f;
             currentStamina -= dashStaminaCost;
             dashCooldownCounter = dashCooldown;
+
+            AudioManager.PlayJumpDash();
         }
     }
 
@@ -763,6 +782,20 @@ public class TheoController : MonoBehaviour
         anim.SetBool("IsClimbing", isClimbing);
         anim.SetBool("IsClimbMoving", isClimbMoving);
         anim.SetBool("IsCalling", isCallingMom);
+    }
+
+    void HandleFootsteps()
+    {
+        bool walking = isGrounded && !isClimbing && !isHooked && !isSitting
+                       && Mathf.Abs(rb.linearVelocity.x) > footstepMinSpeed;
+        if (!walking) { footstepTimer = 0f; return; }
+
+        footstepTimer -= Time.deltaTime;
+        if (footstepTimer <= 0f)
+        {
+            AudioManager.PlayStep();
+            footstepTimer = footstepInterval;
+        }
     }
 
     // ─── PROPIEDADES PÚBLICAS ──────────────────────────────────

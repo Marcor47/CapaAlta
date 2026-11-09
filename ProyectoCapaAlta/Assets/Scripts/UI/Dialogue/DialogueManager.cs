@@ -188,6 +188,7 @@ public class DialogueManager : MonoBehaviour
             if (!isTheoLine) npcNameText.text = speaker;
 
             dialogueText.text = line.text;
+            AudioManager.PlayBabble(line.text.Length, isTheoLine ? 0.3f : 0f);
             waitingInput = true;
             SetArrow(true);
         }
@@ -276,6 +277,7 @@ public class DialogueManager : MonoBehaviour
         
         SetNPCSpeaking(false);
         SetArrow(false);
+        AudioManager.StopBabble();
         if (currentNpcTalk != null) currentNpcTalk.SetTalking(false);
         state = DialogueState.Choosing;
         choosingOption = true;
@@ -342,6 +344,7 @@ public class DialogueManager : MonoBehaviour
         isOpen = false;
         simpleMode = false;
         SetArrow(false);
+        AudioManager.StopBabble();
         if (currentNpcTalk != null) currentNpcTalk.SetTalking(false);
         currentNpcTalk = null;
 
