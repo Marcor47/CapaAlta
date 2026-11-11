@@ -16,6 +16,16 @@ MonoBehaviour:
   authorName: Jason
   cardType: 0
   chapter: 4
-  cardText: "Pienso mucho en c\u00F3mo ser\u00E1s ahora. La \u00FAltima vez que te vi cab\u00EDas en mis brazos, y desde entonces solo me quedan mis recuerdos. Cuando cae nieve me pregunto si alg\u00FAn d\u00EDa podremos jugar juntos en ella. Dej\u00E9 que se fueran porque te quiero y no quer\u00EDa atarte a este legado, mereces vivir la vida que t\u00FA elijas. Perd\u00F3n si no me fui con ustedes. Te pienso todos los d\u00EDas y te extra\u00F1o, mi querido Theo."
+  cardText: "Pienso mucho en c\xF3mo ser\xE1s ahora. La \xFAltima vez que te vi cab\xEDas
+    en mis brazos, y desde entonces solo me quedan mis recuerdos. Cuando cae nieve
+    me pregunto si alg\xFAn d\xEDa podremos jugar juntos en ella. Dej\xE9 que se
+    fueran porque te quiero y no quer\xEDa atarte a este legado, mereces vivir la
+    vida que t\xFA elijas. Perd\xF3n si no me fui con ustedes. Te pienso todos los
+    d\xEDas y te extra\xF1o, mi querido Theo."
+  theoReactionLines:
+  - "Pap\xE1\u2026"
+  - "Perd\xF3n por pensar que no viniste porque no quer\xEDas."
+  - "Ah\xED voy, pap\xE1."
+  - "Esp\xE9rame un poco m\xE1s."
   cardSprite: {fileID: 21300000, guid: d1e074bfca74f7f4eb852f9fb0c46f92, type: 3}
   babbleAudio: {fileID: 0}

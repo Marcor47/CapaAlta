@@ -16,6 +16,14 @@ MonoBehaviour:
   authorName: Jason
   cardType: 0
   chapter: 1
-  cardText: "Hoy sub\u00ED al tejado de la casa, como sol\u00EDas subirme t\u00FA, pap\u00E1. Estoy cuidando bien de ella, todo est\u00E1 en su lugar, hasta la silla junto a la ventana donde t\u00FA sol\u00EDas leer, mam\u00E1. Casi los llamo para ver el atardecer, y entonces me acuerdo. Me acostumbr\u00E9 a una casa en silencio, pero no a que ustedes ya no est\u00E9n. Los extra\u00F1o m\u00E1s de lo que digo."
+  cardText: "Hoy sub\xED al tejado de la casa, como sol\xEDas subirme t\xFA, pap\xE1.
+    Estoy cuidando bien de ella, todo est\xE1 en su lugar, hasta la silla junto a
+    la ventana donde t\xFA sol\xEDas leer, mam\xE1. Casi los llamo para ver el atardecer,
+    y entonces me acuerdo. Me acostumbr\xE9 a una casa en silencio, pero no a que
+    ustedes ya no est\xE9n. Los extra\xF1o m\xE1s de lo que digo."
+  theoReactionLines:
+  - "\xBFJason? Es el nombre de pap\xE1\u2026"
+  - "\xBFLa habr\xE1 escrito \xE9l?"
+  - "No hab\xEDa pensado que \xE9l tambi\xE9n extra\xF1a a sus padres\u2026"
   cardSprite: {fileID: 21300000, guid: d1e074bfca74f7f4eb852f9fb0c46f92, type: 3}
   babbleAudio: {fileID: 0}

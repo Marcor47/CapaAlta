@@ -16,6 +16,17 @@ MonoBehaviour:
   authorName: Mely
   cardType: 1
   chapter: 3
-  cardText: "La maleta est\u00E1 lista desde ayer y a\u00FAn no la cierro. Me encanta esta monta\u00F1a, y t\u00FA a\u00FAn m\u00E1s. S\u00E9 que lo hablamos y quedamos de acuerdo en que Theo merece un mundo m\u00E1s grande para elegir su propio camino. Pero cuando se durmi\u00F3 en mi hombro me pregunt\u00E9, \u00BFy si de verdad no vienes? Una parte de m\u00ED sigue esperando que cambies de idea. Te amo, y eso no se va a ir con la distancia, mi querido Jason."
+  cardText: "La maleta est\xE1 lista desde ayer y a\xFAn no la cierro. Me encanta
+    esta monta\xF1a, y t\xFA a\xFAn m\xE1s. S\xE9 que lo hablamos y quedamos de acuerdo
+    en que Theo merece un mundo m\xE1s grande para elegir su propio camino. Pero
+    cuando se durmi\xF3 en mi hombro me pregunt\xE9, \xBFy si de verdad no vienes?
+    Una parte de m\xED sigue esperando que cambies de idea. Te amo, y eso no se va
+    a ir con la distancia, mi querido Jason."
+  theoReactionLines:
+  - "\xBFMely?"
+  - "Mam\xE1\u2026"
+  - "Pudiste haberte quedado tambi\xE9n."
+  - "Aunque si lo hubieras hecho, nunca habr\xEDa podido conocer y vivir tanto."
+  - "Pero la felicidad de ustedes tambi\xE9n importa."
   cardSprite: {fileID: 21300000, guid: 0f62e51aff50ddd409c524747f8bb435, type: 3}
   babbleAudio: {fileID: 0}

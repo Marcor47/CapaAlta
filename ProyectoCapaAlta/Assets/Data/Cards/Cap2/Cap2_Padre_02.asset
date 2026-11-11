@@ -16,6 +16,16 @@ MonoBehaviour:
   authorName: Jason
   cardType: 0
   chapter: 2
-  cardText: "A pesar de mis esfuerzos con las construcciones y las cosechas, siento que no es suficiente. Todos me llaman guardi\u00E1n y me miran como a un l\u00EDder, pero no me siento como los que vinieron antes que yo. No quiero ser solo quien los cuida, quiero ser alguien que de verdad les haga falta. Aun con los dones que me dieron, siento que tal vez ya no nos necesitan. Ojal\u00E1 alcancen mis esfuerzos, ojal\u00E1 importen."
+  cardText: "A pesar de mis esfuerzos con las construcciones y las cosechas, siento
+    que no es suficiente. Todos me llaman guardi\xE1n y me miran como a un l\xEDder,
+    pero no me siento como los que vinieron antes que yo. No quiero ser solo quien
+    los cuida, quiero ser alguien que de verdad les haga falta. Aun con los dones
+    que me dieron, siento que tal vez ya no nos necesitan. Ojal\xE1 alcancen mis
+    esfuerzos, ojal\xE1 importen."
+  theoReactionLines:
+  - "\xBFGuardi\xE1n? \xBFL\xEDder? \xBFDones?"
+  - "\xBFTendr\xE1 los mismos poderes que yo?"
+  - "Pap\xE1 es importante en el pueblo\u2026"
+  - "Y aun as\xED siente que no es suficiente."
   cardSprite: {fileID: 21300000, guid: d1e074bfca74f7f4eb852f9fb0c46f92, type: 3}
   babbleAudio: {fileID: 0}

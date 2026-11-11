@@ -158,6 +158,19 @@ public class DialogueManager : MonoBehaviour
         ShowCurrentLine();
     }
 
+    // Pensamientos de Theo (sin NPC ni opciones). Usado por CardReaderUI al cerrar una carta
+    public void ShowTheoLines(string[] texts)
+    {
+        if (texts == null || texts.Length == 0) return;
+
+        var lines = new DialogueLine[texts.Length];
+        for (int i = 0; i < texts.Length; i++)
+            lines[i] = new DialogueLine { speakerName = "Theo", text = texts[i] };
+
+        currentNpcTalk = null;
+        ShowSimpleLines("Theo", lines);
+    }
+
     // ─── MOSTRAR LÍNEA ACTUAL ──────────────────────────────────
     void ShowCurrentLine()
     {
@@ -171,6 +184,7 @@ public class DialogueManager : MonoBehaviour
             if (simpleMode)
             {
                 speaker = string.IsNullOrEmpty(line.speakerName) ? simpleSpeakerName : line.speakerName;
+                isTheoLine = speaker == "Theo";
             }
             else
             {

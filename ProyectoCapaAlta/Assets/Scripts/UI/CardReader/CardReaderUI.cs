@@ -26,6 +26,7 @@ public class CardReaderUI : MonoBehaviour
 
     // ─── ESTADO ────────────────────────────────────────────────
     private bool isOpen = false;
+    private CardData currentCard;
 
     // ──────────────────────────────────────────────────────────
     void Awake()
@@ -77,6 +78,7 @@ public class CardReaderUI : MonoBehaviour
             Debug.LogError("[CardReaderUI] card es NULL");
             return;
         }
+        currentCard = card;
 
         if (cardBackground != null && card.cardSprite != null)
             cardBackground.sprite = card.cardSprite;
@@ -112,6 +114,13 @@ public class CardReaderUI : MonoBehaviour
         readerPanel.SetActive(false);
         Time.timeScale = 1f;
         isOpen = false;
+
+        // Reacción de Theo a la carta (si la tiene)
+        var card = currentCard;
+        currentCard = null;
+        if (card != null && card.theoReactionLines != null && card.theoReactionLines.Length > 0
+            && DialogueManager.Instance != null)
+            DialogueManager.Instance.ShowTheoLines(card.theoReactionLines);
     }
 
     // ─── PROPIEDADES PÚBLICAS ──────────────────────────────────

@@ -16,6 +16,14 @@ MonoBehaviour:
   authorName: Jason
   cardType: 0
   chapter: 3
-  cardText: "Dejaste una taza en la repisa y no me animo a guardarla. Cada ma\u00F1ana sirvo t\u00E9 para dos por costumbre y me lo tomo solo, mirando la puerta. Para ti el mundo era peque\u00F1o, y yo ya ten\u00EDa todo mi mundo aqu\u00ED conmigo, quiz\u00E1 por eso nos quisimos tanto. Te extra\u00F1o en cada rinc\u00F3n de esta casa y en cada amanecer de esta monta\u00F1a. Ojal\u00E1 est\u00E9s bien, mi querida Mely."
+  cardText: "Dejaste una taza en la repisa y no me animo a guardarla. Cada ma\xF1ana
+    sirvo t\xE9 para dos por costumbre y me lo tomo solo, mirando la puerta. Para
+    ti el mundo era peque\xF1o, y yo ya ten\xEDa todo mi mundo aqu\xED conmigo, quiz\xE1
+    por eso nos quisimos tanto. Te extra\xF1o en cada rinc\xF3n de esta casa y en
+    cada amanecer de esta monta\xF1a. Ojal\xE1 est\xE9s bien, mi querida Mely."
+  theoReactionLines:
+  - "T\xE9 para dos, todas las ma\xF1anas\u2026"
+  - "A mam\xE1 le gustar\xEDa mucho leer esto."
+  - "Ella tambi\xE9n te extra\xF1a, pap\xE1."
   cardSprite: {fileID: 21300000, guid: d1e074bfca74f7f4eb852f9fb0c46f92, type: 3}
   babbleAudio: {fileID: 0}

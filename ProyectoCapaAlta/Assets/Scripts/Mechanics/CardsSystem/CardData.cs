@@ -23,6 +23,11 @@ public class CardData : ScriptableObject
     public string cardText;
     // Texto completo de la carta
 
+    [Header("Reacción de Theo (opcional)")]
+    [TextArea(1, 3)]
+    public string[] theoReactionLines;
+    // Lo que Theo piensa al cerrar la carta. Vacío = no dice nada
+
     // ─── VISUAL Y AUDIO ────────────────────────────────────────
     [Header("Visual y Audio")]
     public Sprite cardSprite;
