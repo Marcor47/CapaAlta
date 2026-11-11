@@ -898,7 +898,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
   m_AnchoredPosition: {x: 0, y: -60}
-  m_SizeDelta: {x: 465, y: 60}
+  m_SizeDelta: {x: 470, y: 60}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &251101022
 MonoBehaviour:
@@ -3557,9 +3557,11 @@ MonoBehaviour:
   - speakerName: 
     text: "Es posible que experimentes cosas... extra\xF1as en el camino a la monta\xF1a."
   - speakerName: 
-    text: "Tu pap\xE1 era una persona muy... especial."
+    text: "Tu pap\xE1 era muy... especial. Siempre me hablaba de la cultura de su
+      pueblo."
   - speakerName: 
-    text: Siempre me contaba historias sobre la cultura de su pueblo.
+    text: "Su pueblo tiene un v\xEDnculo con la monta\xF1a, no me sorprender\xEDa
+      que lo heredaras."
   - speakerName: 
     text: "Mientras seas valiente y honesto, la monta\xF1a cuidar\xE1 de ti."
   - speakerName: 
@@ -3697,8 +3699,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 28
-  m_fontSizeBase: 28
+  m_fontSize: 24
+  m_fontSizeBase: 24
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -3767,7 +3769,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: -32, y: -32}
+  m_SizeDelta: {x: -16, y: -16}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1117889334
 GameObject:
