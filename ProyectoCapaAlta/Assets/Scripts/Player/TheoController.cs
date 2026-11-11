@@ -479,6 +479,7 @@ public class TheoController : MonoBehaviour
     {
         if (isHooked || isClimbing) return;
         if (!dashEnabled || !canMove) return;
+        if (CardReaderUI.Instance != null && CardReaderUI.Instance.IsOpen) return;
         if (InventorySystem.Instance != null &&
             !InventorySystem.Instance.IsUnlocked(InventorySystem.ItemType.Dash)) return;
         if (currentStamina < dashStaminaCost) return;

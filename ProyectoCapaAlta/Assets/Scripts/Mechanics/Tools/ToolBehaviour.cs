@@ -22,7 +22,8 @@ public abstract class ToolBehaviour : MonoBehaviour
         get
         {
             bool blockedNow = theo == null || theo.IsInDialogue || theo.IsBackpackOpen
-                  || theo.IsSitting || theo.IsDashing || theo.IsRespawning;
+                  || theo.IsSitting || theo.IsDashing || theo.IsRespawning
+                  || (CardReaderUI.Instance != null && CardReaderUI.Instance.IsOpen);
             if (blockedNow) unblockTime = Time.unscaledTime + 0.15f;
             return blockedNow || Time.unscaledTime < unblockTime;
         }

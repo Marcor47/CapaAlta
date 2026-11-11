@@ -71,6 +71,7 @@ public class ToolUnlockCall : MonoBehaviour
         if (mouse == null || inventory == null || theo == null) return;
         if (theo.IsBackpackOpen || theo.IsSitting || theo.IsInDialogue) return;
         if (DialogueManager.Instance != null && DialogueManager.Instance.IsOpen) return;
+        if (CardReaderUI.Instance != null && CardReaderUI.Instance.IsOpen) return;
 
         if (inventory.Equipped == InventorySystem.ItemType.Telefono && mouse.leftButton.wasPressedThisFrame)
         {
