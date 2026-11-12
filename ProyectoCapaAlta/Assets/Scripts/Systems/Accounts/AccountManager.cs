@@ -158,15 +158,51 @@ public class AccountManager : MonoBehaviour
         });
     }
 
+    // npcID (el de cada DialogueNode) de los NPC que aparecen en cada capítulo
+    static readonly Dictionary<int, string[]> ChapterNpcs = new Dictionary<int, string[]>
+{
+    { 1, new[] { "gaz", "ryland_astro" } },
+    { 2, new[] { "haru", "gaz" } },
+    { 3, new[] { "haru", "lee_wilber" } },
+    { 4, new[] { "gaz", "padre" } },
+};
+
     void RestoreSnapshot(int chapter)
     {
         var p = CurrentUser.progress;
         var s = p.chapterSnapshots.Find(x => x.chapter == chapter);
         if (s == null) return;
-        p.npcRelationshipKeys = new List<string>(s.npcKeys);
-        p.npcRelationshipValues = new List<int>(s.npcValues);
-        p.manzanasAvailable = s.manzanasAvailable;
-        p.manzanasUsedOnSaved = new List<string>(s.manzanasUsedOn);
+
+        // 1) Relaciones: solo los NPC de este capítulo vuelven a como estaban al entrar
+        if (ChapterNpcs.TryGetValue(chapter, out var npcs))
+        {
+            foreach (var npc in npcs)
+            {
+                int snapVal = 0;
+                int si = s.npcKeys.IndexOf(npc);
+                if (si >= 0) snapVal = s.npcValues[si];
+
+                int ci = p.npcRelationshipKeys.IndexOf(npc);
+                if (ci >= 0) p.npcRelationshipValues[ci] = snapVal;
+                else if (snapVal != 0)
+                {
+                    p.npcRelationshipKeys.Add(npc);
+                    p.npcRelationshipValues.Add(snapVal);
+                }
+            }
+        }
+
+        // 2) Manzanas: solo se restauran si no se inició ningún capítulo posterior
+        bool isLatest = true;
+        foreach (int c in p.chaptersStarted)
+            if (c > chapter) { isLatest = false; break; }
+
+        if (isLatest)
+        {
+            p.manzanasAvailable = s.manzanasAvailable;
+            p.manzanasUsedOnSaved = new List<string>(s.manzanasUsedOn);
+            p.manzanaNodesGiven.RemoveAll(id => id.StartsWith($"Cap{chapter}_"));
+        }
     }
 
     public void SaveCheckpoint(int chapter, Vector3 pos)
@@ -247,6 +283,7 @@ public class StudentProgress
     public List<string> completedNodesSaved = new List<string>();
     public int manzanasAvailable = 0;
     public List<string> manzanasUsedOnSaved = new List<string>();
+    public List<string> manzanaNodesGiven = new List<string>();
 
     // NUEVO — libreta
     //public List<NotebookEntry> notebookEntries = new List<NotebookEntry>();

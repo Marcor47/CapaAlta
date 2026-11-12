@@ -121,6 +121,25 @@ public class DecisionRecord : MonoBehaviour
         SaveToAccount();
     }
 
+    // Manzana entregada por un encuentro: una sola vez por nodo, aunque se rejuegue
+    public void AddManzanaFromNode(string nodeID)
+    {
+        if (AccountManager.Instance != null && AccountManager.Instance.CurrentUser != null)
+        {
+            var given = AccountManager.Instance.CurrentUser.progress.manzanaNodesGiven;
+            if (given.Contains(nodeID)) return;
+            given.Add(nodeID);
+        }
+        AddManzana();
+    }
+
+    public bool WasManzanaGivenFor(string nodeID)
+    {
+        return AccountManager.Instance != null
+            && AccountManager.Instance.CurrentUser != null
+            && AccountManager.Instance.CurrentUser.progress.manzanaNodesGiven.Contains(nodeID);
+    }
+
     public bool TryUseManzana(string npcID, string completedNodeID)
     {
         if (manzanasAvailable <= 0)

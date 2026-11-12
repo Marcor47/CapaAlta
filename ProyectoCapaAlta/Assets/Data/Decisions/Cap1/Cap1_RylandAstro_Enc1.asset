@@ -18,7 +18,8 @@ MonoBehaviour:
   npcID: ryland_astro
   isSingleSpeaker: 0
   rounds:
-  - npcLeadInLines:
+  - conditionalOpenings: []
+    npcLeadInLines:
     - speakerName: Astro
       text: "Cari\xF1o, seguro que no quieres que te d\xE9 una ayuda con la bici."
     - speakerName: Ryland
@@ -94,6 +95,7 @@ MonoBehaviour:
       - speakerName: Ryland
         text: "Ten cuidado al subir la monta\xF1a, ni\xF1o. Puede llegar a ser dif\xEDcil,
           as\xED que te recomiendo que no te sobreexijas tanto."
+    sharedFollowUpLines: []
   givesManzanaOnEnd: 1
   manzanaTutorialLines:
   - speakerName: Ryland
@@ -101,8 +103,16 @@ MonoBehaviour:
   - speakerName: Astro
     text: "Toma esto, ni\xF1o. Seguro lo llegar\xE1s a necesitar en alg\xFAn momento."
   - speakerName: Astro
-    text: "Si te encuentras alguien en el camino seguro agradecer\xE1 que alguien
-      le d\xE9 una mano tambi\xE9n."
+    text: "Si te encuentras a alguien en el camino, seguro agradecer\xE1 que le des
+      una mano tambi\xE9n."
+  - speakerName: Astro
+    text: "Cu\xEDdate mucho."
+  manzanaRepeatLines:
+  - speakerName: Ryland
+    text: Termino de arreglar nuestra bici y nosotros seguiremos nuestro camino.
+  - speakerName: Astro
+    text: "Si te encuentras a alguien en el camino, seguro agradecer\xE1 que le des
+      una mano para llegar lejos."
   - speakerName: Astro
     text: "Cu\xEDdate mucho."
   manzanaGivenWhenBad: []

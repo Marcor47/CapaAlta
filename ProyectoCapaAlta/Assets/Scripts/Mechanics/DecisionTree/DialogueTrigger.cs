@@ -104,7 +104,7 @@ public class DialogueTrigger : MonoBehaviour
             AccountManager.Instance.MarkNpcMet(dialogueNode.npcID);
 
         if (dialogueNode.givesManzanaOnEnd && DecisionRecord.Instance != null)
-            DecisionRecord.Instance.AddManzana();
+            DecisionRecord.Instance.AddManzanaFromNode(dialogueNode.nodeID);
 
         Debug.Log($"[DialogueTrigger] Encuentro completado: {dialogueNode.nodeID} — última opción elegida: {chosenOptionIndex}");
     }

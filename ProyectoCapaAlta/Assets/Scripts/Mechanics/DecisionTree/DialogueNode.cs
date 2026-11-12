@@ -28,6 +28,8 @@ public class DialogueNode : ScriptableObject
 
     [Tooltip("Líneas tras entregar la manzana — se muestran igual sin importar qué opción se eligió")]
     public DialogueLine[] manzanaTutorialLines;
+    [Tooltip("Despedida cuando el alumno ya recibió esta manzana en una pasada anterior (rejugar). Si queda vacío se usan las líneas normales.")]
+    public DialogueLine[] manzanaRepeatLines;
 
     // ─── MANZANA: THEO → NPC ─────────────────────────────────────
     [Header("Manzana que Theo le da al NPC (después de este encuentro)")]

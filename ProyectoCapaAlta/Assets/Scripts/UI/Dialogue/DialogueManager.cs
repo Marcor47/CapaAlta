@@ -278,7 +278,11 @@ public class DialogueManager : MonoBehaviour
                 state = DialogueState.Manzana;
                 currentLineIndex = 0;
                 currentLines.Clear();
-                currentLines.AddRange(currentNode.manzanaTutorialLines);
+                bool repeat = DecisionRecord.Instance != null
+                && DecisionRecord.Instance.WasManzanaGivenFor(currentNode.nodeID)
+                && currentNode.manzanaRepeatLines != null
+                && currentNode.manzanaRepeatLines.Length > 0;
+                            currentLines.AddRange(repeat ? currentNode.manzanaRepeatLines : currentNode.manzanaTutorialLines);
                 ShowCurrentLine();
             }
             else EndDialogue();

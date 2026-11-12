@@ -1370,7 +1370,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 1
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 21300000, guid: 2833997785b1d0c408bec52110dae1b1, type: 3}
+  m_Sprite: {fileID: 9088041989709556776, guid: 58a8f66d96f23734b8c84d9ea6d83af8, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -1437,8 +1437,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e3fc47abf617d9a47aa88373d433c018, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::NpcTalkAnimator
-  idleFrames: []
-  talkFrames: []
+  idleFrames:
+  - {fileID: 9088041989709556776, guid: 58a8f66d96f23734b8c84d9ea6d83af8, type: 3}
+  - {fileID: -7269977397199589544, guid: 58a8f66d96f23734b8c84d9ea6d83af8, type: 3}
+  - {fileID: -4860916151483029703, guid: 58a8f66d96f23734b8c84d9ea6d83af8, type: 3}
+  - {fileID: -8327416791116563915, guid: 58a8f66d96f23734b8c84d9ea6d83af8, type: 3}
+  talkFrames:
+  - {fileID: 7134763840028367224, guid: 58a8f66d96f23734b8c84d9ea6d83af8, type: 3}
+  - {fileID: -4063698640253527896, guid: 58a8f66d96f23734b8c84d9ea6d83af8, type: 3}
+  - {fileID: 3298898175582993472, guid: 58a8f66d96f23734b8c84d9ea6d83af8, type: 3}
+  - {fileID: 7111571460089356828, guid: 58a8f66d96f23734b8c84d9ea6d83af8, type: 3}
   idleFps: 4
   talkFps: 4
 --- !u!1 &349891246 stripped
@@ -1804,7 +1812,7 @@ Camera:
   far clip plane: 1000
   field of view: 34
   orthographic: 1
-  orthographic size: 2.109375
+  orthographic size: 1.9791666
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -3086,7 +3094,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 1
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 21300000, guid: 2833997785b1d0c408bec52110dae1b1, type: 3}
+  m_Sprite: {fileID: -2534726230709207157, guid: 16c7413eded08fa419561217ed26c50d, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -3140,8 +3148,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e3fc47abf617d9a47aa88373d433c018, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::NpcTalkAnimator
-  idleFrames: []
-  talkFrames: []
+  idleFrames:
+  - {fileID: -2534726230709207157, guid: 16c7413eded08fa419561217ed26c50d, type: 3}
+  - {fileID: -7247707700664060541, guid: 16c7413eded08fa419561217ed26c50d, type: 3}
+  - {fileID: 5835118032245648487, guid: 16c7413eded08fa419561217ed26c50d, type: 3}
+  - {fileID: 9134825469857456891, guid: 16c7413eded08fa419561217ed26c50d, type: 3}
+  talkFrames:
+  - {fileID: -147628525452043003, guid: 16c7413eded08fa419561217ed26c50d, type: 3}
+  - {fileID: -2030529963763830475, guid: 16c7413eded08fa419561217ed26c50d, type: 3}
+  - {fileID: 3821452433598021649, guid: 16c7413eded08fa419561217ed26c50d, type: 3}
+  - {fileID: -1196453635190561307, guid: 16c7413eded08fa419561217ed26c50d, type: 3}
   idleFps: 4
   talkFps: 4
 --- !u!114 &840754186

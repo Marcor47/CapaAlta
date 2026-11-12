@@ -11672,6 +11672,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: RamaEnganchable
       objectReference: {fileID: 0}
+    - target: {fileID: 8571509609750266956, guid: 611eb4ba25c2e4f4e9364244554533c9, type: 3}
+      propertyPath: m_FlipX
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8571509609750266956, guid: 611eb4ba25c2e4f4e9364244554533c9, type: 3}
+      propertyPath: m_FlipY
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8703195973809209192, guid: 611eb4ba25c2e4f4e9364244554533c9, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.47
