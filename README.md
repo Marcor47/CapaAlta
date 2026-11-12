@@ -13,6 +13,8 @@ Theo, un joven de 18 años que no creció con su padre, recorre los cuatro sende
 
 Las decisiones del jugador, las relaciones que construye y las cartas que recolecta determinan cómo termina el reencuentro con su padre.
 
+> **Estado:** prototipo demo desarrollado como proyecto de tesis. Los cuatro capítulos, el módulo alumno y el módulo docente son jugables; la narrativa completa y pulida del clímax y de los finales queda fuera del alcance de la tesis.
+
 ### Mecánicas principales
 
 | Mecánica | Descripción |
@@ -22,9 +24,9 @@ Las decisiones del jugador, las relaciones que construye y las cartas que recole
 | Motivación (M6) | Estamina que consume el dash y el salto; se recarga sola y más rápido al sentarse. |
 | Regulación emocional (M9) | Baja con caídas y situaciones difíciles; se recupera meditando con la libreta o llamando a mamá. En 0 reduce el campo de visión. |
 | Libreta de Theo (M7) | Menú principal con selección de capítulos y rejugabilidad. |
-| Respuesta epistolar (M8) | El alumno escribe una reflexión sobre cada carta recolectada y la vincula con una o más de las 13 habilidades socioemocionales (HSE) del MINEDU. |
-| Registro docente (M10) | El profesor ve el avance, las decisiones, las relaciones con los personajes y las respuestas de cada alumno, y una vista agregada del grupo. |
-| Teléfono satelital (M12) | Mamá da tutoriales, consejos y apoyo emocional durante el viaje. |
+| Respuesta epistolar (M8) | El alumno voltea cada carta recolectada, escribe una reflexión y la vincula con una o más de las 13 habilidades socioemocionales (HSE) del MINEDU. Ver [Respuesta epistolar](#respuesta-epistolar). |
+| Registro docente (M10) | El profesor ve el avance, las decisiones, las relaciones con los personajes y las reflexiones de cada alumno, y una vista agregada del grupo. Ver [Dashboard docente](#dashboard-docente). |
+| Teléfono satelital (M12) | Mamá da tutoriales, consejos y apoyo emocional durante el viaje; con su llamada se desbloquean el dash y la herramienta de cada capítulo. |
 | Manzanas (M13) | Ítem que mejora la relación con un personaje después de completar su diálogo. |
 
 ### Capítulos y herramientas
@@ -35,6 +37,37 @@ Las decisiones del jugador, las relaciones que construye y las cartas que recole
 | 2 · Frondoso | Vegetación | Onda |
 | 3 · Rocoso | Roca | Gancho |
 | 4 · Helado | Nieve | Pinchos (piolet) + doble salto |
+
+Las herramientas solo funcionan mientras están equipadas en la mochila.
+
+---
+
+## Respuesta epistolar
+
+Es el instrumento digital de expresión emocional del juego. Cada carta recolectada queda en el Compendio y puede responderse en cualquier momento:
+
+1. El alumno abre la carta y la voltea para ver su reverso.
+2. Escribe su reflexión en **TU REFLEXIÓN**.
+3. Marca al menos una de las 13 HSE (por ejemplo, Empatía o Autoestima). El panel de ayuda incluye un glosario de las 13 habilidades.
+4. El botón **GUARDAR** solo se habilita cuando hay texto y al menos una HSE. Al guardar vuelve al panel de cartas y la carta pierde su indicador de pendiente.
+
+Otras reglas:
+
+- La respuesta puede editarse después y se guarda con la carta (`cardID`, `reflectionText`, `linkedHSE`).
+- Responder las cartas **no** es requisito para avanzar de capítulo.
+- Las cartas pendientes se señalan con un indicador en el Compendio, en la pestaña de cartas y en cada carta.
+- Al terminar un capítulo se muestra un aviso con las cartas por responder de ese capítulo y las que quedan en otros capítulos.
+
+---
+
+## Dashboard docente
+
+Desde la cuenta de profesor se abren dos paneles con las mismas pestañas (Resumen, Cap.1 a Cap.4 y HSE):
+
+- **Panel individual del alumno:** estado de cada capítulo, cartas recogidas y respondidas, decisiones en los diálogos, relación con cada personaje, la reflexión escrita y las HSE vinculadas a cada carta respondida, y cuántas reflexiones relacionó con cada una de las 13 HSE.
+- **Panel de grupo:** alumnos al día y pendientes, alumnos que completaron cada capítulo, cartas del grupo, relación del grupo con los personajes, las dos HSE más vinculadas a cada carta y cuántos alumnos relacionaron cada HSE.
+
+Las visualizaciones son descriptivas: las barras de HSE cuentan reflexiones o alumnos y no miden el nivel de la habilidad.
 
 ---
 
@@ -114,13 +147,32 @@ El juego tiene dos roles:
 
 - **Persistencia local.** Todo el progreso (decisiones, cartas, reflexiones y habilidades vinculadas) se guarda con `PlayerPrefs`, que en WebGL vive en el navegador del dispositivo. No se comparte entre dispositivos ni navegadores y se borra si se limpian los datos del sitio. Por eso el dashboard docente solo muestra a los alumnos que jugaron en el mismo navegador. El juego no envía datos a ningún servidor.
 - **Autenticación.** La cuenta de profesor es fija y las contraseñas no están protegidas. Es adecuado para el uso en aula previsto en la tesis, no para un despliegue abierto.
+- **Alcance del prototipo.** Es un prototipo demo: la versión completa y pulida del videojuego queda fuera del alcance de la tesis. La prueba de usabilidad con un estudiante real es una verificación inicial del flujo de experiencia, no una validación representativa.
 - **Alcance de las visualizaciones.** Las habilidades socioemocionales (HSE) son un constructo subjetivo y la propuesta no incluye un instrumento validado para medir su nivel. El dashboard describe lo que el alumno hizo o eligió; **no mide el desarrollo de las HSE**. Está pensado como apoyo para conversar con el alumno y planificar la tutoría.
 - **Datos personales y consentimiento.** Capa Alta está dirigido a estudiantes menores de edad, y sus reflexiones y HSE vinculadas son datos emocionales, considerados sensibles por el Reglamento de la Ley N.° 29733 (D. S. N.° 016-2024-JUS). El sistema no gestiona el consentimiento: **la institución educativa es responsable de obtener la autorización de los padres o apoderados antes de implementar el juego con sus estudiantes**. Se recomienda crear las cuentas con alias o códigos en lugar de nombres completos.
 
 ## Trabajos futuros
 
 - Almacenamiento en un servidor con autenticación por institución, para que el profesor vea a todos sus alumnos desde cualquier dispositivo. Incluye un plan de instalación y despliegue: hosting del WebGL, una API y una base de datos.
+- Prueba piloto con grupos completos de 6.° de primaria para evaluar el efecto sobre el involucramiento y las HSE.
+- Visualizaciones con evolución por bimestre, comparación entre capítulos y alumnos, filtros por habilidad y exportación de reportes.
+- Versión final del videojuego: narrativa completa, ilustración y audio para todas las cartas, y cierre de la historia.
+- Adaptación a otros grados y ciclos, y a dispositivos móviles y equipos de bajo rendimiento.
 
 ## Créditos y licencias
 
 - Habilidades socioemocionales: *Orientaciones para el desarrollo del Programa de Habilidades Socioemocionales – V ciclo* (Ministerio de Educación del Perú, 2022).
+- Arte (sprites, escenarios, interfaz y cartas): creado por el autor del proyecto.
+
+### Audio
+
+Todos los audios provienen de [OpenGameArt.org](https://opengameart.org). Los autores indicados no exigen atribución; se listan como cortesía.
+
+| Uso | Recurso | Autor | Licencia |
+|---|---|---|---|
+| Balbuceos | [huh?](https://opengameart.org/content/huh) | TinyWorlds | CC0 |
+| Salto y dash | [Slime jump effect](https://opengameart.org/content/slime-jump-effect) | KobatoGames | CC0 |
+| Pisadas | [42 Snow and Gravel Footsteps](https://opengameart.org/content/42-snow-and-gravel-footsteps) | Corsica_S (publicado por qubodup) | CC0 |
+| Botones | [8bit Menu Highlight](https://opengameart.org/content/8bit-menu-highlight) | Fupi | CC0 |
+| Música del menú | [Rpg Vipraphone And Piano](https://opengameart.org/content/rpg-vipraphone-and-piano) | Tozan | CC0 |
+| Música de los capítulos | [peaceful theme](https://opengameart.org/content/peaceful-theme) | pebonius | CC0 |
