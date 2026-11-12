@@ -164,7 +164,13 @@ public class TelefonoTool : ToolBehaviour
        
     }
 
-    void OnDisable() => EndCall();
+    void OnDisable()
+    {
+        EndCall();
+        tempMessageUntil = 0f;
+        // Si una llamada de desbloqueo está sonando, su cartel debe seguir visible.
+        ReleaseDots(ToolUnlockCall.AnyRinging);
+    }
 
     // ─── COMENTARIOS Y BALBUCEO ────────────────────────────────
     private string lastText;
