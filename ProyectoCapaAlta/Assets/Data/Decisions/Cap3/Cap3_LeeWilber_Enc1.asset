@@ -125,7 +125,7 @@ MonoBehaviour:
       - speakerName: Lee
         text: Me conforta al menos no estar solo en esto.
       - speakerName: Lee
-        text: Y es algo por lo que estoy muy agradecido con mi vida.
+        text: Y es algo por lo que estoy muy agradecido con la vida.
       - speakerName: Lee
         text: "La cual pudimos haber perdido ese d\xEDa."
       - speakerName: Wilber
@@ -156,16 +156,17 @@ MonoBehaviour:
     - speakerName: Wilber
       text: "\xBFQu\xE9 tal... 'L&W's Burgers'?"
     - speakerName: Lee
-      text: "Suena horrible... y gen\xE9rico. Me gusta, hermano"
+      text: "Suena horrible... y gen\xE9rico. Me gusta, hermano."
   givesManzanaOnEnd: 0
   manzanaTutorialLines: []
+  manzanaRepeatLines: []
   manzanaGivenWhenBad:
   - speakerName: Lee
     text: "Muchas gracias, ni\xF1o."
   - speakerName: Lee
     text: "Ser\xE1 un buen postre."
   - speakerName: Wilber
-    text: "Perfecto, hermano, ten\xEDa mucha hambre, la verdad."
+    text: "Perfecto, hermano. Ten\xEDa mucha hambre, la verdad."
   manzanaGivenWhenNeutral:
   - speakerName: Lee
     text: "\xBFDe d\xF3nde sacaste eso?"

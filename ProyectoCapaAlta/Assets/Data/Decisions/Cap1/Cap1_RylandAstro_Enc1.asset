@@ -21,9 +21,10 @@ MonoBehaviour:
   - conditionalOpenings: []
     npcLeadInLines:
     - speakerName: Astro
-      text: "Cari\xF1o, seguro que no quieres que te d\xE9 una ayuda con la bici."
+      text: "Cari\xF1o, \xBFseguro que no quieres que te d\xE9 una ayuda con la bici?"
     - speakerName: Ryland
-      text: "Lo tengo todo controlado cari\xF1o, solo muevo esto aqu\xED y esto ac\xE1..."
+      text: "Lo tengo todo controlado, cari\xF1o, solo muevo esto aqu\xED y esto
+        ac\xE1..."
     - speakerName: Astro
       text: Tan testarudo como siempre jeje.
     - speakerName: Astro
@@ -61,7 +62,7 @@ MonoBehaviour:
       - speakerName: Astro
         text: Soy Astro por cierto, este es mi esposo Ryland.
       - speakerName: Ryland
-        text: "Hola ni\xF1o, \xBFno estar\xE1s pensando subir la monta\xF1a no?"
+        text: "Hola ni\xF1o, \xBFno estar\xE1s pensando subir la monta\xF1a, no?"
       - speakerName: Ryland
         text: "Es una ruta algo peligrosa llegando al final, por eso nosotros solo
           paseamos por aqu\xED para apreciar la vista."
@@ -80,16 +81,16 @@ MonoBehaviour:
       - speakerName: Astro
         text: "Estamos de paseo mi esposo y yo, peque\xF1o."
       - speakerName: Astro
-        text: "\xBFSi o no Ryland?"
+        text: "\xBFS\xED o no, Ryland?"
       - speakerName: Ryland
         text: Ese es el plan, Astro.
       - speakerName: Ryland
         text: "Hasta que se sali\xF3 la cadena de la bici, pero ahora lo arreglo."
       - speakerName: Astro
-        text: "\xBFAs\xED que vas a subir la monta\xF1a no? Tienes muchas agallas,
+        text: "\xBFAs\xED que vas a subir la monta\xF1a, no? Tienes muchas agallas,
           ni\xF1o."
       - speakerName: Astro
-        text: "Me recuerda un poco a Arthur, \xBFa ti no amor?"
+        text: "Me recuerda un poco a Arthur, \xBFa ti no, amor?"
       - speakerName: Ryland
         text: Un poco...
       - speakerName: Ryland

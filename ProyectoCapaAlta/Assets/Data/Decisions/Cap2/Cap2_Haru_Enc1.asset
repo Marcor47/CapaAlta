@@ -35,7 +35,7 @@ MonoBehaviour:
           la polera que traes."
       - speakerName: 
         text: "Hay una vista incre\xEDble desde esta altura. Todo parece tan... infinito
-          desde aqu\xED"
+          desde aqu\xED."
       - speakerName: 
         text: "Subir\xE9 tambi\xE9n un poco m\xE1s para unas \xFAltimas fotos."
       - speakerName: 
@@ -104,6 +104,7 @@ MonoBehaviour:
       text: "Cu\xEDdate en el camino, Azul."
   givesManzanaOnEnd: 0
   manzanaTutorialLines: []
+  manzanaRepeatLines: []
   manzanaGivenWhenBad:
   - speakerName: 
     text: Muchas gracias, Azul.
@@ -120,6 +121,6 @@ MonoBehaviour:
   - speakerName: 
     text: Azuuul.
   - speakerName: 
-    text: "Gracias justo estaba buscando una tambi\xE9n."
+    text: "Gracias, justo estaba buscando una tambi\xE9n."
   - speakerName: 
     text: "Me gust\xF3."
