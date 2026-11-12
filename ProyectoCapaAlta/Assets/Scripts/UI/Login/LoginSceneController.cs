@@ -323,20 +323,50 @@ public class LoginSceneController : MonoBehaviour
 
     void ShowChapterEndNotification()
     {
-        int pending = CountPendingCards();
-        if (pending <= 0) return;
+        int chapter = AccountManager.Instance.justFinishedChapterNumber;
+        int inChapter = CountPendingCards(chapter);
+        int total = CountPendingCards();
+        if (total <= 0) return;
 
-        string plural = pending == 1 ? "carta" : "cartas";
-        notificationText.text = $"Recolectaste {pending} {plural} en el Capítulo {AccountManager.Instance.justFinishedChapterNumber}.\n¡Respóndelas en el Compendio!";
+        int others = total - inChapter;
+        string Cartas(int n) => n == 1 ? "carta" : "cartas";
+        string Quedan(int n) => n == 1 ? "queda" : "quedan";
+        string Otros(int n) => n == 1 ? "otro capítulo" : "otros capítulos";
+
+        string msg;
+        if (inChapter > 0)
+        {
+            msg = $"Tienes {inChapter} {Cartas(inChapter)} del Capítulo {chapter} por responder.";
+            if (others > 0)
+                msg += $"\nTe {Quedan(others)} {others} {Cartas(others)} más de {Otros(others)}.";
+        }
+        else
+        {
+            msg = $"No te quedan cartas del Capítulo {chapter} por responder.";
+            msg += $"\nTe {Quedan(others)} {others} {Cartas(others)} de {Otros(others)}.";
+        }
+
+        msg += total == 1 ? "\n¡Respóndela en el Compendio!" : "\n¡Respóndelas en el Compendio!";
+        notificationText.text = msg;
         notificationPanel.SetActive(true);
     }
 
-    int CountPendingCards()
+    // chapter <= 0: cuenta todas las pendientes (badge). chapter > 0: solo las de ese capítulo.
+    int CountPendingCards(int chapter = -1)
     {
         var progress = AccountManager.Instance.CurrentUser.progress;
+        var db = CardDatabase.Instance;
         int count = 0;
         foreach (var card in progress.allTimeCollectedCards)
-            if (!progress.epistolaryResponses.Exists(r => r.cardID == card.cardID)) count++;
+        {
+            if (progress.epistolaryResponses.Exists(r => r.cardID == card.cardID)) continue;
+            if (chapter > 0)
+            {
+                var data = db == null ? null : db.allCards.Find(c => c != null && c.cardID == card.cardID);
+                if (data == null || data.chapter != chapter) continue;
+            }
+            count++;
+        }
         return count;
     }
 

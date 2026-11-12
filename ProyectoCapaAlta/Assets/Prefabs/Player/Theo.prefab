@@ -619,8 +619,8 @@ MonoBehaviour:
   coyoteTime: 0.15
   jumpBufferTime: 0.12
   dashEnabled: 1
-  dashSpeed: 15
-  dashDuration: 0.33
+  dashSpeed: 11
+  dashDuration: 0.25
   dashStaminaCost: 33
   dashCooldown: 1
   maxStamina: 100
@@ -644,6 +644,8 @@ MonoBehaviour:
   groundLayer:
     serializedVersion: 2
     m_Bits: 64
+  footstepInterval: 0.35
+  footstepMinSpeed: 0.5
 --- !u!95 &7876959419526368669
 Animator:
   serializedVersion: 7
@@ -815,9 +817,6 @@ MonoBehaviour:
   - "Pase lo que pase, aqu\xED estoy para ti."
   - Un poco de agua y un buen respiro, y sigues.
   linesPerCall: 1
-  babbleSource: {fileID: 0}
-  babbleClips: []
-  babbleSecondsPerCharacter: 0.05
 --- !u!114 &551271032708024032
 MonoBehaviour:
   m_ObjectHideFlags: 0
