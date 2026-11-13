@@ -633,6 +633,9 @@ MonoBehaviour:
   drainedStaminaCap: 0.5
   drainRecoverThreshold: 0.5
   autoWalkSpeed: 3
+  autoWalkMaxX: Infinity
+  autoWalkAccel: 3
+  autoWalkDecel: 3
   phoneEquipped: 0
   backpackKey: 19
   swingForce: 30

@@ -34,6 +34,9 @@ public class SnowWalkSequence : MonoBehaviour
     [Tooltip("Distancia máxima que camina en cada paso (comentario + Shift). Cuenta durante el diálogo y la espera.")]
     public float maxWalkPerStep = 2f;
 
+    [Tooltip("Lo que se pasa del límite al frenar (solo para calcular el piso)")]
+    public float stopMargin = 0.25f;
+
     [Header("Prompt Shift")]
     public GameObject shiftPrompt;          // panel con icono Shift + texto
     public float pulseSpeed = 4f;
@@ -50,6 +53,8 @@ public class SnowWalkSequence : MonoBehaviour
     public float fadeOutTime = 1.5f;
     public float maxExitTime = 8f;
     public string nextSceneName = "Cap4_CasaPadre";
+    public float exitWalkSpeed = 2f;        // un poco más rápido al salir de pantalla
+    public float exitGroundMargin = 6f;     // piso extra para salir (media pantalla + margen)
 
     bool started;
 
@@ -116,6 +121,7 @@ public class SnowWalkSequence : MonoBehaviour
         }
 
         theo.autoWalkMaxX = float.PositiveInfinity;
+        theo.autoWalkSpeed = exitWalkSpeed;
         // salida por la derecha (cámara quieta)
         if (virtualCamera != null) virtualCamera.Follow = null;
         Camera cam = Camera.main;
@@ -149,8 +155,9 @@ public class SnowWalkSequence : MonoBehaviour
     }
 
 
-    // Distancia máxima total de la secuencia (sin contar la salida final)
-    public float TotalDistance => comments.Length * (maxWalkPerStep + dashSpeed * dashTime);
+    // Distancia máxima de la secuencia y piso mínimo necesario (desde el borde izquierdo de SnowZone)
+    public float TotalDistance => comments.Length * (maxWalkPerStep + dashSpeed * dashTime + stopMargin);
+    public float RequiredGround => TotalDistance + exitGroundMargin;
 
     void OnDrawGizmosSelected()
     {
@@ -158,8 +165,12 @@ public class SnowWalkSequence : MonoBehaviour
         if (col == null) return;
         Vector3 a = new Vector3(col.bounds.min.x, col.bounds.center.y, 0f);
         Vector3 b = a + Vector3.right * TotalDistance;
+        Vector3 c = a + Vector3.right * RequiredGround;
         Gizmos.color = Color.cyan;
         Gizmos.DrawLine(a, b);
         Gizmos.DrawWireSphere(b, 0.2f);
+        Gizmos.color = Color.red;
+        Gizmos.DrawLine(b, c);
+        Gizmos.DrawWireSphere(c, 0.3f);
     }
 }

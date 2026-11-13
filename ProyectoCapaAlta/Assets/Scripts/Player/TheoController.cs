@@ -73,7 +73,9 @@ public class TheoController : MonoBehaviour
     public bool IsAutoDashing => autoDashTimer > 0f;
 
     [HideInInspector] public float autoWalkMaxX = float.PositiveInfinity;
-    private bool autoWalkHeld;   // en el límite: quieto pero con animación de caminar
+    public float autoWalkAccel = 3f;    // arranque tras el empujón
+    public float autoWalkDecel = 4f;    // frenada al llegar al límite
+    private float autoCurSpeed;
 
     public void AutoDash(float duration, float speed)
     {
@@ -301,10 +303,12 @@ public class TheoController : MonoBehaviour
     {
         if (isAutoWalking)
         {
-            float spd = autoDashTimer > 0f ? autoDashSpeed : autoWalkSpeed;
-            autoWalkHeld = autoDashTimer <= 0f && transform.position.x >= autoWalkMaxX;
-            if (autoWalkHeld) spd = 0f;
-            rb.linearVelocity = new Vector2(autoWalkDir * spd, 0f);
+            bool dashing = autoDashTimer > 0f;
+            bool atLimit = !dashing && transform.position.x >= autoWalkMaxX;
+            float target = dashing ? autoDashSpeed : (atLimit ? 0f : autoWalkSpeed);
+            float rate = dashing ? 100f : (target > autoCurSpeed ? autoWalkAccel : autoWalkDecel);
+            autoCurSpeed = Mathf.MoveTowards(autoCurSpeed, target, rate * Time.fixedDeltaTime);
+            rb.linearVelocity = new Vector2(autoWalkDir * autoCurSpeed, 0f);
             return;
         }
 
@@ -688,13 +692,14 @@ public class TheoController : MonoBehaviour
         facingLeft = autoWalkDir < 0f;
         sr.flipX = facingLeft;
         rb.bodyType = RigidbodyType2D.Kinematic;
-        rb.linearVelocity = new Vector2(autoWalkDir * autoWalkSpeed, 0f);
+        autoCurSpeed = autoWalkSpeed;
+        rb.linearVelocity = new Vector2(autoWalkDir * autoCurSpeed, 0f);
     }
 
     public void EndAutoWalk()
     {
         autoWalkMaxX = float.PositiveInfinity;
-        autoWalkHeld = false;
+        autoCurSpeed = 0f;
         autoDashTimer = 0f;
         isAutoWalking = false;
         rb.bodyType = RigidbodyType2D.Dynamic;
@@ -796,8 +801,8 @@ public class TheoController : MonoBehaviour
     void HandleAnimations()
     {
         float v = Mathf.Abs(rb.linearVelocity.y) < 0.05f ? 0f : rb.linearVelocity.y;
-        float animSpeed = (isAutoWalking && autoWalkHeld) ? autoWalkSpeed : Mathf.Abs(rb.linearVelocity.x);
-        anim.SetFloat("Speed", animSpeed);
+
+        anim.SetFloat("Speed", Mathf.Abs(rb.linearVelocity.x));
         anim.SetFloat("VerticalSpeed", v);
         anim.SetBool("IsGrounded", isGrounded);
         anim.SetBool("IsDashing", isDashing || autoDashTimer > 0f);
@@ -810,7 +815,7 @@ public class TheoController : MonoBehaviour
     void HandleFootsteps()
     {
         bool walking = isGrounded && !isClimbing && !isHooked && !isSitting
-               && (Mathf.Abs(rb.linearVelocity.x) > footstepMinSpeed || (isAutoWalking && autoWalkHeld));
+               && Mathf.Abs(rb.linearVelocity.x) > footstepMinSpeed;
         if (!walking) { footstepTimer = 0f; return; }
 
         footstepTimer -= Time.deltaTime;
