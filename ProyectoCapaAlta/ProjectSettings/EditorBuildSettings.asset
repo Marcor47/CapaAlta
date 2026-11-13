@@ -20,5 +20,8 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/_Scenes/Cap4.unity
     guid: 18ebf2107fe1be24684bbb33a78bb0e9
+  - enabled: 1
+    path: Assets/_Scenes/Cap4_CasaPadre.unity
+    guid: 5103fba5dd6a2bc44aa66a43aaee1197
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}

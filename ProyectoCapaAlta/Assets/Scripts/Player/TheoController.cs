@@ -68,6 +68,20 @@ public class TheoController : MonoBehaviour
     private float autoWalkDir;
     public bool IsAutoWalking => isAutoWalking;
 
+    private float autoDashTimer;
+    private float autoDashSpeed;
+    public bool IsAutoDashing => autoDashTimer > 0f;
+
+    [HideInInspector] public float autoWalkMaxX = float.PositiveInfinity;
+    private bool autoWalkHeld;   // en el límite: quieto pero con animación de caminar
+
+    public void AutoDash(float duration, float speed)
+    {
+        autoDashTimer = duration;
+        autoDashSpeed = speed;
+        AudioManager.PlayJumpDash();
+    }
+
 
     // ─── TELÉFONO SATELITAL (temporal, hasta Bloque 6) ─────────
     [Header("Teléfono satelital (temporal)")]
@@ -261,6 +275,7 @@ public class TheoController : MonoBehaviour
     void Update()
     {
         HandleStaminaRegen();
+        if (autoDashTimer > 0f) autoDashTimer -= Time.deltaTime;
 
         if (dashCooldownCounter > 0f)
             dashCooldownCounter -= Time.deltaTime;
@@ -286,7 +301,10 @@ public class TheoController : MonoBehaviour
     {
         if (isAutoWalking)
         {
-            rb.linearVelocity = new Vector2(autoWalkDir * autoWalkSpeed, 0f);
+            float spd = autoDashTimer > 0f ? autoDashSpeed : autoWalkSpeed;
+            autoWalkHeld = autoDashTimer <= 0f && transform.position.x >= autoWalkMaxX;
+            if (autoWalkHeld) spd = 0f;
+            rb.linearVelocity = new Vector2(autoWalkDir * spd, 0f);
             return;
         }
 
@@ -675,6 +693,9 @@ public class TheoController : MonoBehaviour
 
     public void EndAutoWalk()
     {
+        autoWalkMaxX = float.PositiveInfinity;
+        autoWalkHeld = false;
+        autoDashTimer = 0f;
         isAutoWalking = false;
         rb.bodyType = RigidbodyType2D.Dynamic;
         rb.gravityScale = originalGravityScale;
@@ -775,10 +796,11 @@ public class TheoController : MonoBehaviour
     void HandleAnimations()
     {
         float v = Mathf.Abs(rb.linearVelocity.y) < 0.05f ? 0f : rb.linearVelocity.y;
-        anim.SetFloat("Speed", Mathf.Abs(rb.linearVelocity.x));
+        float animSpeed = (isAutoWalking && autoWalkHeld) ? autoWalkSpeed : Mathf.Abs(rb.linearVelocity.x);
+        anim.SetFloat("Speed", animSpeed);
         anim.SetFloat("VerticalSpeed", v);
         anim.SetBool("IsGrounded", isGrounded);
-        anim.SetBool("IsDashing", isDashing);
+        anim.SetBool("IsDashing", isDashing || autoDashTimer > 0f);
         anim.SetBool("IsSitting", isSitting);
         anim.SetBool("IsClimbing", isClimbing);
         anim.SetBool("IsClimbMoving", isClimbMoving);
@@ -788,7 +810,7 @@ public class TheoController : MonoBehaviour
     void HandleFootsteps()
     {
         bool walking = isGrounded && !isClimbing && !isHooked && !isSitting
-                       && Mathf.Abs(rb.linearVelocity.x) > footstepMinSpeed;
+               && (Mathf.Abs(rb.linearVelocity.x) > footstepMinSpeed || (isAutoWalking && autoWalkHeld));
         if (!walking) { footstepTimer = 0f; return; }
 
         footstepTimer -= Time.deltaTime;
