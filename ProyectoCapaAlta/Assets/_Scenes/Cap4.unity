@@ -20667,10 +20667,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1140642099197078128, guid: cbc050e13979a094f995592887f8d89e, type: 3}
-      propertyPath: autoWalkDecel
-      value: 3
-      objectReference: {fileID: 0}
     - target: {fileID: 2707299062785966144, guid: cbc050e13979a094f995592887f8d89e, type: 3}
       propertyPath: m_Name
       value: Theo

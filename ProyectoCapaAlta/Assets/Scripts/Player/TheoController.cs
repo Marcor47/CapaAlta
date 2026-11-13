@@ -303,10 +303,16 @@ public class TheoController : MonoBehaviour
     {
         if (isAutoWalking)
         {
-            bool dashing = autoDashTimer > 0f;
-            bool atLimit = !dashing && transform.position.x >= autoWalkMaxX;
-            float target = dashing ? autoDashSpeed : (atLimit ? 0f : autoWalkSpeed);
-            float rate = dashing ? 100f : (target > autoCurSpeed ? autoWalkAccel : autoWalkDecel);
+            // Empujón: velocidad propia, sin tocar la velocidad de caminata
+            if (autoDashTimer > 0f)
+            {
+                rb.linearVelocity = new Vector2(autoWalkDir * autoDashSpeed, 0f);
+                return;
+            }
+
+            bool atLimit = transform.position.x >= autoWalkMaxX;
+            float target = atLimit ? 0f : autoWalkSpeed;
+            float rate = target > autoCurSpeed ? autoWalkAccel : autoWalkDecel;
             autoCurSpeed = Mathf.MoveTowards(autoCurSpeed, target, rate * Time.fixedDeltaTime);
             rb.linearVelocity = new Vector2(autoWalkDir * autoCurSpeed, 0f);
             return;
