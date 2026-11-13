@@ -112,24 +112,32 @@ public class HelpPanelUI : MonoBehaviour
     // tokens: Sprite (tecla/mouse) o string ("o", "+")
     void KeyRow(string desc, params object[] tokens)
     {
+        float descW = DashUI.W - DescX - 10f;
         var row = DashUI.Row(content, "KeyRow", KeyRowH);
+
+        // la descripción puede ocupar 3 o 4 líneas: medimos y ajustamos la altura de la fila
+        var descText = DashUI.Text(skin, row, desc, DescX, 0, descW, KeyRowH, 12, DashUI.Black,
+            TextAlignmentOptions.MidlineLeft, FontStyles.Normal, true);
+        float textH = Mathf.Ceil(descText.GetPreferredValues(desc, descW, 0f).y);
+        float total = Mathf.Max(KeyRowH, textH + 16f);
+        descText.rectTransform.sizeDelta = new Vector2(descW, total);
+        SetRowHeight(row, total);
+
         float x = 12f;
         foreach (var tk in tokens)
         {
             if (tk is Sprite sp)
             {
                 float w = sp.rect.width, h = sp.rect.height;
-                DashUI.Img(row, sp, x, (KeyRowH - h) * 0.5f, w, h);
+                DashUI.Img(row, sp, x, (total - h) * 0.5f, w, h);
                 x += w + 6f;
             }
             else if (tk is string s)
             {
-                DashUI.Text(skin, row, s, x, 0, 22, KeyRowH, 12, DashUI.Ink, TextAlignmentOptions.Center);
+                DashUI.Text(skin, row, s, x, 0, 22, total, 12, DashUI.Ink, TextAlignmentOptions.Center);
                 x += 28f;
             }
         }
-        DashUI.Text(skin, row, desc, DescX, 0, DashUI.W - DescX - 10f, KeyRowH, 12, DashUI.Black,
-            TextAlignmentOptions.MidlineLeft, FontStyles.Normal, true);
     }
 
     void InfoRow(Sprite icon, string title, string desc)
