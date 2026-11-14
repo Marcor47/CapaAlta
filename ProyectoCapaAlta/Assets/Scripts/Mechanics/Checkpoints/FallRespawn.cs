@@ -70,6 +70,9 @@ public class FallRespawn : MonoBehaviour
         yield return null;   // Cinemachine encuadra el punto de partida
         yield return null;
 
+        var prologue = FindAnyObjectByType<ChapterPrologue>();      // NUEVO
+        if (prologue != null) yield return prologue.Play();         // NUEVO
+
         var cam = Camera.main;
         float leftEdge = cam.transform.position.x - cam.orthographicSize * cam.aspect;
         transform.position = new Vector3(leftEdge - introMargin, spawn.y, spawn.z);

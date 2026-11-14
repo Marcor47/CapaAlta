@@ -593,7 +593,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 0.1125, y: 0.4875}
+  m_Size: {x: 0.1125, y: 0.48}
   m_EdgeRadius: 0.1
 --- !u!114 &1140642099197078128
 MonoBehaviour:
@@ -643,7 +643,7 @@ MonoBehaviour:
   toolChargeGroundDeceleration: 25
   sitHoldTime: 0.05
   groundCheck: {fileID: 2952072239460208561}
-  groundCheckSize: {x: 0.22, y: 0.06}
+  groundCheckSize: {x: 0.22, y: 0.01}
   groundLayer:
     serializedVersion: 2
     m_Bits: 64
@@ -835,7 +835,7 @@ MonoBehaviour:
   aimLineMaxLength: 6
   cooldown: 0.3
   chargeTime: 0
-  maxRange: 7
+  maxRange: 2.5
   castDuration: 0.08
   grappableTag: Grappable
   hookMask:
@@ -857,7 +857,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PinchosTool
   climbableTag: Climbable
   wallCheckOffset: {x: 0.2, y: 0.05}
-  wallCheckSize: {x: 0.01, y: 0.66}
+  wallCheckSize: {x: 0.01, y: 0.6}
   climbSpeed: 3.5
   climbStaminaPerSecond: 20
   hangStaminaPerSecond: 4
