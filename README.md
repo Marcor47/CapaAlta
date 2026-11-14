@@ -159,10 +159,19 @@ El juego tiene dos roles:
 - Versión final del videojuego: narrativa completa, ilustración y audio para todas las cartas, y cierre de la historia.
 - Adaptación a otros grados y ciclos, y a dispositivos móviles y equipos de bajo rendimiento.
 
+## Licencia
+
+Copyright (c) 2026 Marco Rodriguez
+
+"Capa Alta" está licenciado bajo [Creative Commons Atribución-NoComercial 4.0 Internacional (CC BY-NC 4.0)](https://creativecommons.org/licenses/by-nc/4.0/). Puedes copiar, redistribuir y adaptar el material con fines no comerciales, dando el crédito correspondiente e indicando los cambios. **No está permitido su uso comercial ni su venta.**
+
+Esto cubre el código, el arte, la narrativa y las cartas creados por el autor. Los recursos de terceros (audio, motor y paquetes de Unity) mantienen las licencias de sus fuentes originales y no están cubiertos por esta licencia; ver [Créditos y licencias](#créditos-y-licencias). El texto completo está en el archivo [`LICENSE`](LICENSE).
+
 ## Créditos y licencias
 
 - Habilidades socioemocionales: *Orientaciones para el desarrollo del Programa de Habilidades Socioemocionales – V ciclo* (Ministerio de Educación del Perú, 2022).
 - Arte (sprites, escenarios, interfaz y cartas): creado por el autor del proyecto.
+- Motor y paquetes (Unity, Universal Render Pipeline, Cinemachine, TextMeshPro): se rigen por las licencias de Unity Technologies.
 
 ### Audio
 
