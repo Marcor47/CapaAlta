@@ -33,7 +33,7 @@ public class FinalesScene : MonoBehaviour
     public Sprite epiRylandAstro;
 
     [Header("Cierre")]
-    public Sprite fin;
+    public TextMeshProUGUI finText;       // "Fin" centrado sobre la página
 
     [Header("Tiempos")]
     public float introFade = 1.2f;
@@ -47,13 +47,13 @@ public class FinalesScene : MonoBehaviour
 
     [Header("Debug (solo pruebas)")]
     public bool debugActivar;
-    public int debugPadre;          // -1, 0 o 1
+    public int debugPadre;                // -1, 0 o 1
     public bool debugTodosEpilogos;
 
     struct Slide
     {
-        public Sprite img; public string text;
-        public Slide(Sprite i, string t) { img = i; text = t; }
+        public Sprite img; public string text; public bool isFin;
+        public Slide(Sprite i, string t, bool fin = false) { img = i; text = t; isFin = fin; }
     }
 
     readonly List<Slide> slides = new List<Slide>();
@@ -64,6 +64,7 @@ public class FinalesScene : MonoBehaviour
 
         page.alpha = 0f;
         narration.text = "";
+        if (finText != null) finText.gameObject.SetActive(false);
         if (continueArrow != null) continueArrow.SetActive(false);
 
         if (ScreenFader.Instance != null)
@@ -83,28 +84,29 @@ public class FinalesScene : MonoBehaviour
     {
         int padre = DecisionRecord.Instance != null ? DecisionRecord.Instance.GetRelationship("padre") : 0;
         if (debugActivar) padre = debugPadre;
+
         // Misma diapositiva 1 para relación 0 y -1
         const string quedarsePueblo =
-            "Me quedé unos días en el pueblo, caminando sin apuro. Cada rincón tenía algo que papá había cuidado con tanto esfuerzo. Entendí que amar un lugar y extrañar a alguien pueden doler al mismo tiempo.";
+            "Nos quedamos unos días en el pueblo, caminando sin apuro. Cada rincón tenía algo que papá había cuidado con tanto esfuerzo. Entendí que amar un lugar y extrañar a alguien pueden doler al mismo tiempo.";
 
         if (padre >= 1)
         {
             slides.Add(new Slide(plusA,
                 "Acompañé a papá a despedirse del pueblo. Lo vi abrazar a cada uno como quien se va sin soltar nada de lo que ama. Entendí que quedarse nunca fue falta de cariño, y que perdonar empezaba por mirarlo con empatía."));
             slides.Add(new Slide(plusB,
-                "Volvimos juntos con mamá. Sé que años de silencio no se borran en un día, pero los dos tuvieron el valor de intentarlo. Yo solo quise ayudarlos a darse esa oportunidad, y verlos dar el primer paso valió toda la montaña."));
+                "Volvimos juntos a casa de mamá. Sé que años de silencio no se borran en un día, pero los dos tuvieron el valor de intentarlo. Yo solo quise ayudarlos a darse esa oportunidad, y ver a papá dar el primer paso hacia esa puerta valió toda la montaña."));
         }
         else if (padre == 0)
         {
             slides.Add(new Slide(neutralA, quedarsePueblo));
             slides.Add(new Slide(neutralB,
-                "Al final volví con papá para reencontrarse con mamá. No será fácil, los dos cargan años de dolor y de dudas. Pero los vi con ganas de cambiar, y creo que eso ya es empezar a sanar."));
+                "Al final volvimos juntos a casa de mamá. No será fácil, los dos cargan años de dolor y de dudas. Pero vi a papá con ganas de cambiar, y creo que eso ya es empezar a sanar."));
         }
         else
         {
             slides.Add(new Slide(minusA, quedarsePueblo));
             slides.Add(new Slide(minusB,
-                "Me enamoré del pueblo y entendí mejor a papá, pero terminé regresando solo, sin él. Todavía le cuesta perdonarse, y aprendí que la empatía también sabe esperar. Le dejé la puerta abierta, por si algún día se anima a volver."));
+                "Me enamoré del pueblo y entendí mejor a papá, pero terminé regresando solo a casa de mamá. Todavía le cuesta perdonarse, y aprendí que la empatía también sabe esperar. Le dejé la puerta abierta, por si algún día se anima a volver."));
         }
 
         if (Plus("gaz"))
@@ -123,41 +125,49 @@ public class FinalesScene : MonoBehaviour
             slides.Add(new Slide(epiRylandAstro,
                 "Ryland y Astro dejaron una rosa al pie de un árbol, recordando a su hijo con una sonrisa tranquila. Los vi irse en su bicicleta doble y comprendí que se puede extrañar a alguien con todo el corazón y aun así seguir pedaleando."));
 
-        slides.Add(new Slide(fin, "Fin"));
+        slides.Add(new Slide(null, "Fin", true));
     }
 
     bool Plus(string npcID)
-    => (debugActivar && debugTodosEpilogos) ||
-       (DecisionRecord.Instance != null && DecisionRecord.Instance.GetRelationship(npcID) >= 1);
+        => (debugActivar && debugTodosEpilogos) ||
+           (DecisionRecord.Instance != null && DecisionRecord.Instance.GetRelationship(npcID) >= 1);
 
     // ─── MOSTRAR UNA PÁGINA ────────────────────────────────────
     IEnumerator ShowSlide(Slide s)
     {
         drawing.sprite = s.img;
-        drawing.enabled = s.img != null;
-        narration.text = s.text;
-        narration.maxVisibleCharacters = 0;
+        drawing.enabled = !s.isFin && s.img != null;
+        narration.gameObject.SetActive(!s.isFin);
+        if (finText != null) finText.gameObject.SetActive(s.isFin);
+
+        if (!s.isFin)
+        {
+            narration.text = s.text;
+            narration.maxVisibleCharacters = 0;
+        }
 
         yield return FadePage(1f);
 
-        float duration = Mathf.Max(0.5f, s.text.Length / charsPerSecond);
-        AudioManager.PlayBabble(s.text, duration);
-
-        // máquina de escribir; un clic muestra todo el texto
-        float t = 0f;
-        int total = narration.textInfo.characterCount;
-        narration.ForceMeshUpdate();
-        total = narration.textInfo.characterCount;
-        while (narration.maxVisibleCharacters < total)
+        if (!s.isFin)
         {
-            if (Clicked()) break;
-            t += Time.unscaledDeltaTime;
-            narration.maxVisibleCharacters = Mathf.Min(total, Mathf.FloorToInt(t * charsPerSecond));
-            yield return null;
+            float duration = Mathf.Max(0.5f, s.text.Length / charsPerSecond);
+            AudioManager.PlayBabble(s.text, duration);
+
+            // máquina de escribir; un clic muestra todo el texto
+            float t = 0f;
+            narration.ForceMeshUpdate();
+            int total = narration.textInfo.characterCount;
+            while (narration.maxVisibleCharacters < total)
+            {
+                if (Clicked()) break;
+                t += Time.unscaledDeltaTime;
+                narration.maxVisibleCharacters = Mathf.Min(total, Mathf.FloorToInt(t * charsPerSecond));
+                yield return null;
+            }
+            narration.maxVisibleCharacters = total;
+            AudioManager.StopBabble();
+            yield return null;                   // evita que el mismo clic avance la página
         }
-        narration.maxVisibleCharacters = total;
-        AudioManager.StopBabble();
-        yield return null;                       // evita que el mismo clic avance la página
 
         if (continueArrow != null) continueArrow.SetActive(true);
         while (!Clicked()) yield return null;
@@ -191,7 +201,6 @@ public class FinalesScene : MonoBehaviour
     {
         if (ScreenFader.Instance != null)
             yield return ScreenFader.Instance.FadeTo(1f, outFade);
-
 
         if (AccountManager.Instance != null)
         {
