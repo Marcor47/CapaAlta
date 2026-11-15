@@ -1642,7 +1642,7 @@ Camera:
   far clip plane: 1000
   field of view: 34
   orthographic: 1
-  orthographic size: 1.9791666
+  orthographic size: 2.109375
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -9290,12 +9290,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SnowWalkSequence
   comments:
   - "Hace tanto que sal\xED de casa..."
-  - Al principio todo me daba miedo.
-  - "Conoc\xED a gente que no esperaba conocer."
-  - "Algunos me ayudaron. A otros los ayud\xE9 yo."
-  - "Hubo d\xEDas en que quise rendirme."
-  - "Pero segu\xED caminando, aunque fuera despacio."
-  - Ya casi llego.
+  - "Vine buscando respuestas pero... \xBFa\xFAn las necesito?"
+  - Estaba molesto, con redentimiento.
+  - Pero todos merecen una oportunidad para ser mejor.
+  - "Tambi\xE9n yo."
+  - "Voy a hacer las cosas bien. Mam\xE1..., pap\xE1..."
+  - Ya estoy muy cerca.
   walkSpeed: 1.2
   dashSpeed: 5
   dashTime: 0.35

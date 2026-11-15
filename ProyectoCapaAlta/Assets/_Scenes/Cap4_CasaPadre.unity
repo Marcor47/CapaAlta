@@ -1494,12 +1494,12 @@ MonoBehaviour:
   - {fileID: -1349872214, guid: 98f2e00c3deafcc4f8add43e0f510fed, type: 3}
   - {fileID: 3204879644014605102, guid: 98f2e00c3deafcc4f8add43e0f510fed, type: 3}
   talkFrames:
-  - {fileID: 2002076339, guid: 98f2e00c3deafcc4f8add43e0f510fed, type: 3}
   - {fileID: -360954623, guid: 98f2e00c3deafcc4f8add43e0f510fed, type: 3}
   - {fileID: 914595717, guid: 98f2e00c3deafcc4f8add43e0f510fed, type: 3}
   - {fileID: -616942595, guid: 98f2e00c3deafcc4f8add43e0f510fed, type: 3}
-  idleFps: 4
-  talkFps: 4
+  - {fileID: 2002076339, guid: 98f2e00c3deafcc4f8add43e0f510fed, type: 3}
+  idleFps: 2
+  talkFps: 2
 --- !u!1 &486105098
 GameObject:
   m_ObjectHideFlags: 0
@@ -1686,7 +1686,7 @@ Camera:
   far clip plane: 1000
   field of view: 34
   orthographic: 1
-  orthographic size: 1.9791666
+  orthographic size: 2.109375
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2

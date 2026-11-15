@@ -136,7 +136,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2697268
 RectTransform:
   m_ObjectHideFlags: 0
@@ -650,13 +650,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 4427ade449115dc478f099ee48a729e2, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 2a60a88013baac94b8821979ba0e9958, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -965,11 +965,11 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 992549892}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0}
-  m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 0, y: 5}
+  m_AnchorMin: {x: 0.5, y: 1}
+  m_AnchorMax: {x: 0.5, y: 1}
+  m_AnchoredPosition: {x: 0, y: -330}
   m_SizeDelta: {x: 700, y: 130}
-  m_Pivot: {x: 0.5, y: 0}
+  m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &1842035569
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1025,12 +1025,12 @@ MonoBehaviour:
   m_fontSizeMax: 72
   m_fontStyle: 0
   m_HorizontalAlignment: 2
-  m_VerticalAlignment: 512
+  m_VerticalAlignment: 256
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_characterHorizontalScale: 1
   m_wordSpacing: 0
-  m_lineSpacing: -15
+  m_lineSpacing: -10
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
@@ -1223,16 +1223,16 @@ MonoBehaviour:
   drawing: {fileID: 1062099161}
   narration: {fileID: 1842035569}
   continueArrow: {fileID: 1736409988}
-  plusA: {fileID: 21300000, guid: 4245b615d193aa64ba7faea884dbb191, type: 3}
-  plusB: {fileID: 21300000, guid: 728361bf3d9760e46a8e315ae6d9e521, type: 3}
-  neutralA: {fileID: 21300000, guid: 322dd5d432fb37c4f8808718151ac177, type: 3}
-  neutralB: {fileID: 21300000, guid: 728361bf3d9760e46a8e315ae6d9e521, type: 3}
-  minusA: {fileID: 21300000, guid: 322dd5d432fb37c4f8808718151ac177, type: 3}
-  minusB: {fileID: 21300000, guid: 001f2e59dc8812a45be3ebc333d48a69, type: 3}
-  epiGaz: {fileID: 21300000, guid: dcafaaa2a9224d2478c27d86e9a03e9d, type: 3}
-  epiLeeWilber: {fileID: 21300000, guid: 8d13e79705c08aa42b7421e2104cdeb5, type: 3}
-  epiHaru: {fileID: 21300000, guid: 489eaf8788d81af43b423f6a5cbd5d6a, type: 3}
-  epiRylandAstro: {fileID: 21300000, guid: 0feaa72de31183e4d8b0b2fa79b5de81, type: 3}
+  plusA: {fileID: 21300000, guid: 2a60a88013baac94b8821979ba0e9958, type: 3}
+  plusB: {fileID: 21300000, guid: 02db76e4bad96214b881c4b730987a62, type: 3}
+  neutralA: {fileID: 21300000, guid: 4c926027b8bc3cb4ba5c39c518e70214, type: 3}
+  neutralB: {fileID: 21300000, guid: 02db76e4bad96214b881c4b730987a62, type: 3}
+  minusA: {fileID: 21300000, guid: 4c926027b8bc3cb4ba5c39c518e70214, type: 3}
+  minusB: {fileID: 21300000, guid: 1d17c6b9db48a4f4fad6ba3eb3eb90d8, type: 3}
+  epiGaz: {fileID: 21300000, guid: 28bf251bbc19da949bf257629515fe37, type: 3}
+  epiLeeWilber: {fileID: 21300000, guid: ffd6e2e11fc40114f8bcd16de516e650, type: 3}
+  epiHaru: {fileID: 21300000, guid: 343a9fdafe0275b40aaeffb1b8b42aae, type: 3}
+  epiRylandAstro: {fileID: 21300000, guid: 1a0793320c0c7664fa248e5b4edf0a0d, type: 3}
   finText: {fileID: 2697269}
   introFade: 1.2
   pageFade: 0.4
