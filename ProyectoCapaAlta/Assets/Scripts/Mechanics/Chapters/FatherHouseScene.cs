@@ -21,6 +21,11 @@ public class FatherHouseScene : MonoBehaviour
 
     bool started, finished;
 
+
+    [Header("Animación")]
+    public NpcTalkAnimator padreAnim;   // Jason
+    public NpcTalkAnimator theoAnim;    // Theo en la cama
+
     IEnumerator Start()
     {
         if (promptE != null) promptE.SetActive(false);
@@ -39,6 +44,8 @@ public class FatherHouseScene : MonoBehaviour
         {
             started = true;
             if (promptE != null) promptE.SetActive(false);
+            DialogueManager.Instance.currentNpcTalk = padreAnim;
+            DialogueManager.Instance.currentTheoTalk = theoAnim;
             DialogueManager.Instance.StartDialogue(fatherNode, OnDialogueComplete);
         }
     }

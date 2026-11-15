@@ -51,6 +51,7 @@ public class DialogueManager : MonoBehaviour
 
     private TheoController theo;
     [HideInInspector] public NpcTalkAnimator currentNpcTalk;
+    [HideInInspector] public NpcTalkAnimator currentTheoTalk;   // Theo en la casa del padre (opcional)
 
 
     private enum DialogueState
@@ -198,6 +199,7 @@ public class DialogueManager : MonoBehaviour
             theoNameText.gameObject.SetActive(isTheoLine);
             dialogueText.gameObject.SetActive(true);
             if (currentNpcTalk != null) currentNpcTalk.SetTalking(!isTheoLine);
+            if (currentTheoTalk != null) currentTheoTalk.SetTalking(isTheoLine);
 
             if (!isTheoLine) npcNameText.text = speaker;
 
@@ -297,6 +299,7 @@ public class DialogueManager : MonoBehaviour
         SetArrow(false);
         AudioManager.StopBabble();
         if (currentNpcTalk != null) currentNpcTalk.SetTalking(false);
+        if (currentTheoTalk != null) currentTheoTalk.SetTalking(false);
         state = DialogueState.Choosing;
         choosingOption = true;
         waitingInput = false;
@@ -365,6 +368,8 @@ public class DialogueManager : MonoBehaviour
         AudioManager.StopBabble();
         if (currentNpcTalk != null) currentNpcTalk.SetTalking(false);
         currentNpcTalk = null;
+        if (currentTheoTalk != null) currentTheoTalk.SetTalking(false);
+        currentTheoTalk = null;
 
         dialoguePanel.SetActive(false);
         optionsPanel.SetActive(false);

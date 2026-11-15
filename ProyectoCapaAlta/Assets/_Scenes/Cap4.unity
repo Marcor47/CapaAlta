@@ -1642,7 +1642,7 @@ Camera:
   far clip plane: 1000
   field of view: 34
   orthographic: 1
-  orthographic size: 2.109375
+  orthographic size: 1.9791666
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -20180,6 +20180,7 @@ MonoBehaviour:
   - {fileID: 1359804902}
   regulacionPenaltyPerBadChoice: 15
   currentNpcTalk: {fileID: 0}
+  currentTheoTalk: {fileID: 0}
 --- !u!1 &2125608581
 GameObject:
   m_ObjectHideFlags: 0
