@@ -1115,8 +1115,8 @@ MonoBehaviour:
   fatherNode: {fileID: 11400000, guid: f75ad8e07d9e20f41b26e5d308b7764d, type: 2}
   promptE: {fileID: 342229004}
   endingsSceneName: Finales
-  fadeInTime: 1.2
-  fadeOutTime: 1.5
+  fadeInTime: 3
+  fadeOutTime: 3
   chapter: 4
   padreAnim: {fileID: 1406119574}
   theoAnim: {fileID: 469118141}
@@ -1498,8 +1498,8 @@ MonoBehaviour:
   - {fileID: 914595717, guid: 98f2e00c3deafcc4f8add43e0f510fed, type: 3}
   - {fileID: -616942595, guid: 98f2e00c3deafcc4f8add43e0f510fed, type: 3}
   - {fileID: 2002076339, guid: 98f2e00c3deafcc4f8add43e0f510fed, type: 3}
-  idleFps: 2
-  talkFps: 2
+  idleFps: 4
+  talkFps: 4
 --- !u!1 &474093204
 GameObject:
   m_ObjectHideFlags: 0
@@ -12822,8 +12822,8 @@ MonoBehaviour:
   - {fileID: -660104950391253072, guid: f83157c761ac951408038c4db11a22c1, type: 3}
   - {fileID: 2474215028539286902, guid: f83157c761ac951408038c4db11a22c1, type: 3}
   - {fileID: 9108904874216778447, guid: f83157c761ac951408038c4db11a22c1, type: 3}
-  idleFps: 2
-  talkFps: 2
+  idleFps: 4
+  talkFps: 4
 --- !u!1 &1414629908
 GameObject:
   m_ObjectHideFlags: 0
