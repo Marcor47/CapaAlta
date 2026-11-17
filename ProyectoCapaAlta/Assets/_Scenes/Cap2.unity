@@ -2261,7 +2261,7 @@ Camera:
   far clip plane: 1000
   field of view: 34
   orthographic: 1
-  orthographic size: 2.109375
+  orthographic size: 1.9791666
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -25298,8 +25298,8 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 519420032}
-  - {fileID: 1117889338}
   - {fileID: 486105101}
+  - {fileID: 1117889338}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1745285220

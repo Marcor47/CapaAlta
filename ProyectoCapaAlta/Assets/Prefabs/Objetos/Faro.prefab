@@ -155,7 +155,7 @@ MonoBehaviour:
   spriteRenderer: {fileID: 7920213781297375015}
   offSprite: {fileID: 2200890650637688142, guid: 1244c773cd020504aa2e83e51a098a4b, type: 3}
   litAnimator: {fileID: 3345268437324015154}
-  spawnOffset: {x: 0.75, y: 0.38}
+  spawnOffset: {x: 0.75, y: 1}
   matchRadius: 0.15
 --- !u!114 &3345268437324015154
 MonoBehaviour:
