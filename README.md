@@ -23,7 +23,7 @@ Las decisiones del jugador, las relaciones que construye y las cartas que recole
 |---|---|
 | Cartas (M1, M4) | Cartas del padre (principales, una por capítulo) y de otros pobladores (secundarias, tres por capítulo) que el jugador recolecta y lee. |
 | Árbol de decisiones (M2, M3) | Diálogos por rondas con 3 opciones; la relación con cada personaje (-1 / 0 / +1) influye en capítulos posteriores. |
-| Motivación (M6) | Estamina que consume el dash y el salto; se recarga sola y más rápido al sentarse. |
+| Motivación (M6) | Estamina que consumen el salto, el dash y la trepada con pinchos; se recarga sola y más rápido al sentarse. |
 | Regulación emocional (M9) | Baja con caídas y situaciones difíciles; se recupera meditando con la libreta o llamando a mamá. En 0 reduce el campo de visión. |
 | Libreta de Theo (M7) | Menú principal con selección de capítulos y rejugabilidad. |
 | Respuesta epistolar (M8) | El alumno voltea cada carta recolectada, escribe una reflexión y la vincula con una o más de las 13 habilidades socioemocionales (HSE) del MINEDU. Ver [Respuesta epistolar](#respuesta-epistolar). |
@@ -38,7 +38,7 @@ Las decisiones del jugador, las relaciones que construye y las cartas que recole
 | 1 · Árido | Tierra | Teléfono satelital (tutorial) y dash |
 | 2 · Frondoso | Vegetación | Onda |
 | 3 · Rocoso | Roca | Gancho |
-| 4 · Helado | Nieve | Pinchos (piolet) + doble salto |
+| 4 · Helado | Nieve | Pinchos (piolet) |
 
 Las herramientas solo funcionan mientras están equipadas en la mochila.
 
