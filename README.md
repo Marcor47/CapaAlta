@@ -109,9 +109,9 @@ Para actualizarla se genera un build WebGL (con la compresión desactivada) y se
 3. En el panel de **Alumnos**, agregar un alumno nuevo con un usuario y una contraseña (se recomienda un alias o código, no el nombre completo).
 4. En el panel de **Capítulos**, habilitar los capítulos que se van a jugar. El Capítulo 1 está siempre habilitado.
 5. Volver al panel principal del profesor y cerrar la sesión con la **X** de la esquina superior derecha. Después, iniciar sesión con la cuenta del alumno.
-6. El alumno juega los capítulos habilitados. Para pasar a un capítulo debe haber completado el anterior.
+6. Antes de jugar, el alumno debe leer el panel de ayuda con el botón **i** (abajo a la izquierda): explica los controles y el glosario de las 13 habilidades socioemocionales. Después juega los capítulos habilitados. Para pasar a un capítulo debe haber completado el anterior.
 
-El engranaje (arriba a la izquierda) regula el volumen y el botón **i** (abajo a la izquierda) muestra la ayuda con los controles. El progreso se guarda en el navegador del dispositivo, así que la cuenta del profesor y las de los alumnos deben usarse en el mismo navegador y equipo.
+El engranaje (arriba a la izquierda) regula el volumen. El progreso se guarda en el navegador del dispositivo, así que la cuenta del profesor y las de los alumnos deben usarse en el mismo navegador y equipo.
 
 ---
 
