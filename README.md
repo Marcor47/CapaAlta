@@ -80,7 +80,8 @@ Las visualizaciones son descriptivas: las barras de HSE cuentan reflexiones o al
 | Moverse | `A` / `D` o `←` / `→` |
 | Saltar | `Espacio` o `↑` |
 | Dash | `Shift` izquierdo |
-| Interactuar (hablar, leer una carta, entregar una manzana, terminar el capítulo) | `E` |
+| Interactuar (hablar, leer una carta, entregar una manzana) | `E` |
+| Terminar el capítulo (al llegar al hito de la meta) | `Enter` |
 | Abrir la mochila | `E` (mantener) |
 | Sentarse / abrir la libreta | `S` o `↓` (mantener 1 s) |
 | Usar la herramienta equipada | Click izquierdo (mantener para cargar) |
@@ -100,6 +101,17 @@ Estas mismas instrucciones están disponibles dentro del juego, en el botón de 
 La versión web se publica con GitHub Pages desde la carpeta `docs/` y no requiere instalación: https://marcor47.github.io/CapaAlta/
 
 Para actualizarla se genera un build WebGL (con la compresión desactivada) y se reemplaza el contenido de `docs/`. El progreso se guarda en el navegador de cada dispositivo (ver Limitaciones).
+
+## Cómo empezar a jugar
+
+1. Abrir https://marcor47.github.io/CapaAlta/ en Chrome o Edge y esperar a que cargue el juego. El botón de la esquina inferior derecha permite verlo en pantalla completa.
+2. En la portada, pulsar **INICIAR SESIÓN** e ingresar como profesor con el usuario `Profesor` y la contraseña `12345`.
+3. En el panel de **Alumnos**, agregar un alumno nuevo con un usuario y una contraseña (se recomienda un alias o código, no el nombre completo).
+4. En el panel de **Capítulos**, habilitar los capítulos que se van a jugar. El Capítulo 1 está siempre habilitado.
+5. Volver al panel principal del profesor y cerrar la sesión con la **X** de la esquina superior derecha. Después, iniciar sesión con la cuenta del alumno.
+6. El alumno juega los capítulos habilitados. Para pasar a un capítulo debe haber completado el anterior.
+
+El engranaje (arriba a la izquierda) regula el volumen y el botón **i** (abajo a la izquierda) muestra la ayuda con los controles. El progreso se guarda en el navegador del dispositivo, así que la cuenta del profesor y las de los alumnos deben usarse en el mismo navegador y equipo.
 
 ---
 
@@ -153,7 +165,7 @@ El juego tiene dos roles:
 - **Profesor:** crea y elimina cuentas de alumno, habilita capítulos para todo el grupo y consulta el dashboard: avance de cada alumno, relaciones con los personajes, cartas recolectadas y respondidas, habilidades que relacionó con sus cartas, y una vista agregada del grupo.
 - **Alumno:** juega los capítulos habilitados, responde las cartas que recolecta y consulta su compendio de cartas y personajes.
 
-> La cuenta de profesor es fija y los datos se guardan localmente en el navegador. Es adecuado para el uso en aula previsto en la tesis, no es un sistema de autenticación seguro.
+> La cuenta de profesor es fija (usuario `Profesor`, contraseña `12345`) y los datos se guardan localmente en el navegador. Es adecuado para el uso en aula previsto en la tesis, no es un sistema de autenticación seguro.
 
 ## Limitaciones y consideraciones de implementación
 
