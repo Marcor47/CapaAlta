@@ -843,6 +843,10 @@ MonoBehaviour:
     m_Bits: 4294967295
   holdTime: 0
   toolCooldown: 0.5
+  maxAngularSpeed: 200
+  maxSwingAngle: 150
+  swingDamping: 0.4
+  tautTolerance: 0.35
 --- !u!114 &39641648255878141
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -16,11 +16,18 @@ public class GanchoTool : AimedTool
     public float holdTime = 1f;
     public float toolCooldown = 0.3f;
 
+    [Header("Límites de balanceo")]
+    public float maxAngularSpeed = 150f;   // °/s alrededor del punto de anclaje
+    public float maxSwingAngle = 100f;     // ° respecto a la vertical (0 = colgando recto hacia abajo)
+    public float swingDamping = 0.4f;      // 1/s, frena el balanceo con el tiempo
+    public float tautTolerance = 0.35f;    // m; por debajo de ropeLength - esto la cuerda se considera floja
+
     private bool hooked;
     private bool casting;
     private Vector2 anchorPoint;
     private float ropeLength;
     private DistanceJoint2D joint;
+    private Rigidbody2D rb;
 
     protected override bool CanStartAiming() => !hooked && !casting;
 
@@ -106,6 +113,7 @@ public class GanchoTool : AimedTool
 
     void Attach(Vector2 point)
     {
+        rb = theo.GetComponent<Rigidbody2D>();
         anchorPoint = point;
         ropeLength = Mathf.Max(0.5f, Vector2.Distance(OriginPosition, point));
 
@@ -133,6 +141,37 @@ public class GanchoTool : AimedTool
     void HideRope()
     {
         if (controller != null && controller.ropeLine != null) controller.ropeLine.enabled = false;
+    }
+
+    void FixedUpdate()
+    {
+        if (!hooked || casting || rb == null || joint == null) return;
+
+        // Punto real donde la cuerda sujeta a Theo (el mismo que usa el joint)
+        Vector2 hand = theo.transform.TransformPoint(joint.anchor);
+        Vector2 r = hand - anchorPoint;
+        float len = r.magnitude;
+        if (len < 0.1f || len < ropeLength - tautTolerance) return;   // cuerda floja: no limitar
+
+        Vector2 u = r / len;                          // dirección radial (del ancla a Theo)
+        Vector2 t = new Vector2(-u.y, u.x);           // tangente antihoraria
+        Vector2 v = rb.linearVelocity;
+        float vr = Vector2.Dot(v, u);
+        float vt = Vector2.Dot(v, t);
+
+        // 1) Tope de velocidad angular
+        float maxVt = maxAngularSpeed * Mathf.Deg2Rad * len;
+        vt = Mathf.Clamp(vt, -maxVt, maxVt);
+
+        // 2) Amortiguación suave del balanceo
+        vt *= Mathf.Max(0f, 1f - swingDamping * Time.fixedDeltaTime);
+
+        // 3) Ángulo máximo: no pasar por encima del pivote ni dar vueltas
+        float angle = Vector2.SignedAngle(Vector2.down, r);   // + = lado derecho, - = izquierdo
+        if (angle > maxSwingAngle && vt > 0f) vt = 0f;
+        else if (angle < -maxSwingAngle && vt < 0f) vt = 0f;
+
+        rb.linearVelocity = vr * u + vt * t;
     }
 
     void LateUpdate()

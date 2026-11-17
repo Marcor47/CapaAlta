@@ -198,7 +198,12 @@ public class TheoController : MonoBehaviour
             anim.SetTrigger("ClimbStart");
         }
         isClimbing = value;
-        if (!value) isClimbMoving = false;
+        if (anim != null) anim.SetBool("IsClimbing", value);   // se sincroniza al instante, junto al trigger
+        if (!value)
+        {
+            isClimbMoving = false;
+            if (anim != null) anim.SetBool("IsClimbMoving", false);
+        }
     }
 
     public void SetClimbMoving(bool value) { isClimbMoving = value; }
