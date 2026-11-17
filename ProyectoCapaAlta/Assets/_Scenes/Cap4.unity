@@ -2594,7 +2594,7 @@ Camera:
   far clip plane: 1000
   field of view: 34
   orthographic: 1
-  orthographic size: 2.109375
+  orthographic size: 1.9791666
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -13294,12 +13294,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SnowWalkSequence
   comments:
-  - "Hace tanto que sal\xED de casa..."
-  - "Vine buscando respuestas pero... \xBFa\xFAn las necesito?"
-  - Estaba molesto, con redentimiento.
-  - Pero todos merecen una oportunidad para ser mejor.
-  - "Tambi\xE9n yo."
-  - "Voy a hacer las cosas bien. Mam\xE1..., pap\xE1..."
+  - "Hace tanto que sal\xED de casa\u2026"
+  - "Vine buscando respuestas, pero\u2026 \xBFa\xFAn las necesito?"
+  - Estaba molesto, con resentimiento.
+  - Pero todos merecen una oportunidad para ser mejores.
+  - "Yo tambi\xE9n."
+  - "Voy a hacer las cosas bien. Mam\xE1\u2026 pap\xE1\u2026"
   - Ya estoy muy cerca.
   walkSpeed: 1.2
   dashSpeed: 5
