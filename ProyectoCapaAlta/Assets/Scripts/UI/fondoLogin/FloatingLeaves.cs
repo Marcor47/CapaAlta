@@ -24,16 +24,17 @@ public class FloatingLeaves : MonoBehaviour
 
     Leaf[] leaves;
     float width, height;
+    bool ready;
 
     void Start()
     {
         if (container == null) container = (RectTransform)transform;
         if (leafSprites == null || leafSprites.Length == 0) { enabled = false; return; }
+    }
 
-        Rect r = container.rect;
-        width = r.width; height = r.height;
+    void CreateLeaves()
+    {
         leaves = new Leaf[count];
-
         for (int i = 0; i < count; i++)
         {
             var go = new GameObject("Leaf" + i, typeof(RectTransform), typeof(Image));
@@ -65,8 +66,16 @@ public class FloatingLeaves : MonoBehaviour
         float dt = Time.unscaledDeltaTime;
         float t = Time.unscaledTime;
 
+        Rect rect = container.rect;
+        if (rect.width < 1f || rect.height < 1f) return;
+        width = rect.width;
+        height = rect.height;
+
+        if (!ready) { CreateLeaves(); ready = true; }
+
         foreach (var l in leaves)
         {
+            // ... igual que ahora
             l.x += l.speed * dt;
             l.y += l.driftY * dt;
 
