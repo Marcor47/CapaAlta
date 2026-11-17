@@ -5,6 +5,8 @@ Videojuego educativo de plataformas 2D para reforzar habilidades socioemocionale
 Proyecto de tesis de pregrado en Ingeniería Informática, Pontificia Universidad Católica del Perú (PUCP).
 **Autor:** Marco Rodriguez · **Asesor:** Johan Paul Baldeón Medrano
 
+**Jugar en línea:** https://marcor47.github.io/CapaAlta/
+
 ---
 
 ## Sobre el juego
@@ -93,17 +95,25 @@ Estas mismas instrucciones están disponibles dentro del juego, en el botón de 
 
 ---
 
+## Jugar en línea
+
+La versión web se publica con GitHub Pages desde la carpeta `docs/` y no requiere instalación: https://marcor47.github.io/CapaAlta/
+
+Para actualizarla se genera un build WebGL (con la compresión desactivada) y se reemplaza el contenido de `docs/`. El progreso se guarda en el navegador de cada dispositivo (ver Limitaciones).
+
+---
+
 ## Requisitos
 
 - **Unity 6 (6000.4.1f1)** con Universal Render Pipeline 2D
-- Módulo **WebGL Build Support** (para exportar)
+- Módulo **Web Build Support** (para exportar)
 
 ## Cómo abrir el proyecto
 
-1. Clonar el repositorio.
-2. Abrirlo desde Unity Hub con la versión **6000.4.1f1**.
+1. Clonar el repositorio. El proyecto de Unity está en la carpeta `ProyectoCapaAlta/`.
+2. Abrir esa carpeta desde Unity Hub con la versión **6000.4.1f1**.
 3. Abrir `Assets/_Scenes/LoginScene` y presionar Play.
-4. Para compilar, verificar que en **File → Build Profiles** estén agregadas `LoginScene` y `Cap1` a `Cap4`.
+4. Para compilar, verificar que en **File → Build Profiles** estén agregadas, en este orden, `LoginScene`, `Cap1`, `Cap2`, `Cap3`, `Cap4`, `Cap4_CasaPadre` y `Finales`.
 
 ## Configuración técnica
 
@@ -112,24 +122,26 @@ Estas mismas instrucciones están disponibles dentro del juego, en el botón de 
 | Plataforma de exportación | WebGL + IL2CPP |
 | Resolución | 960 × 540 |
 | FPS | 60 (`vSyncCount = 0`) |
-| Cámara | Cinemachine, Orthographic Size 2.8125 (escala de píxel 3×) |
+| Cámara | Cinemachine, Orthographic Size 2.109375 (escala de píxel 4×; referencia 240×135 con 32 px por unidad) |
 | Sprites | Filter Mode Point; personajes 32×32 px, tiles 16×16 px |
 | Persistencia | Local por alumno vía `PlayerPrefs` |
 
-## Estructura del proyecto
+## Estructura del repositorio
 
 ```
-Assets/
-├── _Scenes/            LoginScene, Cap1 … Cap4
-└── Scripts/
-    ├── Player/         Control de Theo
-    ├── Mechanics/      Cartas, árbol de decisiones, herramientas, inventario,
-    │                   regulación emocional, checkpoints, peligros, capítulos
-    ├── Systems/        Cuentas de profesor y alumno, progreso, ajustes del curso
-    ├── UI/             Login y dashboard docente, diálogos, lector de cartas,
-    │                   compendio, pausa, barras de estado, inventario
-    ├── Managers/       Gestores globales
-    └── Shared/         Utilidades compartidas
+docs/                       Build WebGL publicado en GitHub Pages
+ProyectoCapaAlta/
+└── Assets/
+    ├── _Scenes/            LoginScene, Cap1 … Cap4, Cap4_CasaPadre, Finales
+    └── Scripts/
+        ├── Player/         Control de Theo
+        ├── Mechanics/      Cartas, árbol de decisiones, herramientas, inventario,
+        │                   regulación emocional, checkpoints, peligros, capítulos
+        ├── Systems/        Cuentas de profesor y alumno, progreso, ajustes del curso
+        ├── UI/             Login y dashboard docente, diálogos, lector de cartas,
+        │                   compendio, pausa, barras de estado, inventario
+        ├── Managers/       Gestores globales
+        └── Shared/         Utilidades compartidas
 ```
 
 ---
@@ -146,14 +158,14 @@ El juego tiene dos roles:
 ## Limitaciones y consideraciones de implementación
 
 - **Persistencia local.** Todo el progreso (decisiones, cartas, reflexiones y habilidades vinculadas) se guarda con `PlayerPrefs`, que en WebGL vive en el navegador del dispositivo. No se comparte entre dispositivos ni navegadores y se borra si se limpian los datos del sitio. Por eso el dashboard docente solo muestra a los alumnos que jugaron en el mismo navegador. El juego no envía datos a ningún servidor.
-- **Autenticación.** La cuenta de profesor es fija y las contraseñas no están protegidas. Es adecuado para el uso en aula previsto en la tesis, no para un despliegue abierto.
+- **Autenticación.** La cuenta de profesor es fija y las contraseñas no están protegidas. Es adecuado para el uso en aula previsto en la tesis, no para un despliegue abierto. La instancia publicada en GitHub Pages es una demostración: es de acceso público, pero cada navegador guarda sus propios datos y no se envía nada a ningún servidor.
 - **Alcance del prototipo.** Es un prototipo demo: la versión completa y pulida del videojuego queda fuera del alcance de la tesis. La prueba de usabilidad con un estudiante real es una verificación inicial del flujo de experiencia, no una validación representativa.
 - **Alcance de las visualizaciones.** Las habilidades socioemocionales (HSE) son un constructo subjetivo y la propuesta no incluye un instrumento validado para medir su nivel. El dashboard describe lo que el alumno hizo o eligió; **no mide el desarrollo de las HSE**. Está pensado como apoyo para conversar con el alumno y planificar la tutoría.
 - **Datos personales y consentimiento.** Capa Alta está dirigido a estudiantes menores de edad, y sus reflexiones y HSE vinculadas son datos emocionales, considerados sensibles por el Reglamento de la Ley N.° 29733 (D. S. N.° 016-2024-JUS). El sistema no gestiona el consentimiento: **la institución educativa es responsable de obtener la autorización de los padres o apoderados antes de implementar el juego con sus estudiantes**. Se recomienda crear las cuentas con alias o códigos en lugar de nombres completos.
 
 ## Trabajos futuros
 
-- Almacenamiento en un servidor con autenticación por institución, para que el profesor vea a todos sus alumnos desde cualquier dispositivo. Incluye un plan de instalación y despliegue: hosting del WebGL, una API y una base de datos.
+- Almacenamiento en un servidor con autenticación por institución, para que el profesor vea a todos sus alumnos desde cualquier dispositivo. Incluye un plan de instalación y despliegue: hosting definitivo del WebGL, una API y una base de datos.
 - Prueba piloto con grupos completos de 6.° de primaria para evaluar el efecto sobre el involucramiento y las HSE.
 - Visualizaciones con evolución por bimestre, comparación entre capítulos y alumnos, filtros por habilidad y exportación de reportes.
 - Versión final del videojuego: narrativa completa, ilustración y audio para todas las cartas, y cierre de la historia.
