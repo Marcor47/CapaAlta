@@ -129,9 +129,14 @@ public class AccountManager : MonoBehaviour
         }
         else
         {
-            RestoreSnapshot(chapter); // reinicio: vuelve al estado de relaciones del inicio del capítulo
+            // reinicio: el capítulo se juega de nuevo, así que sus encuentros dejan de contar
             p.completedNodesSaved.RemoveAll(id => id.StartsWith($"Cap{chapter}_"));
+            RestoreSnapshot(chapter); // solo manzanas
         }
+
+        // Las relaciones se RECALCULAN desde las decisiones vigentes de los encuentros completados
+        // (los capítulos anteriores propagan su efecto a los siguientes).
+        RelationCalculator.RecomputeAll(p);
 
         p.checkpoints.RemoveAll(c => c.chapter == chapter);
         resumeFromCheckpoint = false;
@@ -158,50 +163,43 @@ public class AccountManager : MonoBehaviour
         });
     }
 
-    // npcID (el de cada DialogueNode) de los NPC que aparecen en cada capítulo
-    static readonly Dictionary<int, string[]> ChapterNpcs = new Dictionary<int, string[]>
-{
-    { 1, new[] { "gaz", "ryland_astro" } },
-    { 2, new[] { "haru", "gaz" } },
-    { 3, new[] { "haru", "lee_wilber" } },
-    { 4, new[] { "gaz", "padre" } },
-};
-
     void RestoreSnapshot(int chapter)
     {
         var p = CurrentUser.progress;
-        var s = p.chapterSnapshots.Find(x => x.chapter == chapter);
-        if (s == null) return;
+        string prefix = $"Cap{chapter}_";
 
-        // 1) Relaciones: solo los NPC de este capítulo vuelven a como estaban al entrar
-        if (ChapterNpcs.TryGetValue(chapter, out var npcs))
-        {
-            foreach (var npc in npcs)
-            {
-                int snapVal = 0;
-                int si = s.npcKeys.IndexOf(npc);
-                if (si >= 0) snapVal = s.npcValues[si];
-
-                int ci = p.npcRelationshipKeys.IndexOf(npc);
-                if (ci >= 0) p.npcRelationshipValues[ci] = snapVal;
-                else if (snapVal != 0)
-                {
-                    p.npcRelationshipKeys.Add(npc);
-                    p.npcRelationshipValues.Add(snapVal);
-                }
-            }
-        }
-
-        // 2) Manzanas: solo se restauran si no se inició ningún capítulo posterior
         bool isLatest = true;
         foreach (int c in p.chaptersStarted)
             if (c > chapter) { isLatest = false; break; }
 
-        if (isLatest)
+        // 1) Manzanas entregadas EN ESTE capítulo: al rejugarlo se devuelven al inventario
+        //    (si no, el "recibió" seguiría sumando +1 aunque ya no la des).
+        foreach (var node in p.manzanaReceivedNodes.FindAll(id => id.StartsWith(prefix)))
+        {
+            var ch = p.choices.Find(x => x.nodeID == node);
+            if (ch != null && p.manzanasUsedOnSaved.Remove(ch.npcID)) p.manzanasAvailable++;
+        }
+        p.manzanaReceivedNodes.RemoveAll(id => id.StartsWith(prefix));
+
+        // 2) Si es el último capítulo iniciado, también se deshace lo recogido en él
+        var s = p.chapterSnapshots.Find(x => x.chapter == chapter);
+        if (isLatest && s != null)
         {
             p.manzanasAvailable = s.manzanasAvailable;
             p.manzanasUsedOnSaved = new List<string>(s.manzanasUsedOn);
-            p.manzanaNodesGiven.RemoveAll(id => id.StartsWith($"Cap{chapter}_"));
+            p.manzanaNodesGiven.RemoveAll(id => id.StartsWith(prefix));
+        }
+
+        // 3) Coherencia: toda manzana entregada en un capítulo que se conserva sigue gastada
+        //    (la foto del capítulo puede ser anterior a una repetición de capítulos previos).
+        foreach (var node in p.manzanaReceivedNodes)
+        {
+            var ch = p.choices.Find(x => x.nodeID == node);
+            if (ch != null && !p.manzanasUsedOnSaved.Contains(ch.npcID))
+            {
+                p.manzanasUsedOnSaved.Add(ch.npcID);
+                p.manzanasAvailable = Mathf.Max(0, p.manzanasAvailable - 1);
+            }
         }
     }
 
@@ -284,6 +282,8 @@ public class StudentProgress
     public int manzanasAvailable = 0;
     public List<string> manzanasUsedOnSaved = new List<string>();
     public List<string> manzanaNodesGiven = new List<string>();
+    // Encuentros en los que Theo le entregó la manzana al NPC ("recibió"): suman +1 a la relación
+    public List<string> manzanaReceivedNodes = new List<string>();
 
     // NUEVO — libreta
     //public List<NotebookEntry> notebookEntries = new List<NotebookEntry>();

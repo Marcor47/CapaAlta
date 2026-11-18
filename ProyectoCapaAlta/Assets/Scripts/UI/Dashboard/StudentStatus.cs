@@ -38,16 +38,7 @@ public static class StudentStatus
     }
 
     // -1 / 0 / 1, o NoEncounter (2) si no hay encuentro.
+    // Mismo cálculo que usa el juego (RelationCalculator).
     public static int RelationOf(StudentProgress p, string npcKey)
-    {
-        var mine = EffectiveChoices(p).Where(c => c.npcID == npcKey).ToList();
-        if (mine.Count > 0)
-        {
-            int v = 0;
-            foreach (var c in mine) v = Mathf.Clamp(v + c.relationshipDelta, -1, 1);
-            return v;
-        }
-        int idx = p.npcRelationshipKeys.IndexOf(npcKey);
-        return idx < 0 ? NoEncounter : p.npcRelationshipValues[idx];
-    }
+        => RelationCalculator.RelationOf(p, npcKey);
 }

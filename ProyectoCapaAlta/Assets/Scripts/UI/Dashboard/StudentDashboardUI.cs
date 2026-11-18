@@ -175,23 +175,25 @@ public class StudentDashboardUI : MonoBehaviour
         DashUI.Text(skin, hdr, $"CAPÍTULO {c} - {StateName(st)}", 45, 0, 450, 36, 16, DashUI.Ink);
 
         DashUI.Title(skin, content, "PERSONAJES");
-        DashUI.Note(skin, content, "Cada cuadrito = una decisión: verde buena · amarillo neutral · rojo mala.", 18);
+        DashUI.Note(skin, content, "Cada cuadrito = una decisión: verde buena · amarillo neutral · rojo mala · naranja manzana (+1).", 18);
         foreach (var e in Encounters.Where(x => x.chapter == c))
         {
-            var rounds = p.choices.Where(x => x.nodeID == e.nodeID)
-                .GroupBy(x => x.roundIndex).OrderBy(g => g.Key)
-                .Select(g => g.Last().relationshipDelta).ToList();
+            var rounds = RelationCalculator.RoundDeltas(p, e.nodeID);
+            bool apple = RelationCalculator.AppleReceived(p, e.nodeID);
 
             var row = DashUI.Row(content, "Encounter", 36);
             DashUI.Text(skin, row, $"{e.npcName} - ENCUENTRO {e.num}", 12, 0, 300, 36, 16, DashUI.Ink);
-            float sx = 420f - Mathf.Min(rounds.Count, 6) * 17f;
+            int boxes = Mathf.Min(rounds.Count + (apple ? 1 : 0), 6);
+            float sx = 420f - boxes * 17f;
             for (int k = 0; k < rounds.Count && k < 6; k++)
                 DashUI.Swatch(row, sx + k * 17, 11, 12, DashUI.DeltaColor(rounds[k]));
+            if (apple && rounds.Count < 6)
+                DashUI.Swatch(row, sx + rounds.Count * 17, 11, 12, DashUI.Orange); // manzana recibida (+1)
 
             if (rounds.Count == 0) DashUI.Tag(skin, row, TagKind.Cream, "SIN ENCUENTRO");
             else
             {
-                int sum = rounds.Sum();
+                int sum = RelationCalculator.NodeTotal(p, e.nodeID); // rondas + manzana
                 if (sum > 0) DashUI.Tag(skin, row, TagKind.Green, "BUENA");
                 else if (sum < 0) DashUI.Tag(skin, row, TagKind.Red, "MALA");
                 else DashUI.Tag(skin, row, TagKind.Yellow, "NEUTRAL");

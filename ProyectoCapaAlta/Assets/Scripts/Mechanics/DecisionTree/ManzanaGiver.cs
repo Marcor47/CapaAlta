@@ -42,7 +42,7 @@ public class ManzanaGiver : MonoBehaviour
     void GiveManzana()
     {
         DialogueNode node = trigger.dialogueNode;
-        int before = DecisionRecord.Instance.GetRelationship(node.npcID);
+        int before = DecisionRecord.Instance.GetRelationshipAfter(node.nodeID, node.npcID); // relación en ESTE encuentro
         bool used = DecisionRecord.Instance.TryUseManzana(node.npcID, node.nodeID);
         if (!used) return;
 

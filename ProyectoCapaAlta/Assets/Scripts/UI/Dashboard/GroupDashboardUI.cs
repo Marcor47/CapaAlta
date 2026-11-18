@@ -81,9 +81,7 @@ public class GroupDashboardUI : MonoBehaviour
             ? responsePanel.hseNames : StudentDashboardUI.HseFallback.ToList();
 
     static List<int> RoundsOf(UserAccount s, string nodeID) =>
-        s.progress.choices.Where(x => x.nodeID == nodeID)
-            .GroupBy(x => x.roundIndex).OrderBy(g => g.Key)
-            .Select(g => g.Last().relationshipDelta).ToList();
+        RelationCalculator.RoundDeltas(s.progress, nodeID);
 
     bool ChapterUnlocked(int c) => CourseSettings.Instance != null && CourseSettings.Instance.IsChapterUnlocked(c);
 
@@ -195,7 +193,7 @@ public class GroupDashboardUI : MonoBehaviour
             {
                 var r = RoundsOf(s, e.nodeID);
                 if (r.Count == 0) continue;
-                int sum = r.Sum();
+                int sum = RelationCalculator.NodeTotal(s.progress, e.nodeID); // rondas + manzana
                 if (sum > 0) good++; else if (sum < 0) bad++; else neu++;
             }
             var row = DashUI.Row(content, "Encounter", 36);

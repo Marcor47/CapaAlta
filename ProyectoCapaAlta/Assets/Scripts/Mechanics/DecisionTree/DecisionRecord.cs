@@ -84,6 +84,57 @@ public class DecisionRecord : MonoBehaviour
         SaveToAccount();
     }
 
+    // Relación con la que el jugador LLEGA a un encuentro (solo cuentan encuentros anteriores).
+    public int GetRelationshipBefore(string nodeID, string npcID)
+    {
+        var user = AccountManager.Instance != null ? AccountManager.Instance.CurrentUser : null;
+        if (user != null && RelationCalculator.HasEncounter(user.progress, npcID))
+        {
+            SaveToAccount(); // vuelca los encuentros completados en memoria al progreso
+            return RelationCalculator.Compute(user.progress, npcID, nodeID);
+        }
+        return GetRelationship(npcID);
+    }
+
+    // Relación justo después de un encuentro (sin contar los encuentros posteriores).
+    // Se usa para elegir la respuesta del NPC al recibir la manzana en ese encuentro.
+    public int GetRelationshipAfter(string nodeID, string npcID)
+    {
+        var user = AccountManager.Instance != null ? AccountManager.Instance.CurrentUser : null;
+        if (user != null && RelationCalculator.HasEncounter(user.progress, npcID))
+        {
+            SaveToAccount();
+            return RelationCalculator.ComputeThrough(user.progress, npcID, nodeID);
+        }
+        return GetRelationship(npcID);
+    }
+
+    // Recalcula TODAS las relaciones desde las decisiones y manzanas guardadas
+    // (misma cuenta que usan los paneles del profesor).
+    public void RecomputeRelations()
+    {
+        if (AccountManager.Instance == null || AccountManager.Instance.CurrentUser == null) return;
+        SaveToAccount();
+        RelationCalculator.RecomputeAll(AccountManager.Instance.CurrentUser.progress);
+        LoadFromAccount();
+        AccountManager.Instance.SaveProgress();
+    }
+
+    // Se llama al terminar la última ronda de un encuentro: lo marca completado y recalcula.
+    // fallbackDelta solo se usa si no hay cuenta iniciada (pruebas directas en el editor).
+    public void CompleteNode(string nodeID, string npcID, int fallbackDelta)
+    {
+        completedNodes.Add(nodeID);
+        if (AccountManager.Instance != null && AccountManager.Instance.CurrentUser != null)
+        {
+            Debug.Log($"[DecisionRecord] Encuentro completado: {nodeID}");
+            int before = GetRelationship(npcID);
+            RecomputeRelations();
+            Debug.Log($"[DecisionRecord] {npcID}: {before} → {GetRelationship(npcID)}");
+        }
+        else SetRelationship(npcID, fallbackDelta);
+    }
+
     public void ForceRelationship(string npcID, int value)
     {
         npcRelationships[npcID] = Mathf.Clamp(value, -1, 1);
@@ -164,14 +215,19 @@ public class DecisionRecord : MonoBehaviour
         manzanasUsedOn.Add(npcID);
 
         int current = GetRelationship(npcID);
-        if (current < 1)
+        var user = AccountManager.Instance != null ? AccountManager.Instance.CurrentUser : null;
+        if (user != null)
         {
-            SetRelationship(npcID, +1);
+            // La manzana queda registrada en ese encuentro ("recibió"): suma +1 en el cálculo único.
+            if (!user.progress.manzanaReceivedNodes.Contains(completedNodeID))
+                user.progress.manzanaReceivedNodes.Add(completedNodeID);
+            RecomputeRelations();
+            if (GetRelationship(npcID) == current)
+                Debug.Log($"[DecisionRecord] Relación con {npcID} ya estaba al máximo; la manzana se usó igual (sin subir más).");
+            else
+                Debug.Log($"[DecisionRecord] {npcID}: {current} → {GetRelationship(npcID)} (manzana)");
         }
-        else
-        {
-            Debug.Log($"[DecisionRecord] Relación con {npcID} ya estaba al máximo; la manzana se usó igual (sin subir más).");
-        }
+        else if (current < 1) SetRelationship(npcID, +1);
 
         Debug.Log($"[DecisionRecord] Manzana usada con {npcID}. Manzanas restantes: {manzanasAvailable}");
         SaveToAccount();

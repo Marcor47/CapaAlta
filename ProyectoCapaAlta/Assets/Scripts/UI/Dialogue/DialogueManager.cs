@@ -112,7 +112,7 @@ public class DialogueManager : MonoBehaviour
         chosenOptionsThisNode.Clear();
 
         entryRelationship = DecisionRecord.Instance != null
-            ? DecisionRecord.Instance.GetRelationship(node.npcID)
+            ? DecisionRecord.Instance.GetRelationshipBefore(node.nodeID, node.npcID)
             : 0;
 
         state = DialogueState.Opening;
@@ -270,7 +270,7 @@ public class DialogueManager : MonoBehaviour
             if (DecisionRecord.Instance != null)
             {
                 int finalDelta = Mathf.Clamp(pendingRelationshipDelta, -1, 1);
-                DecisionRecord.Instance.SetRelationship(currentNode.npcID, finalDelta);
+                DecisionRecord.Instance.CompleteNode(currentNode.nodeID, currentNode.npcID, finalDelta);
             }
 
             if (currentNode.givesManzanaOnEnd &&
@@ -284,7 +284,7 @@ public class DialogueManager : MonoBehaviour
                 && DecisionRecord.Instance.WasManzanaGivenFor(currentNode.nodeID)
                 && currentNode.manzanaRepeatLines != null
                 && currentNode.manzanaRepeatLines.Length > 0;
-                            currentLines.AddRange(repeat ? currentNode.manzanaRepeatLines : currentNode.manzanaTutorialLines);
+                currentLines.AddRange(repeat ? currentNode.manzanaRepeatLines : currentNode.manzanaTutorialLines);
                 ShowCurrentLine();
             }
             else EndDialogue();
@@ -294,7 +294,7 @@ public class DialogueManager : MonoBehaviour
     // ─── MOSTRAR OPCIONES ──────────────────────────────────────
     void ShowOptions()
     {
-        
+
         SetNPCSpeaking(false);
         SetArrow(false);
         AudioManager.StopBabble();
@@ -360,7 +360,7 @@ public class DialogueManager : MonoBehaviour
     // ─── CERRAR DIÁLOGO ────────────────────────────────────────
     void EndDialogue()
     {
-        
+
         state = DialogueState.Done;
         isOpen = false;
         simpleMode = false;
