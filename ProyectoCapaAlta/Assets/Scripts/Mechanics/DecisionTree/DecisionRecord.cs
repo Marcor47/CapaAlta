@@ -163,6 +163,13 @@ public class DecisionRecord : MonoBehaviour
     // ─── MANZANAS ──────────────────────────────────────────────
     public int ManzanasAvailable => manzanasAvailable;
 
+    // ¿Se puede entregar ahora una manzana a este personaje en este encuentro?
+    // Mismas condiciones que TryUseManzana: así el "E" solo aparece cuando la entrega es posible.
+    public bool CanGiveManzana(string npcID, string nodeID)
+        => manzanasAvailable > 0
+        && completedNodes.Contains(nodeID)
+        && !manzanasUsedOn.Contains(npcID);
+
     public void AddManzana()
     {
         manzanasAvailable++;

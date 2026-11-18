@@ -30,6 +30,8 @@ public class ManzanaGiver : MonoBehaviour
         && DecisionRecord.Instance.ManzanasAvailable > 0
         && InventorySystem.Instance != null && InventorySystem.Instance.IsManzanaEquipped // NUEVO
         && trigger.IsCompleted
+        && trigger.dialogueNode != null
+        && DecisionRecord.Instance.CanGiveManzana(trigger.dialogueNode.npcID, trigger.dialogueNode.nodeID) // una por personaje
         && DialogueManager.Instance != null
         && !DialogueManager.Instance.IsOpen;
 
